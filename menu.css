@@ -1,0 +1,61 @@
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            background-color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            padding-top: 60px;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            z-index: 1000;
+        }
+        .menu a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+        .menu a:hover {
+            background-color: #575757;
+        }
+
+        .menu.active {
+            transform: translateX(0);
+        }
+        .burger {
+            cursor: pointer;
+            color: white;
+            background-color: #333;
+            padding: 0;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 24px;
+            width: 30px;
+            transition: transform 0.3s ease;
+            z-index: 1010;
+        }
+        .burger div {
+            width: 100%;
+            height: 4px;
+            background-color: white;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .burger.active div:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+        .burger.active div:nth-child(2) {
+            opacity: 0;
+        }
+        .burger.active div:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ua">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrendLab</title>
+    <link rel="stylesheet" href="menu.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7cfa2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+      
+      .product {
+          width: 240px;
+          padding: 12px;
+          border: none;
+          border-radius: 12px;
+          margin: 12px;
+          display: inline-flex;
+          flex-direction: column;
+          text-align: center;
+          background: #f7cfa2;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+          transition: transform 0.3s, box-shadow 0.3s;
+          align-items: center;
+      }
+      
+      .product:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      }
+      
+      .product img {
+          width: 100%;
+          height: 220px;
+          object-fit: cover;
+          border-radius: 8px;
+          margin-bottom: 10px;
+          display: block;
+      }
+      
+      .product h3 {
+          margin: 8px 0;
+          color: #333;
+          font-size: 16px;
+          line-height: 1.3;
+      }
+      
+      .remove-btn {
+          background-color: #ff6b9d;
+          border: none;
+          color: white;
+          padding: 10px 20px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 14px;
+          margin-top: auto;
+          transition: background-color 0.2s;
+      }
+      
+      .remove-btn:hover {
+          background-color: #ff4081;
+      }
+      
+      .price {
+          font-size: 18px;
+          color: #ff6b9d;
+          font-weight: bold;
+          margin: 8px 0;
+      }
+      
+      .container {
+          max-width: 1400px;
+          margin: 100px auto 120px auto;
+          padding: 32px 24px;
+          background: #fff;
+          border-radius: 18px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      }
+      
+      .container-header {
+          text-align: center;
+          margin-bottom: 32px;
+      }
+      
+      .container-header h1 {
+          margin: 0;
+          font-size: 35px;
+          color: #333;
+          letter-spacing: 1px;
+      }
+      
+      #favoritesContainer {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          min-height: 200px;
+      }
+      
+      .empty-state {
+          text-align: center;
+          padding: 60px 20px;
+          color: #666;
+          font-size: 18px;
+      }
+      
+      /* Sticky Footer */
+      .sticky-footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+          border-top: 2px solid #ddd;
+          padding: 16px 24px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 100;
+          box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+      }
+      
+      .total-section {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+      }
+      
+      .total-label {
+          font-size: 18px;
+          color: #666;
+          font-weight: 600;
+      }
+      
+      .total-amount {
+          font-size: 28px;
+          color: #ff6b9d;
+          font-weight: bold;
+      }
+      
+      .checkout-btn {
+          background: linear-gradient(135deg, #84e74b 0%, #6ecf3a 100%);
+          color: #333;
+          padding: 14px 40px;
+          border-radius: 10px;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 16px;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+          box-shadow: 0 4px 12px rgba(132, 231, 75, 0.3);
+      }
+      
+      .checkout-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 18px rgba(132, 231, 75, 0.4);
+      }
+      
+      @media (max-width: 768px) {
+          .sticky-footer {
+              flex-direction: column;
+              gap: 12px;
+              padding: 12px 16px;
+          }
+          
+          .total-amount {
+              font-size: 24px;
+          }
+          
+          .checkout-btn {
+              width: 100%;
+              padding: 12px 24px;
+          }
+      }
+    </style>
+</head>
+<body> 
+    <div style="height: 60px; background-color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 1; display: flex; justify-content: center; align-items: center;">
+    <marquee id="marquee" style="width: 90%; color:white" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee></div>
+    <div class="burger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="menu" id="menu">
+        <a href="Katalog.html">Каталог товарів</a>
+        <a href="Obrane.html">Обране</a>
+        <a href="Kontakt.html">Наші контакти</a>
+        <a href="index.html">Про нас ^-^</a>
+    </div>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            var burger = document.querySelector('.burger');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+        }
+
+        var messages = [
+            "Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!",
+            "Літній розпродаж на TrendLab! Оновіть свій гардероб за вигідними цінами. Акція діє до кінця місяця!",
+            "Осінній розпродаж на TrendLab! Теплі речі та аксесуари зі знижками. Не пропустіть сезонні пропозиції!",
+            "Зимовий розпродаж на TrendLab! Обирайте стильні речі для холодної пори року зі знижками до 60%!",
+            "Спеціальна пропозиція на TrendLab! Безкоштовна доставка при замовленні від 1000 грн. Поспішайте скористатися!"
+        ];
+        var marquee = document.getElementById('marquee');
+        var index = 0;
+        function changeMessage() {
+            index = (index + 1) % messages.length;
+            marquee.textContent = messages[index];
+        }
+
+        marquee.addEventListener('finish', changeMessage);
+        setInterval(changeMessage, 29000); // смена сообщения каждые 5 секунд
+        marquee.style.fontSize = "2rem";
+        marquee.style.fontWeight = "bold";
+    </script>
+<div class="container">
+    <div class="container-header">
+        <h1>💕 Обране 💕</h1>
+    </div>
+    <div id="favoritesContainer"></div>
+</div>
+
+<!-- Sticky Footer with Total and Checkout -->
+<div class="sticky-footer">
+    <div class="total-section">
+        <span class="total-label">Сума до оплати:</span>
+        <div class="total-amount" id="totalAmount">0₴</div>
+    </div>
+    <a href="Oplata.html" class="checkout-btn" id="checkoutBtn">🛒 Перейти до оплати</a>
+</div>
+
+<script>
+let productsList = [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+async function loadProducts() {
+    try {
+        const response = await fetch(`products-data.json?cache-bust=${Date.now()}`);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data && Array.isArray(data.products)) {
+            productsList = data.products;
+            return;
+        }
+
+        throw new Error('Invalid products-data.json format');
+    } catch (error) {
+        console.warn('Не вдалося завантажити products-data.json, використовую products.js:', error);
+
+        if (typeof allProducts !== 'undefined' && Array.isArray(allProducts)) {
+            productsList = allProducts;
+        }
+    }
+}
+
+// Функція для оновлення липкого футера
+function updateStickyFooter() {
+    const favoriteProducts = productsList.filter(product => favorites.includes(product.id));
+    let total = 0;
+    
+    if (favoriteProducts.length > 0) {
+        favoriteProducts.forEach(product => {
+            const priceValue = parseFloat(product.price.replace(/[^\d.]/g, ''));
+            total += priceValue;
+        });
+    }
+    
+    document.getElementById('totalAmount').textContent = total.toFixed(2) + '₴';
+    document.getElementById('checkoutBtn').style.display = favoriteProducts.length === 0 ? 'none' : 'block';
+}
+
+// Функція для відображення обраних товарів
+function renderFavorites() {
+    const container = document.getElementById("favoritesContainer");
+    const favoriteProducts = productsList.filter(product => favorites.includes(product.id));
+
+    container.innerHTML = '';
+    
+    if (favoriteProducts.length === 0) {
+        container.innerHTML = '<div class="empty-state">📭 Поки що немає обраних товарів. <br/>Перейдіть у <a href="Katalog.html" style="color: #ff6b9d; text-decoration: none;">каталог</a>, щоб додати товари!</div>';
+    } else {
+        favoriteProducts.forEach(product => {
+            container.innerHTML += `
+                <div class="product">
+                    <img src="${product.img}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <button class="remove-btn" onclick="removeFromFavorites(${product.id})">❌ Видалити</button>
+                </div>
+            `;
+        });
+    }
+    
+    updateStickyFooter();
+}
+
+// Функція для видалення з обраного
+function removeFromFavorites(productId) {
+    favorites = favorites.filter(id => id !== productId);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    renderFavorites();
+}
+
+// Викликаємо функції після завантаження даних
+loadProducts().then(renderFavorites);
+</script>
+</body>
+</html>
+
+
