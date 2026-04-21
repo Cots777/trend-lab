@@ -74,6 +74,17 @@
           font-weight: bold;
           margin: 8px 0;
       }
+
+      .selected-size {
+          margin: 2px 0 10px;
+          font-size: 14px;
+          font-weight: 700;
+          color: #6b4f40;
+          background: #fff3ea;
+          border: 1px solid #f1d6c5;
+          border-radius: 999px;
+          padding: 6px 12px;
+      }
       
       .container {
           max-width: 1400px;
@@ -162,6 +173,103 @@
           transform: translateY(-2px);
           box-shadow: 0 6px 18px rgba(132, 231, 75, 0.4);
       }
+
+      .product-modal {
+          position: fixed;
+          inset: 0;
+          z-index: 1200;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          background: rgba(0, 0, 0, 0.65);
+      }
+
+      .product-modal.open {
+          display: flex;
+      }
+
+      .product-modal-content {
+          width: min(920px, 96vw);
+          max-height: 92vh;
+          overflow: auto;
+          background: #fff;
+          border-radius: 16px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 18px;
+          padding: 20px;
+          position: relative;
+      }
+
+      .modal-close {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          border: none;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 20px;
+          background: #f0f0f0;
+          color: #333;
+      }
+
+      .modal-image {
+          width: 100%;
+          height: 480px;
+          object-fit: cover;
+          border-radius: 12px;
+      }
+
+      .modal-details {
+          padding: 18px 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          background: linear-gradient(180deg, #fff7f1 0%, #ffffff 100%);
+          border: 1px solid #f0dfd3;
+          border-radius: 12px;
+      }
+
+      .modal-title {
+          margin: 0;
+          font-size: 1.8rem;
+          line-height: 1.25;
+          color: #2f211a;
+          font-weight: 800;
+      }
+
+      .modal-price {
+          margin: 0;
+          font-size: 1.5rem;
+          font-weight: 800;
+          color: #c24776;
+      }
+
+      .modal-size-box {
+          margin-top: 4px;
+          font-size: 1rem;
+          font-weight: 700;
+          color: #4b362b;
+          background: #fff;
+          border: 1px solid #e7cdbd;
+          border-radius: 10px;
+          padding: 10px 12px;
+      }
+
+      @media (max-width: 900px) {
+          .product-modal-content {
+              grid-template-columns: 1fr;
+          }
+
+          .modal-image {
+              height: 340px;
+          }
+      }
+
       .actions-section {
           display: flex;
           align-items: center;
@@ -272,9 +380,22 @@
     </div>
 </div>
 
+<div class="product-modal" id="favoriteProductModal">
+    <div class="product-modal-content" id="favoriteProductModalContent">
+        <button class="modal-close" id="closeFavoriteProductModal" aria-label="Закрити">✕</button>
+        <img id="favoriteModalImage" class="modal-image" src="" alt="">
+        <div class="modal-details">
+            <h2 id="favoriteModalTitle" class="modal-title"></h2>
+            <p id="favoriteModalPrice" class="modal-price"></p>
+            <div id="favoriteModalSize" class="modal-size-box"></div>
+        </div>
+    </div>
+</div>
+
 <script>
 let productsList = [];
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+const selectedSizes = JSON.parse(localStorage.getItem("selectedSizes")) || {};
 
 async function loadProducts() {
     try {
@@ -326,12 +447,14 @@ function renderFavorites() {
         container.innerHTML = '<div class="empty-state">📭 Поки що немає обраних товарів. <br/>Перейдіть у <a href="Katalog.html" style="color: #ff6b9d; text-decoration: none;">каталог</a>, щоб додати товари!</div>';
     } else {
         favoriteProducts.forEach(product => {
+            const selectedSize = selectedSizes[product.id] || 'Не обрано';
             container.innerHTML += `
-                <div class="product">
+                <div class="product" onclick="openFavoriteProductModal(${product.id})">
                     <img src="${product.img}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p class="price">${product.price}</p>
-                    <button class="remove-btn" onclick="removeFromFavorites(${product.id})">❌ Видалити</button>
+                    <div class="selected-size">Розмір: ${selectedSize}</div>
+                    <button class="remove-btn" onclick="removeFromFavorites(${product.id}, event)">❌ Видалити</button>
                 </div>
             `;
         });
@@ -341,11 +464,54 @@ function renderFavorites() {
 }
 
 // Функція для видалення з обраного
-function removeFromFavorites(productId) {
+function removeFromFavorites(productId, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+
     favorites = favorites.filter(id => id !== productId);
     localStorage.setItem("favorites", JSON.stringify(favorites));
     renderFavorites();
 }
+
+function openFavoriteProductModal(productId) {
+    const product = productsList.find(item => item.id === productId);
+    if (!product) {
+        return;
+    }
+
+    const modal = document.getElementById('favoriteProductModal');
+    const image = document.getElementById('favoriteModalImage');
+    const title = document.getElementById('favoriteModalTitle');
+    const price = document.getElementById('favoriteModalPrice');
+    const size = document.getElementById('favoriteModalSize');
+
+    image.src = product.img;
+    image.alt = product.name;
+    title.textContent = product.name;
+    price.textContent = product.price || '';
+    size.textContent = 'Обраний розмір: ' + (selectedSizes[product.id] || 'Не обрано');
+
+    modal.classList.add('open');
+}
+
+function closeFavoriteProductModal() {
+    const modal = document.getElementById('favoriteProductModal');
+    modal.classList.remove('open');
+}
+
+document.getElementById('closeFavoriteProductModal').addEventListener('click', closeFavoriteProductModal);
+document.getElementById('favoriteProductModal').addEventListener('click', function (event) {
+    if (event.target.id === 'favoriteProductModal') {
+        closeFavoriteProductModal();
+    }
+});
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        closeFavoriteProductModal();
+    }
+});
 
 // Викликаємо функції після завантаження даних
 loadProducts().then(renderFavorites);
