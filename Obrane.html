@@ -162,6 +162,28 @@
           transform: translateY(-2px);
           box-shadow: 0 6px 18px rgba(132, 231, 75, 0.4);
       }
+      .actions-section {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+      }
+      .continue-btn {
+          background: #fff;
+          color: #5a3d2b;
+          padding: 14px 24px;
+          border-radius: 10px;
+          text-decoration: none;
+          font-weight: 700;
+          font-size: 15px;
+          border: 1px solid rgba(90, 61, 43, 0.18);
+          transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+          white-space: nowrap;
+      }
+      .continue-btn:hover {
+          transform: translateY(-2px);
+          background: #fff7f0;
+          box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+      }
       
       @media (max-width: 768px) {
           .sticky-footer {
@@ -177,6 +199,14 @@
           .checkout-btn {
               width: 100%;
               padding: 12px 24px;
+          }
+          .actions-section {
+              width: 100%;
+              flex-direction: column;
+          }
+          .continue-btn {
+              width: 100%;
+              text-align: center;
           }
       }
     </style>
@@ -236,7 +266,10 @@
         <span class="total-label">Сума до оплати:</span>
         <div class="total-amount" id="totalAmount">0₴</div>
     </div>
-    <a href="Oplata.html" class="checkout-btn" id="checkoutBtn">🛒 Перейти до оплати</a>
+    <div class="actions-section">
+        <a href="Katalog.html" class="continue-btn">↩ Продовжити покупку</a>
+        <a href="Oplata.html" class="checkout-btn" id="checkoutBtn">🛒 Перейти до оплати</a>
+    </div>
 </div>
 
 <script>
