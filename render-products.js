@@ -34,7 +34,7 @@ if (!document.getElementById('products-dynamic-styles')) {
         .product {
             cursor: pointer;
         }
-        .product-info {
+        #productsContainer .product-info {
             padding: 14px 12px 4px;
             display: flex;
             flex-direction: column;
@@ -42,19 +42,19 @@ if (!document.getElementById('products-dynamic-styles')) {
             gap: 6px;
             min-height: 128px;
         }
-        .product h3 {
+        #productsContainer .product h3 {
             margin: 0;
             line-height: 1.35;
-            font-size: 1.9rem;
+            font-size: 1.15rem;
             color: #222;
         }
-        .price {
+        #productsContainer .price {
             font-size: 1.2rem;
             color: #ff6b9d;
             font-weight: bold;
             margin-top: 10px;
         }
-        .product-actions {
+        #productsContainer .product-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
@@ -68,7 +68,7 @@ if (!document.getElementById('products-dynamic-styles')) {
             min-height: 58px;
             width: 100%;
             border-radius: 12px;
-            font-size: 1.9rem;
+            font-size: 1rem;
             line-height: 1.15;
             font-weight: 700;
             padding: 10px 12px;
@@ -76,17 +76,18 @@ if (!document.getElementById('products-dynamic-styles')) {
             display: flex;
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
             text-decoration: none;
             transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
         }
-        .quick-favorites-btn {
+        #productsContainer .quick-favorites-btn {
             background: #fff7fa;
             border: 2px solid #ffb8d2;
             cursor: pointer;
             color: #d84a7f;
             box-shadow: 0 6px 12px rgba(216, 74, 127, 0.12);
         }
-        .quick-favorites-btn:hover {
+        #productsContainer .quick-favorites-btn:hover {
             background: #ffe2ee;
             transform: translateY(-2px);
             box-shadow: 0 10px 18px rgba(216, 74, 127, 0.16);
@@ -217,7 +218,7 @@ if (!document.getElementById('products-dynamic-styles')) {
             }
         }
         @media (max-width: 560px) {
-            .product-actions {
+            #productsContainer .product-actions {
                 grid-template-columns: 1fr;
             }
             #productsContainer .favorite-btn,
@@ -329,7 +330,7 @@ function updateFavoriteButtonState(btn, productId) {
 
     if (btn) {
         btn.classList.toggle('active', isFavorite);
-        btn.textContent = isFavorite ? '❤️ Видалити з обраного' : '❤️ Додати в обране';
+        btn.textContent = isFavorite ? 'Видалити з обраного' : 'Додати в обране';
     }
 }
 
@@ -344,7 +345,7 @@ function updateAllFavoriteButtons() {
 
         const isFavorite = favorites.includes(id);
         btn.classList.toggle('active', isFavorite);
-        btn.textContent = isFavorite ? '❤️ В обраному' : '❤️ В обране';
+        btn.textContent = isFavorite ? 'В обраному' : 'В обране';
     });
 
     const modalFavoriteBtn = document.getElementById('modalFavoriteBtn');
@@ -408,7 +409,7 @@ function renderProducts(productIds, containerId = 'productsContainer') {
                             ${priceHTML}
                         </div>
                         <div class="product-actions">
-                            <button class="favorite-btn" onclick="toggleFavorite(${product.id}, this, event)">❤️ В обране</button>
+                            <button class="favorite-btn" onclick="toggleFavorite(${product.id}, this, event)">В обране</button>
                             <a href="Obrane.html" class="quick-favorites-btn" onclick="event.stopPropagation()">До обраного</a>
                         </div>
                     </div>
@@ -446,7 +447,7 @@ function toggleFavorite(productId, btn, event) {
     if (btn) {
         const isFavorite = favorites.includes(productId);
         btn.classList.toggle('active', isFavorite);
-        btn.textContent = isFavorite ? '❤️ В обраному' : '❤️ В обране';
+        btn.textContent = isFavorite ? 'В обраному' : 'В обране';
     }
 
     updateAllFavoriteButtons();
