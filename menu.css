@@ -11,7 +11,7 @@
             padding-top: 60px;
             transition: transform 0.3s ease;
             transform: translateX(-100%);
-            z-index: 1000;
+            z-index: 10020;
         }
         .menu a {
             padding: 10px 15px;
@@ -41,7 +41,7 @@
             height: 24px;
             width: 30px;
             transition: transform 0.3s ease;
-            z-index: 1010;
+            z-index: 10030;
         }
         .burger div {
             width: 100%;

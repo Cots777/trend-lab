@@ -74,7 +74,7 @@
             display: grid;
             grid-template-columns: 1.1fr 0.9fr;
             gap: 40px;
-            align-items: start;
+            align-items: stretch;
         }
         .contact-info {
             display: flex;
@@ -103,61 +103,114 @@
             color: #5a3d2b;
         }
         .social-links {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 12px;
-            margin-top: 10px;
+            margin-top: 14px;
         }
         .social-link {
-            display: inline-flex;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
+            border-radius: 18px;
+            padding: 16px 10px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.05);
             gap: 10px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             text-decoration: none;
-            color: #333;
+            color: #fff;
             font-weight: 600;
-            transition: transform 0.2s ease, color 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .social-link.instagram { color: #E1306C; }
-        .social-link.telegram { color: #0088cc; }
-        .social-link.facebook { color: #3b5998; }
-        .social-link.discord { color: #5865F2; }
-        .social-link.tiktok { color: #000000; }
-        .social-link.viber { color: #665CAC; }
-        .social-link.youtube { color: #FF0000; }
+        .social-link.instagram {
+            background: linear-gradient(145deg, #f58529 0%, #dd2a7b 52%, #8134af 100%);
+            border-color: rgba(221, 42, 123, 0.28);
+        }
+        .social-link.telegram {
+            background: linear-gradient(145deg, #2ca5e0 0%, #0088cc 100%);
+            border-color: rgba(0, 136, 204, 0.28);
+        }
+        .social-link.facebook {
+            background: linear-gradient(145deg, #6d8fd6 0%, #3b5998 100%);
+            border-color: rgba(59, 89, 152, 0.28);
+        }
+        .social-link.discord {
+            background: linear-gradient(145deg, #8b94ff 0%, #5865F2 100%);
+            border-color: rgba(88, 101, 242, 0.28);
+        }
+        .social-link.whatsapp {
+            background: linear-gradient(145deg, #4ce07f 0%, #25D366 100%);
+            border-color: rgba(37, 211, 102, 0.28);
+        }
+        .social-link.tiktok {
+            background: linear-gradient(145deg, #111111 0%, #2a2a2a 100%);
+            border-color: rgba(0, 0, 0, 0.22);
+        }
+        .social-link.viber {
+            background: linear-gradient(145deg, #8b73d6 0%, #665CAC 100%);
+            border-color: rgba(102, 92, 172, 0.28);
+        }
+        .social-link.youtube {
+            background: linear-gradient(145deg, #ff5c5c 0%, #FF0000 100%);
+            border-color: rgba(255, 0, 0, 0.28);
+        }
+        .social-link.instagram,
+        .social-link.telegram,
+        .social-link.facebook,
+        .social-link.discord,
+        .social-link.whatsapp,
+        .social-link.tiktok,
+        .social-link.viber,
+        .social-link.youtube {
+            color: #fff;
+        }
         .social-link:hover {
-            transform: translateX(4px);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 34px rgba(0,0,0,0.14);
+            filter: saturate(1.06);
         }
-        .social-link:hover.instagram { color: #d72b67; }
-        .social-link:hover.telegram { color: #006699; }
-        .social-link:hover.facebook { color: #2d4373; }
-        .social-link:hover.discord { color: #4752c4; }
-        .social-link:hover.tiktok { color: #333333; }
-        .social-link:hover.viber { color: #5b4fb0; }
-        .social-link:hover.youtube { color: #cc0000; }
         .social-link i {
-            width: 24px;
-            text-align: center;
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            font-size: 1.45rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
         }
         .contact-map {
             border-radius: 18px;
             overflow: hidden;
-            min-height: 520px;
+            height: 100%;
+            min-height: 0;
             box-shadow: 0 14px 30px rgba(0,0,0,0.08);
         }
         .contact-map iframe {
             display: block;
             width: 100%;
             height: 100%;
-            min-height: 520px;
+            min-height: 100%;
             border: 0;
         }
         @media (max-width: 960px) {
             .contact-grid {
                 grid-template-columns: 1fr;
+                align-items: start;
             }
             .contact-map {
-                min-height: 300px;
+                min-height: 420px;
+            }
+            .contact-map iframe {
+                min-height: 420px;
+            }
+            .social-links {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
             .page-header h1 {
                 font-size: 2.2rem;
@@ -170,6 +223,9 @@
             .contact-container {
                 margin: 20px 16px 60px;
                 padding: 24px;
+            }
+            .social-links {
+                gap: 10px;
             }
         }
     </style>
@@ -184,6 +240,7 @@
         <div></div>
     </div>
     <div class="menu" id="menu">
+        <a href="novin.html">Новинки</a>
         <a href="Katalog.html">Каталог товарів</a>
         <a href="Obrane.html">Обране</a>
         <a href="Kontakt.html">Наші контакти</a>
@@ -237,13 +294,14 @@
                     <p>⏰ Графік: Пн-Сб 10:00–19:00</p>
                 </div>
                 <div class="social-links">
-                    <a href="https://www.instagram.com/hdsmaw_" class="social-link instagram" target="_blank"><i class="fab fa-instagram"></i>Instagram</a>
-                    <a href="https://t.me/yourprofile" class="social-link telegram" target="_blank"><i class="fab fa-telegram"></i>Telegram</a>
-                    <a href="https://www.facebook.com/profile.php?id=100057774194965" class="social-link facebook" target="_blank"><i class="fab fa-facebook"></i>Facebook</a>
-                    <a href="https://discord.com/users/donzo1368" class="social-link discord" target="_blank"><i class="fab fa-discord"></i>Discord</a>
-                    <a href="https://www.tiktok.com/@dolbognom123" class="social-link tiktok" target="_blank"><i class="fab fa-tiktok"></i>TikTok</a>
-                    <a href="viber://chat?number=+380000000000" class="social-link viber"><i class="fab fa-viber"></i>Viber</a>
-                    <a href="https://www.youtube.com/@yourchannel" class="social-link youtube" target="_blank"><i class="fab fa-youtube"></i>YouTube</a>
+                    <a href="https://www.instagram.com/hdsmaw_" class="social-link instagram" target="_blank" rel="noreferrer"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+                    <a href="https://t.me/yourprofile" class="social-link telegram" target="_blank" rel="noreferrer"><i class="fab fa-telegram"></i><span>Telegram</span></a>
+                    <a href="https://www.facebook.com/profile.php?id=100057774194965" class="social-link facebook" target="_blank" rel="noreferrer"><i class="fab fa-facebook"></i><span>Facebook</span></a>
+                    <a href="https://discord.com/users/donzo1368" class="social-link discord" target="_blank" rel="noreferrer"><i class="fab fa-discord"></i><span>Discord</span></a>
+                    <a href="https://www.whatsapp.com/" class="social-link whatsapp" target="_blank" rel="noreferrer"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+                    <a href="https://www.tiktok.com/@dolbognom123" class="social-link tiktok" target="_blank" rel="noreferrer"><i class="fab fa-tiktok"></i><span>TikTok</span></a>
+                    <a href="viber://chat?number=+380000000000" class="social-link viber"><i class="fab fa-viber"></i><span>Viber</span></a>
+                    <a href="https://www.youtube.com/@yourchannel" class="social-link youtube" target="_blank" rel="noreferrer"><i class="fab fa-youtube"></i><span>YouTube</span></a>
                 </div>
             </div>
             <div class="contact-map">

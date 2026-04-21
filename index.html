@@ -15,10 +15,13 @@
             color: #333;
             line-height: 1.6;
         }
+        .marquee {
+            z-index: 10000 !important;
+        }
         .hero {
             text-align: center;
             padding: 120px 20px 80px;
-            background: url('https://via.placeholder.com/1920x600?text=TrendLab+Hero') no-repeat center center/cover;
+            background: url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
             color: white;
             position: relative;
         }
@@ -85,9 +88,62 @@
             font-size: 1.5rem;
             margin-bottom: 10px;
         }
+        .visual-showcase {
+            max-width: 1160px;
+            margin: 30px auto 26px;
+            padding: 28px 22px 30px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,244,234,0.92) 100%);
+            border-radius: 20px;
+            box-shadow: 0 16px 34px rgba(0,0,0,0.07);
+            border: 1px solid rgba(244, 162, 97, 0.25);
+        }
+        .visual-title {
+            text-align: center;
+            margin: 0 0 18px;
+            color: #b7522a;
+            font-size: 2.25rem;
+        }
+        .visual-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+        .visual-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4 / 5;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+        }
+        .visual-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+        .visual-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.04) 20%, rgba(0,0,0,0.38) 100%);
+        }
+        .visual-card span {
+            position: absolute;
+            left: 14px;
+            bottom: 12px;
+            z-index: 1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+        .visual-card:hover img {
+            transform: scale(1.04);
+        }
         .gallery-container {
             max-width: 1100px;
-            margin: 100px auto 40px auto;
+            margin: 34px auto 40px auto;
             padding: 36px 28px;
             background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,242,233,0.95) 100%);
             border-radius: 20px;
@@ -133,6 +189,12 @@
             .features h2 {
                 font-size: 2rem;
             }
+            .visual-grid {
+                grid-template-columns: 1fr;
+            }
+            .visual-card {
+                aspect-ratio: 16 / 10;
+            }
             .marquee {
                 font-size: 1rem;
             }
@@ -140,7 +202,7 @@
     </style>
 </head>
 <body>
-    <div class="marquee" style="height: 60px; background-color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 1; display: flex; justify-content: center; align-items: center;">
+    <div class="marquee" style="height: 60px; background-color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 10000; display: flex; justify-content: center; align-items: center;">
         <marquee id="marquee" style="width: 90%; color:white" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
     </div>
     <div class="burger" onclick="toggleMenu()">
@@ -149,6 +211,7 @@
         <div></div>
     </div>
     <div class="menu" id="menu">
+        <a href="novin.html">Новинки</a>
         <a href="Katalog.html">Каталог товарів</a>
         <a href="Obrane.html">Обране</a>
         <a href="Kontakt.html">Наші контакти</a>
@@ -208,6 +271,24 @@
             <div class="feature-item">
                 <h3>Підтримка клієнтів</h3>
                 <p>Наша команда завжди готова допомогти вам з вибором та відповідями на питання.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="visual-showcase">
+        <h2 class="visual-title">Натхнення Для Вашого Образу</h2>
+        <div class="visual-grid">
+            <div class="visual-card">
+                <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=1200&q=80" alt="Сучасний стиль">
+                <span>Urban Style</span>
+            </div>
+            <div class="visual-card">
+                <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80" alt="Жіночий образ">
+                <span>Daily Chic</span>
+            </div>
+            <div class="visual-card">
+                <img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?auto=format&fit=crop&w=1200&q=80" alt="Аксесуари">
+                <span>Fresh Drops</span>
             </div>
         </div>
     </section>

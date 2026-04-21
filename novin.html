@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ua">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новинки | TrendLab</title>
+    <link rel="stylesheet" href="menu.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --header-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1920&q=80');
+            /*  url('https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1920&q=80'); */
+            /*  url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1920&q=80'); */
+            /*  url('https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1920&q=80'); */
+            /*  url('https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1920&q=80'); */
+        }
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #f7cfa2 0%, #f4a261 100%);
+            color: #333;
+        }
+        .marquee-banner {
+            height: 60px;
+            background-color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .marquee-banner marquee {
+            width: 90%;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .page-header {
+            text-align: center;
+            padding: 120px 20px 56px;
+            background: linear-gradient(125deg, rgba(90, 44, 22, 0.62), rgba(183, 82, 42, 0.45)),
+                        var(--header-image) no-repeat center center/cover;
+            color: white;
+        }
+        .page-header h1 {
+            margin: 0 0 12px;
+            font-size: 3rem;
+            letter-spacing: 0.4px;
+        }
+        .page-header p {
+            margin: 0;
+            font-size: 1.15rem;
+            opacity: 0.95;
+        }
+        .new-container {
+            max-width: 1160px;
+            margin: 34px auto 80px;
+            padding: 34px 30px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 22px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(244, 162, 97, 0.3);
+        }
+        .section-title {
+            margin: 0 0 8px;
+            color: #b7522a;
+            font-size: 2rem;
+            text-align: center;
+        }
+        .section-subtitle {
+            margin: 0 0 24px;
+            text-align: center;
+            color: #5a3d2b;
+        }
+        .slider-wrap {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+        .slider-btn {
+            width: 48px;
+            height: 48px;
+            border: 0;
+            border-radius: 14px;
+            background: #b7522a;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(183, 82, 42, 0.3);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .slider-btn:hover {
+            transform: translateY(-2px);
+            background: #a74823;
+        }
+        .slider-window {
+            overflow: hidden;
+            border-radius: 18px;
+            position: relative;
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+        .slide {
+            min-width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            background: linear-gradient(180deg, #fff7f0 0%, #fff 100%);
+            border: 1px solid rgba(244, 162, 97, 0.25);
+            border-radius: 18px;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .slide img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 14px;
+            display: block;
+        }
+        .dots {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        .slider-controls-mobile {
+            display: none;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 0;
+            background: rgba(183, 82, 42, 0.35);
+            cursor: pointer;
+            padding: 0;
+        }
+        .dot.active {
+            background: #b7522a;
+            transform: scale(1.15);
+        }
+        .extra-block {
+            margin-top: 28px;
+            padding: 20px;
+            border-radius: 16px;
+            background: #fff8ef;
+            border: 1px solid rgba(244, 162, 97, 0.3);
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .extra-item {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid rgba(90, 61, 43, 0.08);
+            padding: 14px;
+        }
+        .extra-item h3 {
+            margin: 0 0 8px;
+            color: #b7522a;
+            font-size: 1rem;
+        }
+        .extra-item p {
+            margin: 0;
+            color: #5a3d2b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        @media (max-width: 960px) {
+            .page-header h1 {
+                font-size: 2.3rem;
+            }
+            .slide {
+                grid-template-columns: 1fr;
+            }
+            .slide img {
+                height: 280px;
+            }
+            .extra-block {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 700px) {
+            .new-container {
+                margin: 20px 14px 60px;
+                padding: 22px 16px;
+            }
+            .slider-wrap {
+                grid-template-columns: 1fr;
+            }
+            .slider-btn {
+                width: 44px;
+                height: 44px;
+            }
+            .slider-controls-mobile {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 12px;
+            }
+            .slider-wrap > .slider-btn {
+                display: none;
+            }
+            .slide img {
+                height: 230px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="marquee-banner">
+        <marquee id="marquee">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
+    </div>
+
+    <div class="burger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="menu" id="menu">
+        <a href="novin.html">Новинки</a>
+        <a href="Katalog.html">Каталог товарів</a>
+        <a href="Obrane.html">Обране</a>
+        <a href="Kontakt.html">Наші контакти</a>
+        <a href="index.html">Про нас ^-^</a>
+    </div>
+
+    <div class="page-header">
+        <h1>Новинки TrendLab</h1>
+        <p>Свіжі моделі сезону: гортайте фото стрілками та обирайте свій новий стиль.</p>
+    </div>
+
+    <div class="new-container">
+        <h2 class="section-title">Галерея Новинок</h2>
+        <p class="section-subtitle">Натискайте стрілки поруч зі слайдером або крапки знизу для швидкого переходу.</p>
+
+        <div class="slider-wrap">
+            <button class="slider-btn" id="prevBtn" aria-label="Попередній слайд"><i class="fa-solid fa-chevron-left"></i></button>
+
+            <div class="slider-window" id="sliderWindow">
+                <div class="slides" id="slides">
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 1">
+                        <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 2">
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 3">
+                        <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 4">
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 5">
+                        <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 6">
+                    </div>
+                </div>
+            </div>
+
+            <button class="slider-btn" id="nextBtn" aria-label="Наступний слайд"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div class="slider-controls-mobile">
+            <button class="slider-btn" id="prevBtnMobile" aria-label="Попередній слайд мобільний"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="slider-btn" id="nextBtnMobile" aria-label="Наступний слайд мобільний"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div class="dots" id="dots">
+            <button class="dot active" aria-label="Слайд 1"></button>
+            <button class="dot" aria-label="Слайд 2"></button>
+            <button class="dot" aria-label="Слайд 3"></button>
+        </div>
+
+        <div class="extra-block">
+            <div class="extra-item">
+                <h3>Порада стиліста</h3>
+                <p>Поєднуйте одну яскраву новинку з базовими речами, щоб образ виглядав сучасно та збалансовано.</p>
+            </div>
+            <div class="extra-item">
+                <h3>Що в тренді</h3>
+                <p>Цього сезону популярні фактурні тканини, чисті силуети та акцентні аксесуари у теплих відтінках.</p>
+            </div>
+            <div class="extra-item">
+                <h3>Оновлення щотижня</h3>
+                <p>Ми регулярно додаємо нові позиції, тому заглядайте на сторінку новинок, щоб не пропустити цікаве.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            var burger = document.querySelector('.burger');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+        }
+
+        var messages = [
+            "Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!",
+            "Літній розпродаж на TrendLab! Оновіть свій гардероб за вигідними цінами. Акція діє до кінця місяця!",
+            "Осінній розпродаж на TrendLab! Теплі речі та аксесуари зі знижками. Не пропустіть сезонні пропозиції!",
+            "Зимовий розпродаж на TrendLab! Обирайте стильні речі для холодної пори року зі знижками до 60%!",
+            "Спеціальна пропозиція на TrendLab! Безкоштовна доставка при замовленні від 1000 грн. Поспішайте скористатися!"
+        ];
+        var marquee = document.getElementById('marquee');
+        var msgIndex = 0;
+
+        function changeMessage() {
+            msgIndex = (msgIndex + 1) % messages.length;
+            marquee.textContent = messages[msgIndex];
+        }
+
+        marquee.addEventListener('finish', changeMessage);
+        setInterval(changeMessage, 29000);
+        marquee.style.fontSize = '2rem';
+        marquee.style.fontWeight = 'bold';
+
+        var slides = document.getElementById('slides');
+        var dots = document.querySelectorAll('.dot');
+        var currentSlide = 0;
+        var totalSlides = dots.length;
+
+        function renderSlide(index) {
+            slides.style.transform = 'translateX(-' + (index * 100) + '%)';
+            for (var i = 0; i < dots.length; i++) {
+                dots[i].classList.toggle('active', i === index);
+            }
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            renderSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            renderSlide(currentSlide);
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+        document.getElementById('nextBtnMobile').addEventListener('click', nextSlide);
+        document.getElementById('prevBtnMobile').addEventListener('click', prevSlide);
+
+        for (var d = 0; d < dots.length; d++) {
+            (function(index) {
+                dots[index].addEventListener('click', function() {
+                    currentSlide = index;
+                    renderSlide(currentSlide);
+                });
+            })(d);
+        }
+
+        renderSlide(currentSlide);
+    </script>
+</body>
+</html>
