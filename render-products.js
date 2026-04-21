@@ -109,14 +109,14 @@ if (!document.getElementById('products-dynamic-styles')) {
             font-weight: 800;
             font-size: 1rem;
             color: #fff;
-            background: linear-gradient(135deg, #ff6b9d 0%, #e24f86 100%);
-            box-shadow: 0 10px 24px rgba(226, 79, 134, 0.35);
+            background: linear-gradient(135deg, #7a5a48 0%, #5f4539 100%);
+            box-shadow: 0 10px 24px rgba(95, 69, 57, 0.35);
             border: 2px solid rgba(255, 255, 255, 0.35);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .favorites-dock-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 14px 30px rgba(226, 79, 134, 0.42);
+            box-shadow: 0 14px 30px rgba(95, 69, 57, 0.42);
         }
         #productsContainer .quick-favorites-btn {
             background: #fff7fa;
@@ -184,38 +184,59 @@ if (!document.getElementById('products-dynamic-styles')) {
             display: flex;
             flex-direction: column;
             gap: 14px;
+            background: linear-gradient(180deg, #fff7f1 0%, #ffffff 100%);
+            border: 1px solid #f0dfd3;
+            border-radius: 12px;
+            padding: 18px 16px;
         }
         .modal-title {
             margin: 0;
-            font-size: 1.6rem;
-            color: #2b2b2b;
+            font-size: 1.8rem;
+            line-height: 1.25;
+            color: #2f211a;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+        }
+        #modalProductPrice {
+            margin-top: -4px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #c24776;
         }
         .modal-size-title {
             font-weight: 700;
-            color: #2b2b2b;
+            color: #4b362b;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 2px;
         }
         .size-options {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            margin-top: -2px;
         }
         .size-btn {
             min-width: 52px;
-            border: 2px solid #ddd;
+            border: 2px solid #d8c6bb;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 8px 10px;
             font-weight: 700;
             cursor: pointer;
+            color: #3f2d23;
             transition: all 0.2s ease;
         }
         .size-btn:hover {
-            border-color: #ff8db6;
+            border-color: #c27e69;
+            background: #fff7f2;
         }
         .size-btn.active {
-            border-color: #ff6b9d;
-            background: #ff6b9d;
+            border-color: #7a5a48;
+            background: #7a5a48;
             color: #fff;
+            box-shadow: 0 6px 14px rgba(122, 90, 72, 0.28);
         }
         .modal-actions {
             display: flex;
