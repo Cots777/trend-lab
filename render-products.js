@@ -30,9 +30,14 @@ if (!document.getElementById('products-dynamic-styles')) {
             justify-content: center;
             gap: 25px;
             margin-top: 30px;
+            align-items: stretch;
         }
         .product {
             cursor: pointer;
+        }
+        #productsContainer .product {
+            display: flex;
+            flex-direction: column;
         }
         #productsContainer .product-info {
             padding: 14px 12px 4px;
@@ -55,30 +60,35 @@ if (!document.getElementById('products-dynamic-styles')) {
             margin-top: 10px;
         }
         #productsContainer .product-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            width: 100%;
-            padding: 0 14px 16px;
-            align-items: stretch;
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+            padding: 0 12px 14px;
+            box-sizing: border-box;
         }
         #productsContainer .favorite-btn,
         #productsContainer .quick-favorites-btn {
             margin: 0;
-            min-height: 58px;
+            min-height: 50px;
             width: 100%;
             border-radius: 12px;
             font-size: 1rem;
-            line-height: 1.15;
+            line-height: 1.2;
             font-weight: 700;
-            padding: 10px 12px;
+            padding: 10px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            white-space: nowrap;
+            box-sizing: border-box;
+            min-width: 0;
+            white-space: normal;
             text-decoration: none;
             transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+        }
+        #productsContainer .favorite-btn:disabled {
+            cursor: default;
+            opacity: 0.92;
         }
         #productsContainer .quick-favorites-btn {
             background: #fff7fa;
@@ -218,13 +228,9 @@ if (!document.getElementById('products-dynamic-styles')) {
             }
         }
         @media (max-width: 560px) {
-            #productsContainer .product-actions {
-                grid-template-columns: 1fr;
-            }
-            #productsContainer .favorite-btn,
-            #productsContainer .quick-favorites-btn {
-                min-height: 52px;
-                font-size: 0.98rem;
+            #productsContainer .favorite-btn {
+                min-height: 48px;
+                font-size: 0.95rem;
             }
         }
     `;
@@ -345,7 +351,8 @@ function updateAllFavoriteButtons() {
 
         const isFavorite = favorites.includes(id);
         btn.classList.toggle('active', isFavorite);
-        btn.textContent = isFavorite ? 'В обраному' : 'В обране';
+        btn.textContent = isFavorite ? 'В обраному' : 'Додати в обране';
+        btn.disabled = isFavorite;
     });
 
     const modalFavoriteBtn = document.getElementById('modalFavoriteBtn');
@@ -409,8 +416,7 @@ function renderProducts(productIds, containerId = 'productsContainer') {
                             ${priceHTML}
                         </div>
                         <div class="product-actions">
-                            <button class="favorite-btn" onclick="toggleFavorite(${product.id}, this, event)">В обране</button>
-                            <a href="Obrane.html" class="quick-favorites-btn" onclick="event.stopPropagation()">До обраного</a>
+                            <button class="favorite-btn" onclick="addToFavorites(${product.id}, this, event)">Додати в обране</button>
                         </div>
                     </div>
                 `;
@@ -453,6 +459,26 @@ function toggleFavorite(productId, btn, event) {
     updateAllFavoriteButtons();
 }
 
+function addToFavorites(productId, btn, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+
+    let favorites = getFavorites();
+    if (!favorites.includes(productId)) {
+        favorites.push(productId);
+        setFavorites(favorites);
+    }
+
+    if (btn) {
+        btn.classList.add('active');
+        btn.textContent = 'В обраному';
+        btn.disabled = true;
+    }
+
+    updateAllFavoriteButtons();
+}
+
 // 5. Відновлення стану кнопок
 function restoreFavoriteButtons() {
     updateAllFavoriteButtons();
@@ -470,4 +496,5 @@ document.addEventListener("DOMContentLoaded", restoreFavoriteButtons);
 // Експортуємо функції для глобального доступу
 window.renderProducts = renderProducts;
 window.toggleFavorite = toggleFavorite;
+window.addToFavorites = addToFavorites;
 window.openProductModal = openProductModal;
