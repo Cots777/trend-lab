@@ -90,6 +90,34 @@ if (!document.getElementById('products-dynamic-styles')) {
             cursor: default;
             opacity: 0.92;
         }
+        .favorites-dock {
+            position: fixed;
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+            z-index: 1100;
+            width: min(520px, calc(100vw - 24px));
+        }
+        .favorites-dock-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 52px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(135deg, #ff6b9d 0%, #e24f86 100%);
+            box-shadow: 0 10px 24px rgba(226, 79, 134, 0.35);
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .favorites-dock-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(226, 79, 134, 0.42);
+        }
         #productsContainer .quick-favorites-btn {
             background: #fff7fa;
             border: 2px solid #ffb8d2;
@@ -232,6 +260,14 @@ if (!document.getElementById('products-dynamic-styles')) {
                 min-height: 48px;
                 font-size: 0.95rem;
             }
+            .favorites-dock {
+                bottom: 10px;
+                width: calc(100vw - 16px);
+            }
+            .favorites-dock-link {
+                min-height: 48px;
+                font-size: 0.95rem;
+            }
         }
     `;
     document.head.appendChild(productsStyle);
@@ -270,6 +306,18 @@ function ensureProductModal() {
 
     document.body.appendChild(modal);
     document.getElementById('closeProductModal').addEventListener('click', closeProductModal);
+}
+
+function ensureFavoritesDock() {
+    if (!document.getElementById('favoritesDock')) {
+        const dock = document.createElement('div');
+        dock.id = 'favoritesDock';
+        dock.className = 'favorites-dock';
+        dock.innerHTML = '<a href="Obrane.html" class="favorites-dock-link">Перейти в обране</a>';
+        document.body.appendChild(dock);
+    }
+
+    document.body.style.paddingBottom = '96px';
 }
 
 function openProductModal(productId) {
@@ -352,7 +400,7 @@ function updateAllFavoriteButtons() {
         const isFavorite = favorites.includes(id);
         btn.classList.toggle('active', isFavorite);
         btn.textContent = isFavorite ? 'В обраному' : 'Додати в обране';
-        btn.disabled = isFavorite;
+        btn.disabled = false;
     });
 
     const modalFavoriteBtn = document.getElementById('modalFavoriteBtn');
@@ -396,6 +444,7 @@ function renderProducts(productIds, containerId = 'productsContainer') {
     if (!container) return;
 
     ensureProductModal();
+    ensureFavoritesDock();
 
     const doRender = () => {
         container.innerHTML = '';
@@ -416,7 +465,7 @@ function renderProducts(productIds, containerId = 'productsContainer') {
                             ${priceHTML}
                         </div>
                         <div class="product-actions">
-                            <button class="favorite-btn" onclick="addToFavorites(${product.id}, this, event)">Додати в обране</button>
+                            <button class="favorite-btn" onclick="toggleFavorite(${product.id}, this, event)">Додати в обране</button>
                         </div>
                     </div>
                 `;
@@ -453,27 +502,7 @@ function toggleFavorite(productId, btn, event) {
     if (btn) {
         const isFavorite = favorites.includes(productId);
         btn.classList.toggle('active', isFavorite);
-        btn.textContent = isFavorite ? 'В обраному' : 'В обране';
-    }
-
-    updateAllFavoriteButtons();
-}
-
-function addToFavorites(productId, btn, event) {
-    if (event) {
-        event.stopPropagation();
-    }
-
-    let favorites = getFavorites();
-    if (!favorites.includes(productId)) {
-        favorites.push(productId);
-        setFavorites(favorites);
-    }
-
-    if (btn) {
-        btn.classList.add('active');
-        btn.textContent = 'В обраному';
-        btn.disabled = true;
+        btn.textContent = isFavorite ? 'В обраному' : 'Додати в обране';
     }
 
     updateAllFavoriteButtons();
@@ -496,5 +525,4 @@ document.addEventListener("DOMContentLoaded", restoreFavoriteButtons);
 // Експортуємо функції для глобального доступу
 window.renderProducts = renderProducts;
 window.toggleFavorite = toggleFavorite;
-window.addToFavorites = addToFavorites;
 window.openProductModal = openProductModal;
