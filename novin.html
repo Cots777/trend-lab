@@ -10,6 +10,7 @@
     <style>
         :root {
             --header-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1920&q=80');
+            --header-position: center 62%;
             /*  url('https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1920&q=80'); */
             /*  url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1920&q=80'); */
             /*  url('https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1920&q=80'); */
@@ -23,7 +24,7 @@
         }
         .marquee-banner {
             height: 60px;
-            background-color: #333;
+            background-color: #333333ea;
             position: fixed;
             top: 0;
             left: 0;
@@ -41,9 +42,9 @@
         }
         .page-header {
             text-align: center;
-            padding: 120px 20px 56px;
+            padding: 132px 20px 68px;
             background: linear-gradient(125deg, rgba(90, 44, 22, 0.62), rgba(183, 82, 42, 0.45)),
-                        var(--header-image) no-repeat center center/cover;
+                        var(--header-image) no-repeat var(--header-position)/cover;
             color: white;
         }
         .page-header h1 {
@@ -175,6 +176,10 @@
             line-height: 1.6;
         }
         @media (max-width: 960px) {
+            .page-header {
+                padding: 122px 20px 60px;
+                background-position: center 55%;
+            }
             .page-header h1 {
                 font-size: 2.3rem;
             }
@@ -216,14 +221,22 @@
     </style>
 </head>
 <body>
-    <div class="marquee-banner">
-        <marquee id="marquee">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
+    <div class="marquee">
+        <marquee id="marquee" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
     </div>
 
-    <div class="burger" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
+    <div class="top-nav-fixed">
+        <a class="brand-home" href="index.html" aria-label="Перейти на головну">
+            <img src="../trand/катего/photo_1_2025-05-25_0012-13-46.jpg" alt="TrendLab">
+        </a>
+        <div class="burger" onclick="toggleMenu()" aria-label="Відкрити меню" role="button" tabindex="0" onkeydown="if(event.key==='Enter' || event.key===' '){toggleMenu();}">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="top-right-tools">
+        <a class="quick-link" href="Katalog.html">Каталог</a>
     </div>
     <div class="menu" id="menu">
         <a href="novin.html">Новинки</a>
@@ -317,7 +330,7 @@
 
         marquee.addEventListener('finish', changeMessage);
         setInterval(changeMessage, 29000);
-        marquee.style.fontSize = '2rem';
+        marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
         marquee.style.fontWeight = 'bold';
 
         var slides = document.getElementById('slides');

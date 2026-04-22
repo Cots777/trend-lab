@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ua">
 <head>
     <meta charset="UTF-8">
@@ -14,12 +14,20 @@
     </style>
 </head>
 <body> 
-    <div style="height: 60px; background-color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 1; display: flex; justify-content: center; align-items: center;">
-    <marquee id="marquee" style="width: 90%; color:white" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee></div>
-    <div class="burger" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
+    <div class="marquee"><marquee id="marquee" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
+    </div>
+    <div class="top-nav-fixed">
+        <a class="brand-home" href="index.html" aria-label="Перейти на головну">
+            <img src="../trand/катего/photo_1_2025-05-25_0012-13-46.jpg" alt="TrendLab">
+        </a>
+        <div class="burger" onclick="toggleMenu()" aria-label="Відкрити меню" role="button" tabindex="0" onkeydown="if(event.key==='Enter' || event.key===' '){toggleMenu();}">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="top-right-tools">
+        <a class="quick-link" href="Katalog.html">Каталог</a>
     </div>
     <div class="menu" id="menu">
         <a href="novin.html">Новинки</a>
@@ -52,7 +60,7 @@
 
         marquee.addEventListener('finish', changeMessage);
         setInterval(changeMessage, 29000); // смена сообщения каждые 5 секунд
-        marquee.style.fontSize = "2rem";
+        marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
         marquee.style.fontWeight = "bold";
     </script>
 

@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrendLab</title>
     <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="galer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f7cfa2;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #f7cfa2 0%, #f4a261 100%);
+            color: #333;
         }
 
-        * {
+     /*   * {
             box-sizing: border-box;
-        }
-      
+        } */
+
       .product {
           width: 240px;
           padding: 12px;
@@ -88,7 +91,7 @@
       
       .container {
           max-width: 1400px;
-          margin: 100px auto 120px auto;
+           margin: 100px auto 120px auto;
           padding: 32px 24px;
           background: #fff;
           border-radius: 18px;
@@ -320,47 +323,76 @@
     </style>
 </head>
 <body> 
-    <div style="height: 60px; background-color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 1; display: flex; justify-content: center; align-items: center;">
-    <marquee id="marquee" style="width: 90%; color:white" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee></div>
-    <div class="burger" onclick="toggleMenu()">
+    <div class="marquee">
+    <marquee id="marquee" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
+</div>
+<div class="top-nav-fixed">
+    <a class="brand-home" href="index.html" aria-label="Перейти на головну">
+        <img src="../trand/катего/photo_1_2025-05-25_0012-13-46.jpg" alt="TrendLab">
+    </a>
+    <div class="burger" onclick="toggleMenu()" aria-label="Відкрити меню" role="button" tabindex="0" onkeydown="if(event.key==='Enter' || event.key===' '){toggleMenu();}">
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div class="menu" id="menu">
-        <a href="novin.html">Новинки</a>
-        <a href="Katalog.html">Каталог товарів</a>
-        <a href="Obrane.html">Обране</a>
-        <a href="Kontakt.html">Наші контакти</a>
-        <a href="index.html">Про нас ^-^</a>
-    </div>
-    <script>
-        function toggleMenu() {
-            var menu = document.getElementById('menu');
-            var burger = document.querySelector('.burger');
-            menu.classList.toggle('active');
-            burger.classList.toggle('active');
-        }
+</div>
+<div class="top-right-tools">
+    <a class="quick-link" href="Katalog.html">Каталог</a>
+</div>
+<div class="menu" id="menu">
+    <a href="novin.html">Новинки</a>
+    <a href="Katalog.html">Каталог товарів</a>
+    <a href="Obrane.html">Обране</a>
+    <a href="Kontakt.html">Наші контакти</a>
+    <a href="index.html">Про нас ^-^</a>
+</div>
+<script>
+    function toggleMenu() {
+        var menu = document.getElementById('menu');
+        var burger = document.querySelector('.burger');
+        menu.classList.toggle('active');
+        burger.classList.toggle('active');
+    }
 
-        var messages = [
-            "Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!",
-            "Літній розпродаж на TrendLab! Оновіть свій гардероб за вигідними цінами. Акція діє до кінця місяця!",
-            "Осінній розпродаж на TrendLab! Теплі речі та аксесуари зі знижками. Не пропустіть сезонні пропозиції!",
-            "Зимовий розпродаж на TrendLab! Обирайте стильні речі для холодної пори року зі знижками до 60%!",
-            "Спеціальна пропозиція на TrendLab! Безкоштовна доставка при замовленні від 1000 грн. Поспішайте скористатися!"
-        ];
-        var marquee = document.getElementById('marquee');
-        var index = 0;
-        function changeMessage() {
-            index = (index + 1) % messages.length;
-            marquee.textContent = messages[index];
+    function closeMenu() {
+        var menu = document.getElementById('menu');
+        var burger = document.querySelector('.burger');
+        if (menu) {
+            menu.classList.remove('active');
         }
+        if (burger) {
+            burger.classList.remove('active');
+        }
+    }
 
-        marquee.addEventListener('finish', changeMessage);
-        setInterval(changeMessage, 29000); // смена сообщения каждые 5 секунд
-        marquee.style.fontSize = "2rem";
-        marquee.style.fontWeight = "bold";
-    </script>
+    window.addEventListener('pageshow', closeMenu);
+    document.addEventListener('DOMContentLoaded', function () {
+        closeMenu();
+        var menuLinks = document.querySelectorAll('#menu a');
+        for (var i = 0; i < menuLinks.length; i++) {
+            menuLinks[i].addEventListener('click', closeMenu);
+        }
+    });
+
+    var messages = [
+        "Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!",
+        "Літній розпродаж на TrendLab! Оновіть свій гардероб за вигідними цінами. Акція діє до кінця місяця!",
+        "Осінній розпродаж на TrendLab! Теплі речі та аксесуари зі знижками. Не пропустіть сезонні пропозиції!",
+        "Зимовий розпродаж на TrendLab! Обирайте стильні речі для холодної пори року зі знижками до 60%!",
+        "Спеціальна пропозиція на TrendLab! Безкоштовна доставка при замовленні від 1000 грн. Поспішайте скористатися!"
+    ];
+    var marquee = document.getElementById('marquee');
+    var index = 0;
+    function changeMessage() {
+        index = (index + 1) % messages.length;
+        marquee.textContent = messages[index];
+    }
+
+    marquee.addEventListener('finish', changeMessage);
+    setInterval(changeMessage, 29000);
+    marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
+    marquee.style.fontWeight = "bold";
+</script>
 <div class="container">
     <div class="container-header">
         <h1>💕 Обране 💕</h1>
