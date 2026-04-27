@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Розумний підбір | TrendLab</title>
+	<link rel="stylesheet" href="menu.css">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg-1: #f7cfa2;
+			--bg-2: #f4a261;
+			--ink: #333333;
+			--muted: #5a3d2b;
+			--card: rgba(255, 255, 255, 0.95);
+			--line: rgba(244, 162, 97, 0.32);
+			--accent: #b7522a;
+			--accent-2: #d86734;
+			--shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			font-family: "Roboto", Arial, sans-serif;
+			color: var(--ink);
+			background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+			padding: 24px 14px 40px;
+		}
+
+		.marquee {
+			z-index: 10000 !important;
+			height: 60px;
+			background-color: #333;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-sizing: border-box;
+			padding-left: var(--marquee-side-safe, 170px);
+			padding-right: var(--marquee-side-safe, 170px);
+			overflow: hidden;
+		}
+
+		#marquee {
+			width: 100%;
+			color: #fff;
+		}
+
+		.layout {
+			width: min(1180px, 100%);
+			margin: 78px auto 0;
+			display: grid;
+			grid-template-columns: 1.05fr 0.95fr;
+			gap: 18px;
+		}
+
+		.panel {
+			background: var(--card);
+			border: 1px solid var(--line);
+			border-radius: 20px;
+			box-shadow: var(--shadow);
+			overflow: hidden;
+		}
+
+		.panel-head {
+			padding: 22px;
+			border-bottom: 1px solid var(--line);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.title {
+			margin: 0;
+			font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+			color: #b7522a;
+			line-height: 1.1;
+		}
+
+		.subtitle {
+			margin: 6px 0 0;
+			color: var(--muted);
+			font-size: 0.96rem;
+			line-height: 1.6;
+		}
+
+		.badge {
+			padding: 8px 12px;
+			border-radius: 999px;
+			border: 1px solid var(--line);
+			background: rgba(255, 248, 239, 0.95);
+			font-size: 0.82rem;
+			color: #8c4a2a;
+			white-space: nowrap;
+			font-weight: 700;
+		}
+
+		.hero {
+			padding: 22px;
+			display: grid;
+			gap: 14px;
+		}
+
+		.hero-card {
+			min-height: 250px;
+			border-radius: 18px;
+			background:
+				linear-gradient(160deg, rgba(255,255,255,0.8), rgba(255,255,255,0.24)),
+				url("https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+			border: 1px solid rgba(255,255,255,0.85);
+			box-shadow: 0 14px 30px rgba(16, 28, 30, 0.16);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.hero-card::after {
+			content: "Розумний підбір для TrendLab";
+			position: absolute;
+			left: 16px;
+			bottom: 14px;
+			padding: 8px 12px;
+			border-radius: 10px;
+			background: rgba(18, 32, 39, 0.55);
+			color: #fff;
+			font-size: 0.82rem;
+		}
+
+		.chips {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		.chip {
+			padding: 8px 10px;
+			border-radius: 999px;
+			background: #fff8ef;
+			border: 1px solid var(--line);
+			color: #8c4a2a;
+			font-size: 0.82rem;
+			font-weight: 700;
+		}
+
+		.grid {
+			display: grid;
+			gap: 10px;
+		}
+
+		.form-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.field {
+			display: grid;
+			gap: 6px;
+		}
+
+		label {
+			font-size: 0.82rem;
+			font-weight: 700;
+			color: var(--muted);
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		input,
+		select {
+			width: 100%;
+			font: inherit;
+			color: var(--ink);
+			padding: 11px 12px;
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			background: rgba(255, 255, 255, 0.96);
+		}
+
+		.radio-row {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+		}
+
+		.radio-row input {
+			display: none;
+		}
+
+		.radio-row label {
+			text-transform: none;
+			letter-spacing: 0;
+			font-weight: 700;
+			color: #8c4a2a;
+			border: 1px solid var(--line);
+			background: #fff8ef;
+			border-radius: 999px;
+			padding: 9px 12px;
+			cursor: pointer;
+			transition: transform 0.2s ease, background 0.2s ease;
+		}
+
+		.radio-row input:checked + label {
+			background: linear-gradient(120deg, var(--accent), var(--accent-2));
+			color: #fff;
+			border-color: transparent;
+		}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.button {
+			border: 0;
+			border-radius: 12px;
+			padding: 12px 16px;
+			font-weight: 700;
+			cursor: pointer;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			transition: transform 0.2s ease;
+		}
+
+		.button:hover {
+			transform: translateY(-1px);
+		}
+
+		.button.primary {
+			color: #fff;
+			background: linear-gradient(120deg, #b7522a, var(--accent-2));
+			box-shadow: 0 10px 20px rgba(183, 82, 42, 0.3);
+		}
+
+		.button.secondary {
+			color: #8c4a2a;
+			background: #fff8ef;
+			border: 1px solid var(--line);
+		}
+
+		.result {
+			padding: 22px;
+			display: grid;
+			gap: 14px;
+		}
+
+		.result-card {
+			padding: 16px;
+			border-radius: 16px;
+			background: rgba(255, 255, 255, 0.92);
+			border: 1px solid var(--line);
+		}
+
+		.result-title {
+			margin: 0 0 8px;
+			font-size: 1.05rem;
+			color: #b7522a;
+		}
+
+		.big-size {
+			margin: 0;
+			font-size: 2.5rem;
+			font-weight: 800;
+			color: var(--accent);
+			line-height: 1;
+		}
+
+		.muted {
+			margin: 6px 0 0;
+			color: var(--muted);
+			line-height: 1.6;
+		}
+
+		.suggestions {
+			display: grid;
+			gap: 10px;
+		}
+
+		.suggestion {
+			display: grid;
+			grid-template-columns: 34px 1fr auto;
+			gap: 10px;
+			align-items: center;
+			padding: 12px;
+			border-radius: 12px;
+			border: 1px solid var(--line);
+			background: rgba(255, 255, 255, 0.92);
+			color: inherit;
+			text-decoration: none;
+		}
+
+		.suggestion-icon {
+			width: 34px;
+			height: 34px;
+			display: grid;
+			place-items: center;
+			border-radius: 50%;
+			background: rgba(183, 82, 42, 0.14);
+			color: var(--accent);
+			font-weight: 800;
+		}
+
+		.suggestion-title {
+			margin: 0;
+			font-weight: 700;
+		}
+
+		.suggestion-text {
+			margin: 2px 0 0;
+			color: var(--muted);
+			font-size: 0.9rem;
+		}
+
+		.suggestion-go {
+			color: var(--accent);
+			font-weight: 700;
+			font-size: 0.82rem;
+		}
+
+		.size-table {
+			width: 100%;
+			border-collapse: collapse;
+			overflow: hidden;
+			border-radius: 12px;
+		}
+
+		.size-table th,
+		.size-table td {
+			padding: 10px 12px;
+			border-bottom: 1px solid var(--line);
+			text-align: left;
+			font-size: 0.92rem;
+		}
+
+		.size-table th {
+			color: #8c4a2a;
+			background: #fff8ef;
+		}
+
+		.size-table tr:last-child td {
+			border-bottom: 0;
+		}
+
+		.footnote {
+			margin: 0;
+			color: var(--muted);
+			font-size: 0.86rem;
+			line-height: 1.5;
+		}
+
+		@media (max-width: 920px) {
+			.layout {
+				grid-template-columns: 1fr;
+			}
+
+			.panel-head {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.form-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.layout {
+				margin-top: 68px;
+			}
+
+			.hero-card {
+				min-height: 210px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="marquee">
+		<marquee id="marquee" scrollamount="10">Весняний розпродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
+	</div>
+
+	<div class="top-nav-fixed">
+		<a class="brand-home" href="index.html" aria-label="Перейти на головну">
+			<img src="photo_all/category/photo_1_2025-05-25_0012-13-46.jpg" alt="TrendLab">
+		</a>
+		<div class="burger" onclick="toggleMenu()" aria-label="Відкрити меню" role="button" tabindex="0" onkeydown="if(event.key==='Enter' || event.key===' '){toggleMenu();}">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+	<div class="top-right-tools">
+		<a class="quick-link" href="Katalog.html">Каталог</a>
+	</div>
+	<div class="menu" id="menu">
+		<a href="novin.html">Новинки</a>
+		<a href="Katalog.html">Каталог товарів</a>
+		<a href="Obrane.html">Обране</a>
+		<a href="Kontakt.html">Наші контакти</a>
+		<a href="index.html">Про нас ^-^</a>
+		<a href="otziv.html">Відгуки</a>
+	</div>
+
+	<main class="layout">
+		<section class="panel">
+			<header class="panel-head">
+				<div>
+					<h1 class="title">Розумний підбір для магазину</h1>
+					<p class="subtitle">Корисна сторінка для TrendLab: рахує орієнтовний розмір, підбирає капсулу та веде у потрібний розділ каталогу.</p>
+				</div>
+				<span class="badge">Функціональна сторінка</span>
+			</header>
+
+			<div class="hero">
+				<div class="hero-card"></div>
+				<div class="chips">
+					<span class="chip">Підбір розміру</span>
+					<span class="chip">Капсула дня</span>
+					<span class="chip">Швидкий перехід у каталог</span>
+					<span class="chip">Під стиль TrendLab</span>
+				</div>
+			</div>
+		</section>
+
+		<section class="panel">
+			<header class="panel-head">
+				<div>
+					<h2 class="title" style="font-size: 1.55rem;">Заповніть дані</h2>
+					<p class="subtitle">Система підкаже розмір і запропонує готову капсулу під ваш сценарій.</p>
+				</div>
+			</header>
+
+			<div class="result">
+				<div class="grid form-grid">
+					<div class="field">
+						<label>Стать</label>
+						<div class="radio-row">
+							<input type="radio" name="gender" id="gender-male" value="male" checked>
+							<label for="gender-male">Чоловіча</label>
+							<input type="radio" name="gender" id="gender-female" value="female">
+							<label for="gender-female">Жіноча</label>
+						</div>
+					</div>
+
+					<div class="field">
+						<label for="occasion">Сценарій</label>
+						<select id="occasion">
+							<option value="city">Місто / кожен день</option>
+							<option value="work">Робота / навчання</option>
+							<option value="date">Побачення / вихід</option>
+							<option value="sport">Спорт / активний день</option>
+						</select>
+					</div>
+
+					<div class="field">
+						<label for="season">Сезон</label>
+						<select id="season">
+							<option value="all">Універсально</option>
+							<option value="spring">Весна</option>
+							<option value="summer">Літо</option>
+							<option value="autumn">Осінь</option>
+							<option value="winter">Зима</option>
+						</select>
+					</div>
+
+					<div class="field">
+						<label for="mood">Настрій</label>
+						<select id="mood">
+							<option value="calm">Спокійний</option>
+							<option value="bold">Сміливий</option>
+							<option value="soft">Ніжний</option>
+							<option value="clean">Мінімал</option>
+						</select>
+					</div>
+
+					<div class="field">
+						<label for="height">Зріст, см</label>
+						<input id="height" type="number" min="140" max="220" value="172">
+					</div>
+
+					<div class="field">
+						<label for="weight">Вага, кг</label>
+						<input id="weight" type="number" min="35" max="200" value="68">
+					</div>
+				</div>
+
+				<div class="actions">
+					<button class="button primary" id="calculateBtn">Підібрати</button>
+					<a class="button secondary" href="Katalog.html">Перейти в каталог</a>
+				</div>
+
+				<div class="result-card">
+					<h3 class="result-title">Орієнтовний розмір</h3>
+					<p class="big-size" id="sizeValue">M</p>
+					<p class="muted" id="sizeNote">Підбір орієнтовний, але корисний для швидкого старту покупки.</p>
+				</div>
+
+				<div class="result-card">
+					<h3 class="result-title">Капсула дня</h3>
+					<div class="chips" id="profileChips"></div>
+				</div>
+
+				<div class="result-card">
+					<h3 class="result-title">Що підійде зараз</h3>
+					<div class="suggestions" id="suggestions"></div>
+				</div>
+
+				<div class="result-card">
+					<h3 class="result-title">Таблиця підказок</h3>
+					<table class="size-table">
+						<thead>
+							<tr>
+								<th>Зріст / вага</th>
+								<th>Орієнтир</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>До 165 см</td><td>XS / S</td></tr>
+							<tr><td>165-175 см</td><td>S / M</td></tr>
+							<tr><td>175-185 см</td><td>M / L</td></tr>
+							<tr><td>Понад 185 см</td><td>L / XL</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<p class="footnote">Ця сторінка корисна для покупця: швидко дає розмір, готову капсулу та прямі переходи в потрібні розділи магазину.</p>
+			</div>
+		</section>
+	</main>
+
+	<script>
+		function toggleMenu() {
+			const menu = document.getElementById("menu");
+			const burger = document.querySelector(".burger");
+			menu.classList.toggle("active");
+			burger.classList.toggle("active");
+		}
+
+		const messages = [
+			"Весняний розпродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!",
+			"Літній розпродаж на TrendLab! Оновіть свій гардероб за вигідними цінами.",
+			"Осінній розпродаж на TrendLab! Теплі речі та аксесуари зі знижками.",
+			"Зимовий розпродаж на TrendLab! Обирайте стильні речі для холодної пори року зі знижками до 60%!"
+		];
+
+		const marquee = document.getElementById("marquee");
+		let messageIndex = 0;
+
+		function changeMessage() {
+			messageIndex = (messageIndex + 1) % messages.length;
+			marquee.textContent = messages[messageIndex];
+		}
+
+		setInterval(changeMessage, 29000);
+		marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
+		marquee.style.fontWeight = "bold";
+
+		const genderLabels = {
+			male: "Чоловічий",
+			female: "Жіночий"
+		};
+
+		const catalogBlocks = {
+			male: {
+				city: [
+					["Кепка", "obr2.html", "🧢"],
+					["Годинник", "obr1.html", "⌚"],
+					["Худі", "obr5.html", "👕"]
+				],
+				work: [
+					["Сорочка", "obr5.html", "👔"],
+					["Штани", "obr7.html", "👖"],
+					["Лофери", "obr8.html", "👞"]
+				],
+				date: [
+					["Ланцюжок", "obr1.html", "⌚"],
+					["Футболка", "obr5.html", "👕"],
+					["Кеди", "obr8.html", "👟"]
+				],
+				sport: [
+					["Кепка", "obr2.html", "🧢"],
+					["Худі", "obr5.html", "🧥"],
+					["Кросівки", "obr8.html", "👟"]
+				]
+			},
+			female: {
+				city: [
+					["Берет", "obr2.html", "🎀"],
+					["Мінісумка", "obr1.html", "👜"],
+					["Лонгслів", "obr6.html", "👚"]
+				],
+				work: [
+					["Блуза", "obr6.html", "👚"],
+					["Спідниця", "obr6.html", "👗"],
+					["Лофери", "obr8.html", "👠"]
+				],
+				date: [
+					["Берет", "obr2.html", "🎀"],
+					["Сумка", "obr1.html", "👜"],
+					["Жакет", "obr6.html", "👚"]
+				],
+				sport: [
+					["Кепка", "obr2.html", "🧢"],
+					["Спорттоп", "obr6.html", "👕"],
+					["Кросівки", "obr8.html", "👟"]
+				]
+			}
+		};
+
+		const occasionLabels = {
+			city: "Місто",
+			work: "Робота",
+			date: "Побачення",
+			sport: "Спорт"
+		};
+
+		const seasonLabels = {
+			all: "Універсально",
+			spring: "Весна",
+			summer: "Літо",
+			autumn: "Осінь",
+			winter: "Зима"
+		};
+
+		const moodLabels = {
+			calm: "Спокійний",
+			bold: "Сміливий",
+			soft: "Ніжний",
+			clean: "Мінімал"
+		};
+
+		const genderInputs = document.querySelectorAll('input[name="gender"]');
+		const occasion = document.getElementById("occasion");
+		const season = document.getElementById("season");
+		const mood = document.getElementById("mood");
+		const height = document.getElementById("height");
+		const weight = document.getElementById("weight");
+		const calculateBtn = document.getElementById("calculateBtn");
+		const sizeValue = document.getElementById("sizeValue");
+		const sizeNote = document.getElementById("sizeNote");
+		const suggestions = document.getElementById("suggestions");
+		const profileChips = document.getElementById("profileChips");
+
+		function getGender() {
+			const checked = Array.from(genderInputs).find((input) => input.checked);
+			return checked ? checked.value : "male";
+		}
+
+		function estimateSize(gender, h, w) {
+			const bmi = w / Math.pow(h / 100, 2);
+			let result = gender === "female" ? "S" : "M";
+
+			if (gender === "male") {
+				if (bmi < 19.5) result = "S";
+				else if (bmi < 24) result = "M";
+				else if (bmi < 28) result = "L";
+				else result = "XL";
+			} else {
+				if (bmi < 18.5) result = "XS/S";
+				else if (bmi < 22.5) result = "S/M";
+				else if (bmi < 26) result = "M/L";
+				else result = "L/XL";
+			}
+
+			if (h >= 185 && result === "M") result = gender === "male" ? "L" : "M/L";
+			if (h <= 160 && result === "L") result = gender === "male" ? "M" : "S/M";
+
+			return result;
+		}
+
+		function render() {
+			const gender = getGender();
+			const scenario = occasion.value;
+			const selectedSeason = season.value;
+			const selectedMood = mood.value;
+			const h = Number(height.value || 0);
+			const w = Number(weight.value || 0);
+
+			const size = estimateSize(gender, h, w);
+			const scenarioLabel = occasionLabels[scenario];
+			const seasonLabel = seasonLabels[selectedSeason];
+			const moodLabel = moodLabels[selectedMood];
+			const profile = catalogBlocks[gender][scenario];
+
+			sizeValue.textContent = size;
+			sizeNote.textContent = `Орієнтир для ${genderLabels[gender].toLowerCase()} лінійки. Зріст ${h} см, вага ${w} кг.`;
+
+			profileChips.innerHTML = "";
+			[genderLabels[gender], scenarioLabel, seasonLabel, moodLabel].forEach((text) => {
+				const chip = document.createElement("span");
+				chip.className = "chip";
+				chip.textContent = text;
+				profileChips.appendChild(chip);
+			});
+
+			suggestions.innerHTML = "";
+			profile.forEach(([label, link, icon]) => {
+				const item = document.createElement("a");
+				item.className = "suggestion";
+				item.href = link;
+				item.innerHTML = `
+					<div class="suggestion-icon">${icon}</div>
+					<div>
+						<p class="suggestion-title">${label}</p>
+						<p class="suggestion-text">Підійде під обраний сценарій і палiтру магазину.</p>
+					</div>
+					<div class="suggestion-go">Відкрити</div>
+				`;
+				suggestions.appendChild(item);
+			});
+		}
+
+		genderInputs.forEach((input) => input.addEventListener("change", render));
+		[occasion, season, mood, height, weight].forEach((field) => field.addEventListener("input", render));
+		calculateBtn.addEventListener("click", render);
+
+		render();
+	</script>
+</body>
+</html>
