@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор образов TrendLab</title>
+    <link rel="stylesheet" href="menu.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-1: #f7cfa2;
+            --bg-2: #f4a261;
+            --ink: #333333;
+            --muted: #5a3d2b;
+            --card: rgba(255, 255, 255, 0.95);
+            --line: rgba(244, 162, 97, 0.32);
+            --accent: #b7522a;
+            --accent-2: #d86734;
+            --shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Roboto", Arial, sans-serif;
+            color: var(--ink);
+            background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+            padding: 24px 14px;
+        }
+
+        .layout {
+            width: min(1160px, 100%);
+            margin-left: auto;
+            margin-right: auto;
+            display: grid;
+            gap: 18px;
+            grid-template-columns: 1.1fr 0.9fr;
+            margin-top: 78px;
+        }
+
+        .panel {
+            background: var(--card);
+            backdrop-filter: blur(3px);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .left {
+            position: relative;
+            min-height: 620px;
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+
+        .hero-top {
+            padding: 22px 22px 16px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title {
+            margin: 0;
+            font-size: clamp(1.2rem, 2.3vw, 1.9rem);
+            letter-spacing: 0.3px;
+            color: #b7522a;
+        }
+
+        .subtitle {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 248, 239, 0.95);
+            font-size: 0.82rem;
+            color: #8c4a2a;
+            white-space: nowrap;
+        }
+
+        .image-wrap {
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            position: relative;
+        }
+
+        .image-wrap::before,
+        .image-wrap::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            z-index: 0;
+            opacity: 0.45;
+        }
+
+        .image-wrap::before {
+            width: 180px;
+            height: 180px;
+            background: rgba(183, 82, 42, 0.1);
+            top: 14%;
+            left: 8%;
+            animation: none;
+        }
+
+        .image-wrap::after {
+            width: 220px;
+            height: 220px;
+            background: rgba(244, 162, 97, 0.25);
+            bottom: 12%;
+            right: 5%;
+            animation: none;
+        }
+
+        .look-photo {
+            width: min(95%, 560px);
+            aspect-ratio: 4 / 5;
+            border-radius: 16px;
+            background:
+                linear-gradient(165deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.32)),
+                url("https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80") center/cover no-repeat;
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 14px 30px rgba(16, 28, 30, 0.16);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .look-photo::after {
+            content: "Текущий образ";
+            position: absolute;
+            left: 16px;
+            bottom: 14px;
+            padding: 7px 11px;
+            border-radius: 8px;
+            background: rgba(18, 32, 39, 0.55);
+            color: #fff;
+            font-size: 0.78rem;
+            letter-spacing: 0.02em;
+        }
+
+        .look-actions {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(51, 51, 51, 0.76);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .counter {
+            margin: 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding-bottom: 12px;
+        }
+
+        .right {
+            padding: 20px;
+            display: grid;
+            grid-template-rows: auto auto auto 1fr auto;
+            gap: 14px;
+        }
+
+        .controls {
+            display: grid;
+            gap: 10px;
+        }
+
+        .segment {
+            display: flex;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            overflow: hidden;
+        }
+
+        .segment button {
+            border: 0;
+            background: transparent;
+            flex: 1;
+            padding: 10px 10px;
+            cursor: pointer;
+            color: var(--muted);
+            font-weight: 600;
+            transition: background 0.25s ease, color 0.25s ease;
+        }
+
+        .segment button.active {
+            background: linear-gradient(120deg, var(--accent), #d26936);
+            color: #fff;
+        }
+
+        .generate {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(120deg, #b7522a, var(--accent-2));
+            box-shadow: 0 10px 20px rgba(183, 82, 42, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .generate:hover {
+            transform: translateY(-1px);
+        }
+
+        .stack {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            align-content: start;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.92);
+            opacity: 0;
+            transform: translateY(8px);
+            animation: reveal 0.28s ease forwards;
+            text-decoration: none;
+        }
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .num {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(183, 82, 42, 0.14);
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        .slot {
+            margin: 0;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+        }
+
+        .marquee {
+            z-index: 10000 !important;
+            height: 60px;
+            background-color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding-left: var(--marquee-side-safe, 170px);
+            padding-right: var(--marquee-side-safe, 170px);
+            overflow: hidden;
+        }
+
+        #marquee {
+            width: 100%;
+            color: #fff;
+        }
+
+        .piece {
+            margin: 2px 0 0;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #2e2e2e;
+        }
+
+        .tag {
+            display: none;
+        }
+
+        .idea {
+            margin: 0;
+            font-size: 0.86rem;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+            padding-top: 12px;
+        }
+
+        .empty {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 930px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .left {
+                min-height: 440px;
+            }
+
+            .hero-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stack {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                margin-top: 66px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="marquee">
+        <marquee id="marquee" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
+    </div>
+    <div class="top-nav-fixed">
+        <a class="brand-home" href="index.html" aria-label="Перейти на головну">
+            <img src="photo_all/category/photo_1_2025-05-25_0012-13-46.jpg" alt="TrendLab">
+        </a>
+        <div class="burger" onclick="toggleMenu()" aria-label="Відкрити меню" role="button" tabindex="0" onkeydown="if(event.key==='Enter' || event.key===' '){toggleMenu();}">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="top-right-tools">
+        <a class="quick-link" href="Katalog.html">Каталог</a>
+    </div>
+    <div class="menu" id="menu">
+        <a href="novin.html">Новинки</a>
+        <a href="Katalog.html">Каталог товарів</a>
+        <a href="Obrane.html">Обране</a>
+        <a href="Kontakt.html">Наші контакти</a>
+        <a href="index.html">Про нас ^-^</a>
+        <a href="otziv.html">Відгуки</a>
+    </div>
+
+    <main class="layout">
+        <section class="panel left">
+            <header class="hero-top">
+                <div>
+                    <h1 class="title">Образы с кликабельными товарами</h1>
+                    <p class="subtitle">Листайте фото и открывайте нужный товар по иконке справа. Образы редактируются в коде.</p>
+                </div>
+                <span class="badge" id="styleBadge">Urban / Мужской</span>
+            </header>
+            <div class="image-wrap">
+                <article class="look-photo" id="lookPhoto" aria-label="Фото образа"></article>
+                <div class="look-actions">
+                    <button class="nav-btn" id="prevLookBtn" aria-label="Предыдущий образ">&#10094;</button>
+                    <button class="nav-btn" id="nextLookBtn" aria-label="Следующий образ">&#10095;</button>
+                </div>
+            </div>
+            <p class="counter" id="lookCounter">1 / 1</p>
+        </section>
+
+        <aside class="panel right">
+            <div class="controls">
+                <div class="segment" aria-label="Выбор типа образа">
+                    <button class="active" data-gender="male">Мужской</button>
+                    <button data-gender="female">Женский</button>
+                </div>
+                <button class="generate" id="generateBtn">Случайный образ</button>
+            </div>
+
+            <h2 style="margin: 0; font-size: 1rem;">Товары на образе</h2>
+            <div class="stack" id="stack"></div>
+            <p class="idea" id="ideaLine"></p>
+        </aside>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("menu");
+            const burger = document.querySelector(".burger");
+            menu.classList.toggle("active");
+            burger.classList.toggle("active");
+        }
+
+        const messages = [
+            "Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!",
+            "Літній розпродаж на TrendLab! Оновіть свій гардероб за вигідними цінами. Акція діє до кінця місяця!",
+            "Осінній розпродаж на TrendLab! Теплі речі та аксесуари зі знижками. Не пропустіть сезонні пропозиції!",
+            "Зимовий розпродаж на TrendLab! Обирайте стильні речі для холодної пори року зі знижками до 60%!"
+        ];
+
+        const marquee = document.getElementById("marquee");
+        let messageIndex = 0;
+
+        function changeMessage() {
+            messageIndex = (messageIndex + 1) % messages.length;
+            marquee.textContent = messages[messageIndex];
+        }
+
+        setInterval(changeMessage, 29000);
+        marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
+        marquee.style.fontWeight = "bold";
+
+        const looks = [
+            {
+                gender: "male",
+                style: "urban",
+                photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80",
+                idea: "Нажимайте на иконку товара, чтобы перейти в нужный раздел каталога.",
+                products: [
+                    ["Шапка", "Бини графит", "🧢", "obr2.html"],
+                    ["Аксессуар", "Цепь/часы", "⌚", "obr1.html"],
+                    ["Верх", "Худи или футболка", "👕", "obr5.html"],
+                    ["Низ", "Карго или джинсы", "👖", "obr7.html"],
+                    ["Обувь", "Кроссовки", "👟", "obr8.html"]
+                ]
+            },
+            {
+                gender: "female",
+                style: "classic",
+                photo: "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=900&q=80",
+                idea: "Каждое фото образа имеет собственный набор кликабельных товаров.",
+                products: [
+                    ["Головной убор", "Берет", "🎀", "obr2.html"],
+                    ["Аксессуар", "Сумка", "👜", "obr1.html"],
+                    ["Верх", "Блуза", "👚", "obr6.html"],
+                    ["Низ", "Юбка/брюки", "👗", "obr6.html"],
+                    ["Обувь", "Лоферы", "👠", "obr8.html"]
+                ]
+            }
+        ];
+
+        const stack = document.getElementById("stack");
+        const styleBadge = document.getElementById("styleBadge");
+        const lookPhoto = document.getElementById("lookPhoto");
+        const ideaLine = document.getElementById("ideaLine");
+        const buttons = document.querySelectorAll(".segment button");
+        const generateBtn = document.getElementById("generateBtn");
+        const prevLookBtn = document.getElementById("prevLookBtn");
+        const nextLookBtn = document.getElementById("nextLookBtn");
+        const lookCounter = document.getElementById("lookCounter");
+
+        let currentGender = "male";
+        let currentLookId = 0;
+
+        function styleLabel(style) {
+            if (style === "urban") return "Urban";
+            if (style === "classic") return "Classic";
+            return "Sport";
+        }
+
+        function visibleLooks() {
+            return looks.filter((look) => look.gender === currentGender);
+        }
+
+        function setCurrentLookByIndex(index) {
+            const pool = visibleLooks();
+            if (!pool.length) {
+                currentLookId = -1;
+                return;
+            }
+            const safeIndex = ((index % pool.length) + pool.length) % pool.length;
+            const target = pool[safeIndex];
+            currentLookId = looks.indexOf(target);
+        }
+
+        function render() {
+            const pool = visibleLooks();
+
+            if (!pool.length) {
+                styleBadge.textContent = "Нет образов";
+                lookPhoto.style.background =
+                    "linear-gradient(165deg, rgba(255,255,255,.8), rgba(255,255,255,.45))";
+                lookCounter.textContent = "0 / 0";
+                stack.innerHTML = "<p class=\"empty\">Добавьте образы в массив looks в коде.</p>";
+                ideaLine.textContent = "";
+                return;
+            }
+
+            const current = looks[currentLookId];
+            const localIndex = pool.indexOf(current);
+
+            if (localIndex === -1) {
+                setCurrentLookByIndex(0);
+                return render();
+            }
+
+            const items = current.products || [];
+            const genderText = current.gender === "male" ? "Мужской" : "Женский";
+
+            styleBadge.textContent = `${styleLabel(current.style)} / ${genderText}`;
+            lookPhoto.style.background =
+                "linear-gradient(165deg, rgba(255,255,255,.7), rgba(255,255,255,.32)), " +
+                `url("${current.photo}") center/cover no-repeat`;
+            ideaLine.textContent = current.idea;
+            lookCounter.textContent = `${localIndex + 1} / ${pool.length}`;
+
+            stack.innerHTML = "";
+            if (!items.length) {
+                stack.innerHTML = "<p class=\"empty\">Для этого образа не заполнен список товаров в коде.</p>";
+                return;
+            }
+
+            items.forEach((entry) => {
+                const [slot, piece, icon, link] = entry;
+                const card = document.createElement("a");
+                card.className = "item";
+                card.href = link;
+                card.innerHTML = `
+                    <div class="num">${icon}</div>
+                    <div>
+                        <p class="slot">${slot}</p>
+                        <p class="piece">${piece}</p>
+                    </div>
+                `;
+                stack.appendChild(card);
+            });
+        }
+
+        function nextLook(step) {
+            const pool = visibleLooks();
+            if (!pool.length) return;
+            const current = looks[currentLookId];
+            const localIndex = pool.indexOf(current);
+            setCurrentLookByIndex(localIndex + step);
+            render();
+        }
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                currentGender = button.dataset.gender;
+                buttons.forEach((btn) => btn.classList.remove("active"));
+                button.classList.add("active");
+                setCurrentLookByIndex(0);
+                render();
+            });
+        });
+
+        prevLookBtn.addEventListener("click", () => nextLook(-1));
+        nextLookBtn.addEventListener("click", () => nextLook(1));
+
+        generateBtn.addEventListener("click", () => {
+            const pool = visibleLooks();
+            if (!pool.length) return;
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            const randomLook = pool[randomIndex];
+            currentLookId = looks.indexOf(randomLook);
+            render();
+        });
+
+        setCurrentLookByIndex(0);
+        render();
+    </script>
+</body>
+</html>
