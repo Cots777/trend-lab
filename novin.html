@@ -245,6 +245,7 @@
         <a href="Kontakt.html">Наші контакти</a>
         <a href="index.html">Про нас ^-^</a>
         <a href="otziv.html">Відгуки</a>
+        <a href="dodatok.html">Розміри</a>
     </div>
 
     <div class="page-header">
@@ -263,7 +264,7 @@
                 <div class="slides" id="slides">
                     <div class="slide">
                         <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 1">
-                        <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 2">
+                        <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 2">
                     </div>
                     <div class="slide">
                         <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 3">
@@ -272,6 +273,18 @@
                     <div class="slide">
                         <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 5">
                         <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 6">
+                    </div>
+                    <div class="slide">
+                        <img src="https://i1-c.pinimg.com/1200x/7a/5d/4a/7a5d4aec173da83abcde4db2372c8ef3.jpg?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 7">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 8">
+                    </div>
+                    <div class="slide">
+                        <img src="https://i.pinimg.com/736x/b4/d0/cc/b4d0cc1ad0e2be9a942b12b96c2c075c.jpg?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 9">
+                        <img src="https://i.pinimg.com/736x/1d/fc/8e/1dfc8e858a7ce6931bc533e7f7f67c81.jpg?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 10">
+                    </div>
+                    <div class="slide">
+                        <img src="https://i.pinimg.com/736x/f5/d5/fe/f5d5feb791bb77cef916eeaee09368a5.jpg?auto=format&fit=crop&w=1200&q=80" alt="Новинки одягу 11">
+                        <img src="https://i1-c.pinimg.com/1200x/e6/8b/3f/e68b3f22005518097e64d5cd4043c3a8.jpg?auto=format&fit=crop&w=1200&q=80&sat=-20" alt="Новинки одягу 12">
                     </div>
                 </div>
             </div>
@@ -285,9 +298,6 @@
         </div>
 
         <div class="dots" id="dots">
-            <button class="dot active" aria-label="Слайд 1"></button>
-            <button class="dot" aria-label="Слайд 2"></button>
-            <button class="dot" aria-label="Слайд 3"></button>
         </div>
 
         <div class="extra-block">
@@ -335,9 +345,26 @@
         marquee.style.fontWeight = 'bold';
 
         var slides = document.getElementById('slides');
-        var dots = document.querySelectorAll('.dot');
+        var slideItems = slides.querySelectorAll('.slide');
+        var dotsContainer = document.getElementById('dots');
+        var dots = [];
+        var totalSlides = slideItems.length;
         var currentSlide = 0;
-        var totalSlides = dots.length;
+
+        for (var s = 0; s < totalSlides; s++) {
+            var dot = document.createElement('button');
+            dot.className = 'dot' + (s === 0 ? ' active' : '');
+            dot.type = 'button';
+            dot.setAttribute('aria-label', 'Слайд ' + (s + 1));
+            (function(index) {
+                dot.addEventListener('click', function() {
+                    currentSlide = index;
+                    renderSlide(currentSlide);
+                });
+            })(s);
+            dotsContainer.appendChild(dot);
+            dots.push(dot);
+        }
 
         function renderSlide(index) {
             slides.style.transform = 'translateX(-' + (index * 100) + '%)';
@@ -360,15 +387,6 @@
         document.getElementById('prevBtn').addEventListener('click', prevSlide);
         document.getElementById('nextBtnMobile').addEventListener('click', nextSlide);
         document.getElementById('prevBtnMobile').addEventListener('click', prevSlide);
-
-        for (var d = 0; d < dots.length; d++) {
-            (function(index) {
-                dots[index].addEventListener('click', function() {
-                    currentSlide = index;
-                    renderSlide(currentSlide);
-                });
-            })(d);
-        }
 
         renderSlide(currentSlide);
     </script>

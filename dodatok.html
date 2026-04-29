@@ -264,6 +264,13 @@
 			margin: 0 0 8px;
 			font-size: 1.05rem;
 			color: #b7522a;
+			display: flex;
+			gap: 6px;
+			align-items: center;
+		}
+
+		.result-title::before {
+			font-size: 1.2rem;
 		}
 
 		.big-size {
@@ -357,6 +364,58 @@
 			line-height: 1.5;
 		}
 
+		.info-blocks {
+			display: grid;
+			gap: 14px;
+		}
+
+		.info-block {
+			padding: 16px;
+			border-radius: 14px;
+			border: 1px solid var(--line);
+			background: rgba(255, 248, 239, 0.7);
+		}
+
+		.info-block h4 {
+			margin: 0 0 8px;
+			font-size: 0.95rem;
+			color: var(--accent);
+			font-weight: 700;
+			display: flex;
+			gap: 6px;
+			align-items: center;
+		}
+
+		.info-block p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 0.88rem;
+			line-height: 1.5;
+		}
+
+		.tips-list {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: grid;
+			gap: 8px;
+		}
+
+		.tips-list li {
+			font-size: 0.88rem;
+			color: var(--muted);
+			padding-left: 20px;
+			position: relative;
+		}
+
+		.tips-list li::before {
+			content: "✓";
+			position: absolute;
+			left: 0;
+			color: var(--accent);
+			font-weight: 700;
+		}
+
 		@media (max-width: 920px) {
 			.layout {
 				grid-template-columns: 1fr;
@@ -408,16 +467,17 @@
 		<a href="Kontakt.html">Наші контакти</a>
 		<a href="index.html">Про нас ^-^</a>
 		<a href="otziv.html">Відгуки</a>
+		<a href="dodatok.html">Розміри</a>
 	</div>
 
 	<main class="layout">
 		<section class="panel">
 			<header class="panel-head">
 				<div>
-					<h1 class="title">Розумний підбір для магазину</h1>
+					<h1 class="title">✨ Розумний підбір для магазину</h1>
 					<p class="subtitle">Корисна сторінка для TrendLab: рахує орієнтовний розмір, підбирає капсулу та веде у потрібний розділ каталогу.</p>
 				</div>
-				<span class="badge">Функціональна сторінка</span>
+				<span class="badge">💡 Функціональна сторінка</span>
 			</header>
 
 			<div class="hero">
@@ -427,6 +487,41 @@
 					<span class="chip">Капсула дня</span>
 					<span class="chip">Швидкий перехід у каталог</span>
 					<span class="chip">Під стиль TrendLab</span>
+				</div>
+			</div>
+
+			<div class="result">
+				<div class="info-blocks">
+					<div class="info-block">
+						<h4>🎯 Як працює?</h4>
+						<ol class="tips-list">
+							<li>Виберіть стать і сценарій</li>
+							<li>Вкажіть ваші параметри</li>
+							<li>Система розрахує розмір</li>
+							<li>Отримайте готову капсулу</li>
+						</ol>
+					</div>
+
+					<div class="info-block">
+						<h4>📏 Про розміри</h4>
+						<p>XS — для дрібної комплекції; S — компактна; M — універсальний; L — вільний крій; XL — великий розмір.</p>
+						<p style="margin-top: 8px;">Кожна річ в TrendLab має детальні таблиці розмірів з вимірами вузлів.</p>
+					</div>
+
+					<div class="info-block">
+						<h4>💡 Поради для вас</h4>
+						<ul class="tips-list">
+							<li>Вимірюйте в спокійній позиції</li>
+							<li>Вага без верхнього одягу</li>
+							<li>Розмір орієнтовний, перевіряйте</li>
+							<li>Вибирайте за комфортом</li>
+						</ul>
+					</div>
+
+					<div class="info-block">
+						<h4>✨ Капсула дня</h4>
+						<p>Це готова підборка 3-4 речей, які ідеально гармонують між собою. Підходить для вашого сценарію та палітри TrendLab.</p>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -499,23 +594,23 @@
 				</div>
 
 				<div class="result-card">
-					<h3 class="result-title">Орієнтовний розмір</h3>
+					<h3 class="result-title">📏 Орієнтовний розмір</h3>
 					<p class="big-size" id="sizeValue">M</p>
 					<p class="muted" id="sizeNote">Підбір орієнтовний, але корисний для швидкого старту покупки.</p>
 				</div>
 
 				<div class="result-card">
-					<h3 class="result-title">Капсула дня</h3>
+					<h3 class="result-title">🎨 Капсула дня</h3>
 					<div class="chips" id="profileChips"></div>
 				</div>
 
 				<div class="result-card">
-					<h3 class="result-title">Що підійде зараз</h3>
+					<h3 class="result-title">⭐ Що підійде зараз</h3>
 					<div class="suggestions" id="suggestions"></div>
 				</div>
 
 				<div class="result-card">
-					<h3 class="result-title">Таблиця підказок</h3>
+					<h3 class="result-title">📊 Таблиця підказок</h3>
 					<table class="size-table">
 						<thead>
 							<tr>
