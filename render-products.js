@@ -350,8 +350,8 @@ if (!document.getElementById('products-dynamic-styles')) {
             justify-content: center;
             gap: 8px;
             width: 100%;
-            min-height: 52px;
-            padding: 12px 16px;
+            min-height: 30px;
+            padding: 12px 0.1px;
             border-radius: 14px;
             text-decoration: none;
             font-weight: 800;
