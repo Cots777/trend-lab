@@ -19,6 +19,59 @@ function setSelectedSizes(selectedSizes) {
     localStorage.setItem('selectedSizes', JSON.stringify(selectedSizes));
 }
 
+function getSelectedColors() {
+    return JSON.parse(localStorage.getItem('selectedColors')) || {};
+}
+
+function setSelectedColors(selectedColors) {
+    localStorage.setItem('selectedColors', JSON.stringify(selectedColors));
+}
+
+function getColorOptions(productId) {
+    if (productId >= 1 && productId <= 4) {
+        return [
+            { name: 'Молочний', value: '#f5ede3' },
+            { name: 'Рожевий', value: '#f8c7d8' },
+            { name: 'Чорний', value: '#1f1f1f' },
+            { name: 'Бежевий', value: '#d8c2a5' }
+        ];
+    }
+
+    if (productId >= 5 && productId <= 8) {
+        return [
+            { name: 'Кремовий', value: '#f4ead9' },
+            { name: 'Шоколадний', value: '#7b4b2a' },
+            { name: 'Графітовий', value: '#4b4b4b' },
+            { name: 'Сірий', value: '#c9ced6' }
+        ];
+    }
+
+    if (productId >= 9 && productId <= 16) {
+        return [
+            { name: 'Білий', value: '#f8f4ef' },
+            { name: 'Чорний', value: '#1f1f1f' },
+            { name: 'Ніжно-рожевий', value: '#f2c9d7' },
+            { name: 'Бежевий', value: '#dcc6aa' }
+        ];
+    }
+
+    if (productId >= 17 && productId <= 28) {
+        return [
+            { name: 'Синій', value: '#6fa8dc' },
+            { name: 'Графітовий', value: '#4b4b4b' },
+            { name: 'Світло-сірий', value: '#d8dbe2' },
+            { name: 'Чорний', value: '#1f1f1f' }
+        ];
+    }
+
+    return [
+        { name: 'Білий', value: '#f8f4ef' },
+        { name: 'Чорний', value: '#1f1f1f' },
+        { name: 'Сірий', value: '#c9ced6' },
+        { name: 'Синій', value: '#6fa8dc' }
+    ];
+}
+
 // 1. Додаємо стилі для контейнера (якщо їх немає в HTML)
 if (!document.getElementById('products-dynamic-styles')) {
     const productsStyle = document.createElement('style');
@@ -238,6 +291,81 @@ if (!document.getElementById('products-dynamic-styles')) {
             color: #fff;
             box-shadow: 0 6px 14px rgba(122, 90, 72, 0.28);
         }
+        .modal-color-title {
+            font-weight: 700;
+            color: #4b362b;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 2px;
+        }
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: -2px;
+        }
+        .color-btn {
+            min-width: 92px;
+            border: 2px solid #d8c6bb;
+            background: #fff;
+            border-radius: 12px;
+            padding: 8px 10px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #3f2d23;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .color-btn:hover {
+            border-color: #c27e69;
+            background: #fff7f2;
+        }
+        .color-btn.active {
+            border-color: #7a5a48;
+            box-shadow: 0 6px 14px rgba(122, 90, 72, 0.22);
+            transform: translateY(-1px);
+        }
+        .color-swatch {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.14);
+            flex: 0 0 auto;
+        }
+        .selected-variant-info {
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #fff4e7;
+            border: 1px solid #f0dfd3;
+            color: #5b4035;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+        .size-guide-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: fit-content;
+            min-height: 48px;
+            padding: 12px 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, #b7522a 0%, #d86734 100%);
+            box-shadow: 0 10px 20px rgba(183, 82, 42, 0.24);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+        .size-guide-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 26px rgba(183, 82, 42, 0.3);
+            filter: brightness(1.02);
+        }
         .modal-actions {
             display: flex;
             flex-wrap: wrap;
@@ -311,6 +439,10 @@ function ensureProductModal() {
                 <div id="modalProductPrice" class="price"></div>
                 <div class="modal-size-title">Оберіть розмір:</div>
                 <div id="modalSizeOptions" class="size-options"></div>
+                <div class="modal-color-title">Оберіть колір:</div>
+                <div id="modalColorOptions" class="color-options"></div>
+                <div id="modalSelectedVariant" class="selected-variant-info"></div>
+                <a href="dodatok.html" class="size-guide-link">Підібрати розмір</a>
                 <div class="modal-actions">
                     <button id="modalFavoriteBtn" class="modal-favorite-btn" type="button"></button>
                     <a href="Obrane.html" class="modal-go-favorites">Перейти в обране</a>
@@ -354,6 +486,8 @@ function openProductModal(productId) {
     const imgEl = document.getElementById('modalProductImage');
     const priceEl = document.getElementById('modalProductPrice');
     const sizeOptionsEl = document.getElementById('modalSizeOptions');
+    const colorOptionsEl = document.getElementById('modalColorOptions');
+    const selectedVariantEl = document.getElementById('modalSelectedVariant');
     const favoriteBtn = document.getElementById('modalFavoriteBtn');
 
     nameEl.textContent = product.name;
@@ -382,6 +516,36 @@ function openProductModal(productId) {
             this.classList.add('active');
         });
     });
+
+    const selectedColors = getSelectedColors();
+    const productColors = getColorOptions(productId);
+    const currentColor = selectedColors[productId] || productColors[0].name;
+
+    colorOptionsEl.innerHTML = productColors.map(color => `
+        <button
+            class="color-btn ${color.name === currentColor ? 'active' : ''}"
+            type="button"
+            data-color="${color.name}"
+            data-color-value="${color.value}"
+        >
+            <span class="color-swatch" style="background:${color.value}"></span>
+            ${color.name}
+        </button>
+    `).join('');
+
+    colorOptionsEl.querySelectorAll('.color-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const colorsMap = getSelectedColors();
+            colorsMap[productId] = this.dataset.color;
+            setSelectedColors(colorsMap);
+
+            colorOptionsEl.querySelectorAll('.color-btn').forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+            selectedVariantEl.textContent = 'Обраний колір: ' + this.dataset.color;
+        });
+    });
+
+    selectedVariantEl.textContent = 'Обраний колір: ' + currentColor;
 
     favoriteBtn.onclick = function () {
         toggleFavorite(productId);

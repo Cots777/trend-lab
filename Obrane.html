@@ -88,6 +88,17 @@
           border-radius: 999px;
           padding: 6px 12px;
       }
+
+      .selected-color {
+          margin: 0 0 10px;
+          font-size: 14px;
+          font-weight: 700;
+          color: #6b4f40;
+          background: #f7efe7;
+          border: 1px solid #e8d6c8;
+          border-radius: 999px;
+          padding: 6px 12px;
+      }
       
       .container {
           max-width: 1400px;
@@ -263,6 +274,16 @@
           padding: 10px 12px;
       }
 
+      .modal-color-box {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #4b362b;
+          background: #fff;
+          border: 1px solid #e7cdbd;
+          border-radius: 10px;
+          padding: 10px 12px;
+      }
+
       @media (max-width: 900px) {
           .product-modal-content {
               grid-template-columns: 1fr;
@@ -421,6 +442,7 @@
             <h2 id="favoriteModalTitle" class="modal-title"></h2>
             <p id="favoriteModalPrice" class="modal-price"></p>
             <div id="favoriteModalSize" class="modal-size-box"></div>
+            <div id="favoriteModalColor" class="modal-color-box"></div>
         </div>
     </div>
 </div>
@@ -429,6 +451,7 @@
 let productsList = [];
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 const selectedSizes = JSON.parse(localStorage.getItem("selectedSizes")) || {};
+const selectedColors = JSON.parse(localStorage.getItem("selectedColors")) || {};
 
 async function loadProducts() {
     try {
@@ -481,12 +504,14 @@ function renderFavorites() {
     } else {
         favoriteProducts.forEach(product => {
             const selectedSize = selectedSizes[product.id] || 'Не обрано';
+            const selectedColor = selectedColors[product.id] || 'Не обрано';
             container.innerHTML += `
                 <div class="product" onclick="openFavoriteProductModal(${product.id})">
                     <img src="${product.img}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p class="price">${product.price}</p>
                     <div class="selected-size">Розмір: ${selectedSize}</div>
+                    <div class="selected-color">Колір: ${selectedColor}</div>
                     <button class="remove-btn" onclick="removeFromFavorites(${product.id}, event)">❌ Видалити</button>
                 </div>
             `;
@@ -518,12 +543,14 @@ function openFavoriteProductModal(productId) {
     const title = document.getElementById('favoriteModalTitle');
     const price = document.getElementById('favoriteModalPrice');
     const size = document.getElementById('favoriteModalSize');
+    const color = document.getElementById('favoriteModalColor');
 
     image.src = product.img;
     image.alt = product.name;
     title.textContent = product.name;
     price.textContent = product.price || '';
     size.textContent = 'Обраний розмір: ' + (selectedSizes[product.id] || 'Не обрано');
+    color.textContent = 'Обраний колір: ' + (selectedColors[product.id] || 'Не обрано');
 
     modal.classList.add('open');
 }
