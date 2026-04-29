@@ -262,6 +262,141 @@
             line-height: 1.45;
         }
 
+        /* Стилі для колеса скидок */
+        .wheel-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--line);
+        }
+
+        .wheel-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #7b421c;
+            margin: 0 0 12px;
+            text-align: center;
+        }
+
+        .wheel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #discountWheel {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ff6b6b 0deg 45deg,
+                #4ecdc4 45deg 90deg,
+                #ffe66d 90deg 135deg,
+                #95e1d3 135deg 180deg,
+                #f38181 180deg 225deg,
+                #aa96da 225deg 270deg,
+                #fcbad3 270deg 315deg,
+                #a8d8ea 315deg 360deg
+            );
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 3px var(--accent), 0 8px 16px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-size: 2.4rem;
+        }
+
+        #discountWheel::before {
+            content: '🎡';
+            z-index: 2;
+        }
+
+        #discountWheel::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid var(--accent);
+            z-index: 3;
+        }
+
+        #spinWheelBtn {
+            padding: 10px 14px;
+            background: linear-gradient(120deg, var(--accent), #d86734);
+            color: #fff;
+            border: 0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(196, 106, 43, 0.3);
+        }
+
+        #spinWheelBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(196, 106, 43, 0.4);
+        }
+
+        #spinWheelBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #wheelHint {
+            font-size: 0.82rem;
+            text-align: center;
+            margin-top: 8px;
+            color: var(--text-soft);
+            min-height: 18px;
+        }
+
+        #wheelNotification {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            min-width: 300px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .discount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            color: var(--text-soft);
+        }
+
+        .discount-value {
+            color: #2ecc71;
+            font-weight: 700;
+        }
+
         @media (max-width: 920px) {
             .page-wrap {
                 grid-template-columns: 1fr;
@@ -273,6 +408,11 @@
 
             .title {
                 font-size: 1.7rem;
+            }
+
+            #discountWheel {
+                width: 120px;
+                height: 120px;
             }
         }
 
@@ -295,6 +435,8 @@
     <div class="top-space"></div>
 
     <div class="page-wrap">
+            <div id="wheelNotification"></div>
+
          <form class="payment-card" id="paymentForm" action="#" method="post">
             <h1 class="title">Оплата замовлення</h1>
             <p class="subtitle">Заповніть реквізити, щоб завершити покупку.</p>
@@ -391,10 +533,22 @@
                 <div class="summary-row">
                     <span>Доставка:</span>
                     <strong id="summaryDelivery">0.00 ₴</strong>
+                                <div class="summary-row discount-row" id="discountRow" style="display: none;">
+                                    <span>Знижка:</span>
+                                    <strong class="discount-value" id="summaryDiscount">0.00 ₴</strong>
+                                </div>
                 </div>
                 <div class="summary-total">
                     <span>До оплати:</span>
                     <span id="summaryTotal">0.00 ₴</span>
+                                <div class="wheel-section">
+                                    <h3 class="wheel-title">🎡 Крутильне колесо скидок</h3>
+                                    <div class="wheel-container">
+                                        <div id="discountWheel"></div>
+                                        <button type="button" id="spinWheelBtn" disabled>Крутити колесо</button>
+                                        <div id="wheelHint">Додайте товари від 2000 ₴</div>
+                                    </div>
+                                </div>
                 </div>
             </div>
 
@@ -443,7 +597,11 @@
 
             var deliveryType = document.getElementById('deliveryType').value;
             var delivery = selected.length > 0 ? calculateDelivery(itemsTotal, deliveryType) : 0;
-            var total = itemsTotal + delivery;
+            var discount = 0;
+            if (typeof DiscountWheel !== 'undefined') {
+                discount = (itemsTotal * DiscountWheel.getDiscount()) / 100;
+            }
+            var total = itemsTotal + delivery - discount;
 
             document.getElementById('summaryCount').textContent = String(selected.length);
             document.getElementById('summaryItems').textContent = formatUAH(itemsTotal);
@@ -465,7 +623,19 @@
             }
             
             document.getElementById('summaryDelivery').textContent = formatUAH(delivery);
+                        var discountRow = document.getElementById('discountRow');
+                        var summaryDiscount = document.getElementById('summaryDiscount');
+                        if (discount > 0 && discountRow) {
+                            discountRow.style.display = 'flex';
+                            summaryDiscount.textContent = formatUAH(discount);
+                        } else if (discountRow) {
+                            discountRow.style.display = 'none';
+                        }
             document.getElementById('summaryTotal').textContent = formatUAH(total);
+
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.updateWheelState(itemsTotal);
+            }
 
             var hint = document.getElementById('summaryHint');
             var payButton = document.getElementById('payButton');
@@ -603,6 +773,45 @@
             });
 
             return false;
+        }
+    </script>
+
+    <script src="discount-wheel.js"></script>
+    <script>
+        // Функция для пересчета суммы при новой скидке
+        window.updateSummaryWithDiscount = function(discount) {
+            var summaryItems = document.getElementById('summaryItems');
+            var itemsTotal = parsePrice(summaryItems.textContent);
+            var deliveryType = document.getElementById('deliveryType').value;
+            var delivery = calculateDelivery(itemsTotal, deliveryType);
+            var discountAmount = (itemsTotal * discount) / 100;
+            var total = itemsTotal + delivery - discountAmount;
+
+            document.getElementById('summaryTotal').textContent = formatUAH(total);
+            
+            var discountRow = document.getElementById('discountRow');
+            var summaryDiscount = document.getElementById('summaryDiscount');
+            if (discount > 0) {
+                discountRow.style.display = 'flex';
+                summaryDiscount.textContent = formatUAH(discountAmount);
+            } else {
+                discountRow.style.display = 'none';
+            }
+        };
+
+        // Инициализируем колесо скидок после загрузки DOM
+        function initDiscountWheel() {
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.init();
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                initDiscountWheel();
+            });
+        } else {
+            initDiscountWheel();
         }
     </script>
 </body>
