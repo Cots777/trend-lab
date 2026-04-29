@@ -309,6 +309,13 @@
             font-size: 2.4rem;
         }
 
+        .wheel-label {
+            pointer-events: none;
+            user-select: none;
+            font-weight: 700;
+            opacity: 0.95;
+        }
+
         #discountWheel::before {
             content: '🎡';
             z-index: 2;
@@ -395,6 +402,12 @@
         .discount-value {
             color: #2ecc71;
             font-weight: 700;
+        }
+
+        .summary-total .amount {
+            display: block;
+            font-size: 1.9rem;
+            color: #7b421c;
         }
 
         @media (max-width: 920px) {
@@ -533,22 +546,22 @@
                 <div class="summary-row">
                     <span>Доставка:</span>
                     <strong id="summaryDelivery">0.00 ₴</strong>
-                                <div class="summary-row discount-row" id="discountRow" style="display: none;">
-                                    <span>Знижка:</span>
-                                    <strong class="discount-value" id="summaryDiscount">0.00 ₴</strong>
-                                </div>
+                </div>
+                <div class="summary-row discount-row" id="discountRow" style="display: none;">
+                    <span>Знижка:</span>
+                    <strong class="discount-value" id="summaryDiscount">0.00 ₴</strong>
                 </div>
                 <div class="summary-total">
                     <span>До оплати:</span>
-                    <span id="summaryTotal">0.00 ₴</span>
-                                <div class="wheel-section">
-                                    <h3 class="wheel-title">🎡 Крутильне колесо скидок</h3>
-                                    <div class="wheel-container">
-                                        <div id="discountWheel"></div>
-                                        <button type="button" id="spinWheelBtn" disabled>Крутити колесо</button>
-                                        <div id="wheelHint">Додайте товари від 2000 ₴</div>
-                                    </div>
-                                </div>
+                    <span id="summaryTotal" class="amount">0.00 ₴</span>
+                </div>
+                <div class="wheel-section">
+                    <h3 class="wheel-title">🎡 Знижко-крут</h3>
+                    <div class="wheel-container">
+                        <div id="discountWheel"></div>
+                        <button type="button" id="spinWheelBtn" disabled>Крутити колесо</button>
+                        <div id="wheelHint">Додайте товари від 2000 ₴</div>
+                    </div>
                 </div>
             </div>
 
@@ -784,16 +797,17 @@
             var itemsTotal = parsePrice(summaryItems.textContent);
             var deliveryType = document.getElementById('deliveryType').value;
             var delivery = calculateDelivery(itemsTotal, deliveryType);
-            var discountAmount = (itemsTotal * discount) / 100;
+            var discountAmount = (itemsTotal * (discount || 0)) / 100;
             var total = itemsTotal + delivery - discountAmount;
 
+            // Показываем итог с новой суммой и отдельно процент
             document.getElementById('summaryTotal').textContent = formatUAH(total);
             
             var discountRow = document.getElementById('discountRow');
             var summaryDiscount = document.getElementById('summaryDiscount');
             if (discount > 0) {
                 discountRow.style.display = 'flex';
-                summaryDiscount.textContent = formatUAH(discountAmount);
+                summaryDiscount.innerHTML = `<span class="discount-value">${discount}%</span> &nbsp;(${formatUAH(discountAmount)})`;
             } else {
                 discountRow.style.display = 'none';
             }
@@ -813,6 +827,8 @@
         } else {
             initDiscountWheel();
         }
+
+        // Настройки сегментов удалены из UI — при необходимости правьте `discount-wheel.js` или localStorage
     </script>
 </body>
 </html>

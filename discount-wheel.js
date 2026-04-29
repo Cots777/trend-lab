@@ -4,8 +4,8 @@
 const DiscountWheel = {
     MIN_AMOUNT: 2000,
     
-    // Варианты скидок (%)
-    discounts: [5, 10, 15, 20, 25, 10, 30, 15],
+    // Сегменты (процент и вес) — загружаются из localStorage или ставятся по умолчанию
+    segments: null,
     
     // Состояние колеса
     isSpinning: false,
@@ -23,6 +23,22 @@ const DiscountWheel = {
         if (!wheel || !spinButton) return;
         
         spinButton.addEventListener('click', () => this.spin());
+        // Загрузим сегменты из localStorage или используем дефолт настройка скидок и весов
+        this.segments = this.loadSegments() || [
+            {percent:5, weight:1},
+            {percent:10, weight:1},
+            {percent:15, weight:1},
+            {percent:20, weight:1},
+            {percent:25, weight:1},
+            {percent:10, weight:1},
+            {percent:30, weight:1},
+            {percent:15, weight:1}
+        ];
+        // Добавим подписи сегментов и плавность
+        this.renderLabels();
+        if (wheel) {
+            wheel.style.transition = 'transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        }
         this.updateWheelState();
     },
     
@@ -31,6 +47,28 @@ const DiscountWheel = {
      */
     getDiscount: function() {
         return this.currentDiscount || 0;
+    },
+    // Получить текущие сегменты
+    getSegments: function() {
+        return this.segments || [];
+    },
+    // Установить сегменты и сохранить в localStorage
+    setSegments: function(segments) {
+        this.segments = (segments || []).map(function(s){
+            return { percent: Number(s.percent)||0, weight: Number(s.weight)||0 };
+        });
+        try { localStorage.setItem('trendlab_wheel_segments', JSON.stringify(this.segments)); } catch(e){}
+        this.renderLabels();
+        this.updateWheelState();
+    },
+    loadSegments: function() {
+        try {
+            var raw = localStorage.getItem('trendlab_wheel_segments');
+            if (!raw) return null;
+            var parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return null;
+            return parsed.map(function(s){ return { percent: Number(s.percent)||0, weight: Number(s.weight)||0 }; });
+        } catch(e) { return null; }
     },
     
     /**
@@ -93,30 +131,72 @@ const DiscountWheel = {
         
         spinButton.disabled = true;
         
-        // Генеруємо випадкову скидку
-        const randomIndex = Math.floor(Math.random() * this.discounts.length);
-        const selectedDiscount = this.discounts[randomIndex];
-        
-        // Розраховуємо кут для обертання (кожен сегмент ~ 45 градусів)
-        const segmentAngle = 360 / this.discounts.length;
-        const baseRotation = randomIndex * segmentAngle;
-        const extraSpins = 3; // 3 повні обороти
-        const totalRotation = extraSpins * 360 + baseRotation;
-        
+        // Выбор сегмента взвешенно по weight
+        const segments = this.segments || [];
+        const totalWeight = segments.reduce((s, seg) => s + (seg.weight || 0), 0);
+        let targetIdx = 0;
+        if (segments.length === 0) return;
+        if (totalWeight <= 0) {
+            targetIdx = Math.floor(Math.random() * segments.length);
+        } else {
+            let r = Math.random() * totalWeight;
+            for (let i = 0; i < segments.length; i++) {
+                r -= (segments[i].weight || 0);
+                if (r <= 0) { targetIdx = i; break; }
+            }
+        }
+        const selectedDiscount = (segments[targetIdx] && segments[targetIdx].percent) || 0;
+
+        // Розраховуємо кут для обертання — кінець має дивитись на центр сегмента
+        const segmentAngle = 360 / segments.length;
+        const extraSpins = 4; // повні обороти
+        const targetAngle = targetIdx * segmentAngle + segmentAngle / 2;
+        const totalRotation = extraSpins * 360 + (360 - targetAngle);
+
         // Анімація обертання
         wheel.style.transform = `rotate(${totalRotation}deg)`;
-        
-        // Після анімації показуємо результат
+
+        // Після анімації показуємо результат (чуть довше, щоб вмістилося)
         setTimeout(() => {
             this.currentDiscount = selectedDiscount;
             this.showWinNotification(selectedDiscount, itemsTotal);
             this.updateWheelState(itemsTotal);
             this.isSpinning = false;
             spinButton.disabled = false;
-            
+
             // Оновлюємо суму в кошику
             this.recalculateTotal();
-        }, 2000); // Тривалість анімації
+        }, 4200); // Тривалість анімації трохи довша
+    },
+
+    // Отрисовать подписи сегментов вокруг колеса
+    renderLabels: function() {
+        const wheel = document.getElementById('discountWheel');
+        if (!wheel) return;
+        // Удалим предыдущие, если есть
+        const existing = wheel.querySelectorAll('.wheel-label');
+        existing.forEach(n => n.remove());
+
+        const segments = this.segments || [];
+        const count = segments.length || 1;
+        const angleStep = 360 / count;
+        for (let i = 0; i < count; i++) {
+            const perc = (segments[i] && segments[i].percent) || 0;
+            const label = document.createElement('div');
+            label.className = 'wheel-label';
+            label.textContent = perc + '%';
+            // Расположим по кругу: повернем контейнер, сдвинем вверх и компенсируем поворот текста
+            const angle = i * angleStep;
+            label.style.position = 'absolute';
+            label.style.left = '50%';
+            label.style.top = '50%';
+            label.style.transform = `rotate(${angle}deg) translate(0, -72px) rotate(-${angle}deg)`;
+            label.style.transformOrigin = 'center center';
+            label.style.fontSize = '0.8rem';
+            label.style.color = '#fff';
+            label.style.textShadow = '0 1px 2px rgba(0,0,0,0.6)';
+            wheel.appendChild(label);
+        }
     },
     
     /**
