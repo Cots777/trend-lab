@@ -345,13 +345,13 @@ if (!document.getElementById('products-dynamic-styles')) {
             line-height: 1.35;
         }
         .size-guide-link {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            width: fit-content;
-            min-height: 48px;
-            padding: 12px 18px;
+            width: 100%;
+            min-height: 52px;
+            padding: 12px 16px;
             border-radius: 14px;
             text-decoration: none;
             font-weight: 800;
@@ -367,10 +367,11 @@ if (!document.getElementById('products-dynamic-styles')) {
             filter: brightness(1.02);
         }
         .modal-actions {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             margin-top: auto;
+            width: 100%;
         }
         .modal-favorite-btn,
         .modal-go-favorites {
@@ -384,6 +385,9 @@ if (!document.getElementById('products-dynamic-styles')) {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            min-height: 52px;
+            box-sizing: border-box;
         }
         .modal-favorite-btn {
             background: #ff6b9d;
