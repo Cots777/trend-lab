@@ -190,11 +190,8 @@ const DiscountWheel = {
             label.style.position = 'absolute';
             label.style.left = '50%';
             label.style.top = '50%';
-            label.style.transform = `rotate(${angle}deg) translate(0, -72px) rotate(-${angle}deg)`;
+            label.style.transform = `rotate(${angle}deg) translate(0, -68px) rotate(-${angle}deg)`;
             label.style.transformOrigin = 'center center';
-            label.style.fontSize = '0.8rem';
-            label.style.color = '#fff';
-            label.style.textShadow = '0 1px 2px rgba(0,0,0,0.6)';
             wheel.appendChild(label);
         }
     },

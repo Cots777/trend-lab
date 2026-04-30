@@ -284,9 +284,18 @@
             gap: 12px;
         }
 
-        #discountWheel {
+        .wheel-wrapper {
+            position: relative;
             width: 140px;
             height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #discountWheel {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             background: conic-gradient(
                 from 0deg,
@@ -305,34 +314,41 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             font-size: 2.4rem;
-        }
-
-        .wheel-label {
-            pointer-events: none;
-            user-select: none;
-            font-weight: 700;
-            opacity: 0.95;
         }
 
         #discountWheel::before {
             content: '🎡';
             z-index: 2;
+            font-size: 1.8rem;
         }
 
-        #discountWheel::after {
-            content: '';
+        .wheel-arrow {
             position: absolute;
-            top: -8px;
+            top: -10px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 12px solid var(--accent);
-            z-index: 3;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid var(--accent);
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .wheel-label {
+            pointer-events: none;
+            user-select: none;
+            font-weight: 800;
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            backdrop-filter: blur(4px);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
         }
 
         #spinWheelBtn {
@@ -423,9 +439,14 @@
                 font-size: 1.7rem;
             }
 
-            #discountWheel {
+            .wheel-wrapper {
                 width: 120px;
                 height: 120px;
+            }
+
+            #discountWheel {
+                width: 100%;
+                height: 100%;
             }
         }
 
@@ -558,7 +579,10 @@
                 <div class="wheel-section">
                     <h3 class="wheel-title">🎡 Знижко-крут</h3>
                     <div class="wheel-container">
-                        <div id="discountWheel"></div>
+                        <div class="wheel-wrapper">
+                            <div id="discountWheel"></div>
+                            <div class="wheel-arrow"></div>
+                        </div>
                         <button type="button" id="spinWheelBtn" disabled>Крутити колесо</button>
                         <div id="wheelHint">Додайте товари від 2000 ₴</div>
                     </div>
