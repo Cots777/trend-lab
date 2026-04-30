@@ -175,29 +175,24 @@ const DiscountWheel = {
         }, 4200); // Тривалість анімації трохи довша
     },
 
-    // Отрисовать подписи сегментов вокруг колеса (статичные, не вращаются)
+    // Отрисовать подписи сегментов прямо на колесе (вращаются с колесом)
     renderLabels: function() {
-        const wrapper = document.querySelector('.wheel-wrapper');
-        if (!wrapper) return;
+        const wheel = document.getElementById('discountWheel');
+        if (!wheel) return;
         
-        // Удалим старый контейнер с метками если есть
-        const oldLabelsContainer = wrapper.querySelector('.wheel-labels-container');
-        if (oldLabelsContainer) oldLabelsContainer.remove();
+        // Удалим старые метки если есть
+        const oldLabels = wheel.querySelectorAll('.wheel-label');
+        oldLabels.forEach(n => n.remove());
         
-        // Создаем новый контейнер для меток
-        const labelsContainer = document.createElement('div');
-        labelsContainer.className = 'wheel-labels-container';
-        labelsContainer.style.position = 'absolute';
-        labelsContainer.style.top = '50%';
-        labelsContainer.style.left = '50%';
-        labelsContainer.style.width = '160px';
-        labelsContainer.style.height = '160px';
-        labelsContainer.style.transform = 'translate(-50%, -50%)';
-        labelsContainer.style.pointerEvents = 'none';
+        // Удалим старый контейнер если есть (от предыдущей версии)
+        const oldContainer = document.querySelector('.wheel-labels-container');
+        if (oldContainer) oldContainer.remove();
 
         const segments = this.segments || [];
         const count = segments.length || 1;
         const angleStep = 360 / count;
+        const wheelRadius = wheel.clientWidth / 2;
+        const labelRadius = Math.max(36, wheelRadius * 0.62);
         
         for (let i = 0; i < count; i++) {
             const perc = (segments[i] && segments[i].percent) || 0;
@@ -205,20 +200,24 @@ const DiscountWheel = {
             label.className = 'wheel-label';
             label.textContent = perc + '%';
             
-            const angle = (i * angleStep + angleStep / 2) * (Math.PI / 180);
-            const radius = 72;
-            const x = radius * Math.cos(angle - Math.PI / 2);
-            const y = radius * Math.sin(angle - Math.PI / 2);
+            // Угол по центру сегмента
+            const centerAngle = i * angleStep + angleStep / 2;
+            
+            // Позиция метки относительно фактического размера колеса
+            const radianAngle = (centerAngle - 90) * (Math.PI / 180);
+            const x = Math.cos(radianAngle) * labelRadius;
+            const y = Math.sin(radianAngle) * labelRadius;
             
             label.style.position = 'absolute';
             label.style.left = '50%';
             label.style.top = '50%';
-            label.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            // Передвигаем на позицию и поворачиваем текст по углу сегмента
+            label.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${centerAngle}deg)`;
+            label.style.transformOrigin = 'center center';
+            label.style.pointerEvents = 'none';
             
-            labelsContainer.appendChild(label);
+            wheel.appendChild(label);
         }
-        
-        wrapper.appendChild(labelsContainer);
     },
     
     /**
