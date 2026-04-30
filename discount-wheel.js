@@ -11,7 +11,8 @@ const DiscountWheel = {
     isSpinning: false,
     currentDiscount: null,
     lastSpinTime: 0,
-    spinCooldown: 5000, // 5 сек между спинами
+    spinCooldown: 500, // минимальная задержка между кликами
+    hasSpinThisOrder: false, // флаг: уже один раз крутил в этом заказе
     
     /**
      * Инициализация колеса
@@ -77,6 +78,7 @@ const DiscountWheel = {
     canSpin: function(itemsTotal) {
         return itemsTotal >= this.MIN_AMOUNT && 
                !this.isSpinning && 
+               !this.hasSpinThisOrder && 
                (Date.now() - this.lastSpinTime) > this.spinCooldown;
     },
     
@@ -95,14 +97,17 @@ const DiscountWheel = {
         spinButton.style.opacity = canSpinNow ? '1' : '0.5';
         spinButton.style.cursor = canSpinNow ? 'pointer' : 'not-allowed';
         
-        if (itemsTotal < this.MIN_AMOUNT && itemsTotal > 0) {
+        if (this.hasSpinThisOrder) {
+            wheelHint.textContent = this.currentDiscount 
+                ? `✨ Ви виграли ${this.currentDiscount}% знижку! Йдіть оплачувати.`
+                : '⏸️ Вже крутили колесо для цього замовлення';
+            wheelHint.style.color = this.currentDiscount ? '#2ecc71' : '#b7522a';
+        } else if (itemsTotal < this.MIN_AMOUNT && itemsTotal > 0) {
             wheelHint.textContent = `Ще ${(this.MIN_AMOUNT - itemsTotal).toFixed(2)} ₴ до розблокування колеса`;
             wheelHint.style.color = '#d86734';
         } else if (itemsTotal >= this.MIN_AMOUNT) {
-            wheelHint.textContent = this.currentDiscount 
-                ? `✨ Ви виграли ${this.currentDiscount}% знижку!`
-                : '🎡 Крутіть колесо для скидки!';
-            wheelHint.style.color = this.currentDiscount ? '#2ecc71' : '#b7522a';
+            wheelHint.textContent = '🎡 Крутіть колесо 1 раз для скидки!';
+            wheelHint.style.color = '#b7522a';
         } else {
             wheelHint.textContent = 'Додайте товари від 2000 ₴';
             wheelHint.style.color = '#b7522a';
@@ -124,6 +129,7 @@ const DiscountWheel = {
         }
         
         this.isSpinning = true;
+        this.hasSpinThisOrder = true; // Блокируем дальнейшее кручение
         this.lastSpinTime = Date.now();
         
         const wheel = document.getElementById('discountWheel');
@@ -169,31 +175,50 @@ const DiscountWheel = {
         }, 4200); // Тривалість анімації трохи довша
     },
 
-    // Отрисовать подписи сегментов вокруг колеса
+    // Отрисовать подписи сегментов вокруг колеса (статичные, не вращаются)
     renderLabels: function() {
-        const wheel = document.getElementById('discountWheel');
-        if (!wheel) return;
-        // Удалим предыдущие, если есть
-        const existing = wheel.querySelectorAll('.wheel-label');
-        existing.forEach(n => n.remove());
+        const wrapper = document.querySelector('.wheel-wrapper');
+        if (!wrapper) return;
+        
+        // Удалим старый контейнер с метками если есть
+        const oldLabelsContainer = wrapper.querySelector('.wheel-labels-container');
+        if (oldLabelsContainer) oldLabelsContainer.remove();
+        
+        // Создаем новый контейнер для меток
+        const labelsContainer = document.createElement('div');
+        labelsContainer.className = 'wheel-labels-container';
+        labelsContainer.style.position = 'absolute';
+        labelsContainer.style.top = '50%';
+        labelsContainer.style.left = '50%';
+        labelsContainer.style.width = '160px';
+        labelsContainer.style.height = '160px';
+        labelsContainer.style.transform = 'translate(-50%, -50%)';
+        labelsContainer.style.pointerEvents = 'none';
 
         const segments = this.segments || [];
         const count = segments.length || 1;
         const angleStep = 360 / count;
+        
         for (let i = 0; i < count; i++) {
             const perc = (segments[i] && segments[i].percent) || 0;
             const label = document.createElement('div');
             label.className = 'wheel-label';
             label.textContent = perc + '%';
-            // Расположим по кругу: повернем контейнер, сдвинем вверх и компенсируем поворот текста
-            const angle = i * angleStep;
+            
+            const angle = (i * angleStep + angleStep / 2) * (Math.PI / 180);
+            const radius = 72;
+            const x = radius * Math.cos(angle - Math.PI / 2);
+            const y = radius * Math.sin(angle - Math.PI / 2);
+            
             label.style.position = 'absolute';
             label.style.left = '50%';
             label.style.top = '50%';
-            label.style.transform = `rotate(${angle}deg) translate(0, -68px) rotate(-${angle}deg)`;
-            label.style.transformOrigin = 'center center';
-            wheel.appendChild(label);
+            label.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            
+            labelsContainer.appendChild(label);
         }
+        
+        wrapper.appendChild(labelsContainer);
     },
     
     /**
@@ -243,6 +268,7 @@ const DiscountWheel = {
     reset: function() {
         this.currentDiscount = null;
         this.isSpinning = false;
+        this.hasSpinThisOrder = false; // Позволяем крутить снова для нового заказа
         this.lastSpinTime = 0;
         const wheel = document.getElementById('discountWheel');
         if (wheel) {

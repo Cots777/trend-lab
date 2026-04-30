@@ -624,6 +624,11 @@
         }
 
         function updateSummary(products, favorites) {
+            // Сбрасываем колесо когда товары изменяются
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.reset();
+            }
+            
             var selected = products.filter(function (p) {
                 return favorites.includes(p.id);
             });
@@ -808,6 +813,11 @@
                 expiry: expiry,
                 cvc: cvc
             });
+            
+            // Сбрасываем колесо для нового заказа
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.reset();
+            }
 
             return false;
         }
