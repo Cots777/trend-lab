@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата | TrendLab</title>
+    <style>
+        :root {
+            --bg-main: #f7cfa2;
+            --bg-soft: #fff7ef;
+            --panel: #ffffff;
+            --text-main: #333333;
+            --text-soft: #72584a;
+            --accent: #c46a2b;
+            --accent-hover: #a85a25;
+            --line: #ead8c6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.45), transparent 35%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.35), transparent 35%),
+                linear-gradient(140deg, #f7cfa2 0%, #f5c08f 45%, #efb782 100%);
+            min-height: 100vh;
+        }
+
+        .top-space {
+            height: 22px;
+        }
+
+        .top-actions {
+            max-width: 1100px;
+            margin: 10px auto 0;
+            padding: 0 16px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #7b421c;
+            background: rgba(255, 255, 255, 0.65);
+            border: 1px solid #ead8c6;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 700;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .back-link:hover {
+            background: #fff2e5;
+            transform: translateY(-1px);
+        }
+
+        .page-wrap {
+            max-width: 1100px;
+            margin: 24px auto 40px;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+        }
+
+        .payment-card,
+        .summary-card {
+            background: linear-gradient(180deg, #ffffff 0%, #fff8f1 100%);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: 0 14px 30px rgba(113, 62, 25, 0.12);
+        }
+
+        .payment-card {
+            padding: 24px;
+        }
+
+        .summary-card {
+            padding: 22px 18px;
+            position: sticky;
+            top: 24px;
+            height: fit-content;
+        }
+
+        .title {
+            margin: 0 0 8px;
+            font-size: 2rem;
+            color: #7b421c;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            color: var(--text-soft);
+            text-align: center;
+        }
+
+        .section-title {
+            margin: 18px 0 12px;
+            font-size: 1.05rem;
+            color: #7b421c;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .field {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-soft);
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #dbc4ad;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            background: var(--bg-soft);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(196, 106, 43, 0.18);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 84px;
+        }
+
+        .checkbox-row {
+            margin: 16px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--text-soft);
+            font-size: 0.92rem;
+        }
+
+        .checkbox-row input {
+            width: auto;
+            margin-top: 3px;
+        }
+
+        .checkbox-row a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(196, 106, 43, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            width: 140px;
+            background: #efe3d7;
+            color: #6e4c35;
+        }
+
+        .summary-title {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #7b421c;
+        }
+
+        .summary-subtitle {
+            margin: 6px 0 16px;
+            color: var(--text-soft);
+            font-size: 0.92rem;
+        }
+
+        .summary-box {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            color: var(--text-soft);
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-total {
+            border-top: 1px dashed #d7bda5;
+            margin-top: 10px;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #7b421c;
+        }
+
+        .helper {
+            margin-top: 8px;
+            font-size: 0.88rem;
+            color: var(--text-soft);
+            line-height: 1.45;
+        }
+
+        /* Стилі для колеса скидок */
+        .wheel-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--line);
+            background: linear-gradient(180deg, rgba(196, 106, 43, 0.05), transparent 65%);
+            border-radius: 16px;
+        }
+
+        .wheel-title {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            color: #7b421c;
+            margin: 0 0 12px;
+            text-align: center;
+        }
+
+        .wheel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.14));
+        }
+
+        .wheel-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 214, 143, 0.45) 0%, rgba(255, 214, 143, 0) 72%);
+            z-index: 0;
+        }
+
+        #discountWheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ff6b6b 0deg 45deg,
+                #4ecdc4 45deg 90deg,
+                #ffe66d 90deg 135deg,
+                #95e1d3 135deg 180deg,
+                #f38181 180deg 225deg,
+                #aa96da 225deg 270deg,
+                #fcbad3 270deg 315deg,
+                #a8d8ea 315deg 360deg
+            );
+            border: 4px solid #fff;
+            box-shadow:
+                0 0 0 4px var(--accent),
+                inset 0 8px 14px rgba(255, 255, 255, 0.35),
+                inset 0 -10px 14px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-size: 2.4rem;
+            z-index: 1;
+        }
+
+        #discountWheel::before {
+            content: '';
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd6a5 0%, #f3a158 42%, #b86023 100%);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 3;
+        }
+
+        #discountWheel::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 25% 20%, rgba(255, 255, 255, 0.32), transparent 38%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .wheel-arrow {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 18px solid var(--accent);
+            z-index: 10;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+        }
+
+        .wheel-arrow::after {
+            content: '';
+            position: absolute;
+            top: -18px;
+            left: -4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #8e4518;
+            box-shadow: 0 0 0 2px #fff;
+        }
+
+        .wheel-label {
+            pointer-events: none;
+            user-select: none;
+            font-weight: 900;
+            font-size: 0.88rem;
+            color: #fff;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 2px rgba(0, 0, 0, 0.9);
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        #spinWheelBtn {
+            padding: 11px 18px;
+            background: linear-gradient(135deg, #cf7a3c, #b85f27);
+            color: #fff;
+            border: 0;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(184, 95, 39, 0.3);
+        }
+
+        #spinWheelBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(196, 106, 43, 0.4);
+        }
+
+        #spinWheelBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #wheelHint {
+            font-size: 0.82rem;
+            text-align: center;
+            margin-top: 8px;
+            color: var(--text-soft);
+            min-height: 18px;
+        }
+
+        #wheelNotification {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            min-width: 300px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .discount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            color: var(--text-soft);
+        }
+
+        .discount-value {
+            color: #2ecc71;
+            font-weight: 700;
+        }
+
+        .summary-total .amount {
+            display: block;
+            font-size: 1.9rem;
+            color: #7b421c;
+        }
+
+        @media (max-width: 920px) {
+            .page-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+
+            .title {
+                font-size: 1.7rem;
+            }
+
+            .wheel-wrapper {
+                width: 150px;
+                height: 150px;
+            }
+
+            #discountWheel {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-actions">
+        <a href="Obrane.html" class="back-link">← Повернутися до обраного</a>
+    </div>
+
+    <div class="top-space"></div>
+
+    <div class="page-wrap">
+            <div id="wheelNotification"></div>
+
+         <form class="payment-card" id="paymentForm" action="#" method="post">
+            <h1 class="title">Оплата замовлення</h1>
+            <p class="subtitle">Заповніть реквізити, щоб завершити покупку.</p>
+
+            <h2 class="section-title">Платіжні дані</h2>
+
+            <div class="input-row">
+                <div class="field">
+                    <label for="cardType">Тип картки</label>
+                    <select id="cardType" name="cardType" required>
+                        <option value="" disabled selected>Оберіть тип картки</option>
+                        <option value="visa">Visa</option>
+                        <option value="mastercard">MasterCard</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="cardName">Ім'я власника картки</label>
+                    <input type="text" id="cardName" name="cardName" placeholder="Іваненко Іван" required>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="field" style="flex: 2; min-width: 240px;">
+                    <label for="cardNumber">Номер картки</label>
+                    <input type="text" id="cardNumber" name="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000" required>
+                </div>
+                <div class="field">
+                    <label for="expiry">Термін дії</label>
+                    <input type="text" id="expiry" name="expiry" maxlength="5" placeholder="MM/YY" required>
+                </div>
+                <div class="field" style="max-width: 120px; min-width: 100px;">
+                    <label for="cvc">CVV</label>
+                    <input type="password" id="cvc" name="cvc" maxlength="3" placeholder="123" required>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="field">
+                    <label for="accountNumber">Email для чеку</label>
+                    <input type="email" id="accountNumber" name="accountNumber" placeholder="ivan@gmail.com" required>
+                </div>
+            </div>
+
+            <h2 class="section-title">Доставка</h2>
+
+            <div class="input-row">
+                <div class="field">
+                    <label for="deliveryType">Тип доставки</label>
+                    <select id="deliveryType" name="deliveryType" required>
+                        <option value="" disabled selected>Оберіть тип доставки</option>
+                        <option value="courier">Кур'єр</option>
+                        <option value="nova_poshta">Нова Пошта</option>
+                        <option value="ukr_post">Укрпошта</option>
+                        <option value="pickup">Самовивіз</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="deliveryAddress">Адреса доставки</label>
+                    <input type="text" id="deliveryAddress" name="deliveryAddress" placeholder="м. Дніпро, вул. Степана Бандери, 18" required>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="field">
+                    <label for="comment">Коментар до замовлення</label>
+                    <textarea id="comment" name="comment" placeholder="Ваші побажання..."></textarea>
+                </div>
+            </div>
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="agree" name="agree" required>
+                <label for="agree">Я погоджуюсь з <a href="#" target="_blank">правилами обробки персональних даних</a></label>
+            </div>
+
+            <div class="actions">
+                 <button type="button" class="btn btn-primary" id="payButton" onclick="validateAndSubmit(event)">Оплатити зараз</button>
+                <button type="reset" class="btn btn-secondary">Очистити</button>
+            </div>
+        </form>
+
+        <aside class="summary-card">
+            <h2 class="summary-title">Ваше замовлення</h2>
+            <p class="summary-subtitle">Підсумок по товарах із обраного</p>
+
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>Товарів:</span>
+                    <strong id="summaryCount">0</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Сума товарів:</span>
+                    <strong id="summaryItems">0.00 ₴</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Доставка:</span>
+                    <strong id="summaryDelivery">0.00 ₴</strong>
+                </div>
+                <div class="summary-row discount-row" id="discountRow" style="display: none;">
+                    <span>Знижка:</span>
+                    <strong class="discount-value" id="summaryDiscount">0.00 ₴</strong>
+                </div>
+                <div class="summary-total">
+                    <span>До оплати:</span>
+                    <span id="summaryTotal" class="amount">0.00 ₴</span>
+                </div>
+                <div class="wheel-section">
+                    <h3 class="wheel-title">🎡 Знижко-крут</h3>
+                    <div class="wheel-container">
+                        <div class="wheel-wrapper">
+                            <div id="discountWheel"></div>
+                            <div class="wheel-arrow"></div>
+                        </div>
+                        <button type="button" id="spinWheelBtn" disabled>Крутити колесо</button>
+                        <div id="wheelHint">Додайте товари від 2000 ₴</div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="helper" id="summaryHint">Оберіть товари в розділі "Обране", щоб побачити суму до оплати.</p>
+        </aside>
+    </div>
+
+    <script>
+        function formatUAH(value) {
+            return value.toFixed(2) + ' ₴';
+        }
+
+        function parsePrice(priceText) {
+            var normalized = String(priceText || '').replace(/[^\d.,]/g, '').replace(',', '.');
+            var parsed = parseFloat(normalized);
+            return Number.isNaN(parsed) ? 0 : parsed;
+        }
+
+        function calculateDelivery(itemsTotal, deliveryType) {
+            if (!deliveryType) {
+                return 0;
+            }
+
+            switch (deliveryType) {
+                case 'pickup':
+                    return 0;
+                case 'nova_poshta':
+                    return itemsTotal * 0.10;
+                case 'ukr_post':
+                    return itemsTotal * 0.05;
+                case 'courier':
+                    return itemsTotal * 0.15;
+                default:
+                    return 0;
+            }
+        }
+
+        function updateSummary(products, favorites) {
+            // Сбрасываем колесо когда товары изменяются
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.reset();
+            }
+            
+            var selected = products.filter(function (p) {
+                return favorites.includes(p.id);
+            });
+
+            var itemsTotal = selected.reduce(function (sum, product) {
+                return sum + parsePrice(product.price);
+            }, 0);
+
+            var deliveryType = document.getElementById('deliveryType').value;
+            var delivery = selected.length > 0 ? calculateDelivery(itemsTotal, deliveryType) : 0;
+            var discount = 0;
+            if (typeof DiscountWheel !== 'undefined') {
+                discount = (itemsTotal * DiscountWheel.getDiscount()) / 100;
+            }
+            var total = itemsTotal + delivery - discount;
+
+            document.getElementById('summaryCount').textContent = String(selected.length);
+            document.getElementById('summaryItems').textContent = formatUAH(itemsTotal);
+            
+            var deliveryLabel = 'Доставка:';
+            if (deliveryType === 'courier') {
+                deliveryLabel = 'Доставка (курьер +15%):';
+            } else if (deliveryType === 'nova_poshta') {
+                deliveryLabel = 'Доставка (Нова Пошта +10%):';
+            } else if (deliveryType === 'ukr_post') {
+                deliveryLabel = 'Доставка (Укрпошта +5%):';
+            } else if (deliveryType === 'pickup') {
+                deliveryLabel = 'Доставка (Самовивіз):';
+            }
+            
+            var deliveryElement = document.querySelector('.summary-row:nth-child(3) span:first-child');
+            if (deliveryElement) {
+                deliveryElement.textContent = deliveryLabel;
+            }
+            
+            document.getElementById('summaryDelivery').textContent = formatUAH(delivery);
+                        var discountRow = document.getElementById('discountRow');
+                        var summaryDiscount = document.getElementById('summaryDiscount');
+                        if (discount > 0 && discountRow) {
+                            discountRow.style.display = 'flex';
+                            summaryDiscount.textContent = formatUAH(discount);
+                        } else if (discountRow) {
+                            discountRow.style.display = 'none';
+                        }
+            document.getElementById('summaryTotal').textContent = formatUAH(total);
+
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.updateWheelState(itemsTotal);
+            }
+
+            var hint = document.getElementById('summaryHint');
+            var payButton = document.getElementById('payButton');
+
+            if (selected.length === 0) {
+                hint.textContent = 'Зараз обране порожнє. Додайте товари у каталозі перед оплатою.';
+                payButton.disabled = true;
+                payButton.style.opacity = '0.6';
+                payButton.style.cursor = 'not-allowed';
+            } else {
+                hint.textContent = 'Сума автоматично оновлена за вашими обраними товарами.';
+                payButton.disabled = false;
+                payButton.style.opacity = '1';
+                payButton.style.cursor = 'pointer';
+            }
+        }
+
+        async function loadProductsAndSummary() {
+            var favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+            try {
+                var response = await fetch('products-data.json?cache-bust=' + Date.now());
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+
+                var data = await response.json();
+                var products = Array.isArray(data.products) ? data.products : [];
+                updateSummary(products, favorites);
+            } catch (error) {
+                console.warn('Не вдалося завантажити products-data.json:', error);
+                updateSummary([], favorites);
+            }
+        }
+
+        document.getElementById('cardNumber').addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim().slice(0, 19);
+        });
+
+        document.getElementById('expiry').addEventListener('input', function () {
+            this.value = this.value.replace(/[^\d]/g, '').slice(0, 4);
+            if (this.value.length >= 3) {
+                this.value = this.value.slice(0, 2) + '/' + this.value.slice(2);
+            }
+        });
+
+        document.getElementById('deliveryType').addEventListener('change', function () {
+            var favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            var favoriteProducts = [];
+
+            fetch('products-data.json?cache-bust=' + Date.now())
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    favoriteProducts = Array.isArray(data.products) ? data.products.filter(function (p) {
+                        return favorites.includes(p.id);
+                    }) : [];
+                    updateSummary(Array.isArray(data.products) ? data.products : [], favorites);
+                })
+                .catch(function (error) {
+                    console.warn('Помилка при завантаженні:', error);
+                });
+        });
+
+        loadProductsAndSummary();
+    </script>
+
+    <script>
+        function validateAndSubmit(event) {
+            event.preventDefault();
+
+            var cardType = document.getElementById('cardType').value.trim();
+            var cardName = document.getElementById('cardName').value.trim();
+            var cardNumber = document.getElementById('cardNumber').value.trim();
+            var expiry = document.getElementById('expiry').value.trim();
+            var cvc = document.getElementById('cvc').value.trim();
+            var agree = document.getElementById('agree').checked;
+
+            var errors = [];
+
+            if (!cardType) {
+                errors.push('⚠️ Виберіть тип картки');
+            }
+
+            if (!cardName) {
+                errors.push('⚠️ Введіть ім\'я власника картки');
+            } else if (cardName.length < 3) {
+                errors.push('⚠️ Ім\'я має бути не коротше 3 символів');
+            }
+
+            if (!cardNumber) {
+                errors.push('⚠️ Введіть номер картки');
+            } else {
+                var digitsOnly = cardNumber.replace(/\s/g, '');
+                if (digitsOnly.length < 16 || digitsOnly.length > 19) {
+                    errors.push('⚠️ Номер картки має бути від 16 до 19 цифр');
+                }
+            }
+
+            if (!expiry) {
+                errors.push('⚠️ Введіть термін дії картки (MM/YY)');
+            } else if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+                errors.push('⚠️ Термін дії має формат MM/YY');
+            } else {
+                var parts = expiry.split('/');
+                var month = parseInt(parts[0]);
+                if (month < 1 || month > 12) {
+                    errors.push('⚠️ Місяць повинен бути від 01 до 12');
+                }
+            }
+
+            if (!cvc) {
+                errors.push('⚠️ Введіть CVV код');
+            } else if (!/^\d{3}$/.test(cvc)) {
+                errors.push('⚠️ CVV має бути рівно 3 цифри');
+            }
+
+            if (!agree) {
+                errors.push('⚠️ Погодьтеся з правилами обробки даних');
+            }
+
+            if (errors.length > 0) {
+                alert('Помилка у формі:\n\n' + errors.join('\n'));
+                return false;
+            }
+
+            alert('✓ Всі дані заповнені коректно!\n\nЗамовлення на обробці...');
+            console.log('Форма готова до відправки:', {
+                cardType: cardType,
+                cardName: cardName,
+                cardNumber: cardNumber.replace(/\s/g, ''),
+                expiry: expiry,
+                cvc: cvc
+            });
+            
+            // Сбрасываем колесо для нового заказа
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.reset();
+            }
+
+            return false;
+        }
+    </script>
+
+    <script src="discount-wheel.js"></script>
+    <script>
+        // Функция для пересчета суммы при новой скидке
+        window.updateSummaryWithDiscount = function(discount) {
+            var summaryItems = document.getElementById('summaryItems');
+            var itemsTotal = parsePrice(summaryItems.textContent);
+            var deliveryType = document.getElementById('deliveryType').value;
+            var delivery = calculateDelivery(itemsTotal, deliveryType);
+            var discountAmount = (itemsTotal * (discount || 0)) / 100;
+            var total = itemsTotal + delivery - discountAmount;
+
+            // Показываем итог с новой суммой и отдельно процент
+            document.getElementById('summaryTotal').textContent = formatUAH(total);
+            
+            var discountRow = document.getElementById('discountRow');
+            var summaryDiscount = document.getElementById('summaryDiscount');
+            if (discount > 0) {
+                discountRow.style.display = 'flex';
+                summaryDiscount.innerHTML = `<span class="discount-value">${discount}%</span> &nbsp;(${formatUAH(discountAmount)})`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+        };
+
+        // Инициализируем колесо скидок после загрузки DOM
+        function initDiscountWheel() {
+            if (typeof DiscountWheel !== 'undefined') {
+                DiscountWheel.init();
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                initDiscountWheel();
+            });
+        } else {
+            initDiscountWheel();
+        }
+
+        // Настройки сегментов удалены из UI — при необходимости правьте `discount-wheel.js` или localStorage
+    </script>
+</body>
+</html>
