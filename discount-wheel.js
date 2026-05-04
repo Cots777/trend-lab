@@ -44,7 +44,7 @@ const DiscountWheel = {
     },
     
     /**
-     * Получить скидку на основе суммы товаров
+     * Отримання знижки для поточного замовлення (0 якщо не виграв або ще не крутив)
      */
     getDiscount: function() {
         return this.currentDiscount || 0;
@@ -99,14 +99,14 @@ const DiscountWheel = {
         
         if (this.hasSpinThisOrder) {
             wheelHint.textContent = this.currentDiscount 
-                ? `✨ Ви виграли ${this.currentDiscount}% знижку! Йдіть оплачувати.`
+                ? `✨ Ви виграли ${this.currentDiscount}% знижку! Вітаємо!`
                 : '⏸️ Вже крутили колесо для цього замовлення';
             wheelHint.style.color = this.currentDiscount ? '#2ecc71' : '#b7522a';
         } else if (itemsTotal < this.MIN_AMOUNT && itemsTotal > 0) {
             wheelHint.textContent = `Ще ${(this.MIN_AMOUNT - itemsTotal).toFixed(2)} ₴ до розблокування колеса`;
             wheelHint.style.color = '#d86734';
         } else if (itemsTotal >= this.MIN_AMOUNT) {
-            wheelHint.textContent = '🎡 Крутіть колесо 1 раз для скидки!';
+            wheelHint.textContent = '🎡 Крутіть колесо 1 раз для знижки!';
             wheelHint.style.color = '#b7522a';
         } else {
             wheelHint.textContent = 'Додайте товари від 2000 ₴';
