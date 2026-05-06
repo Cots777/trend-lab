@@ -26,9 +26,28 @@ function getSelectedColors() {
 function setSelectedColors(selectedColors) {
     localStorage.setItem('selectedColors', JSON.stringify(selectedColors));
 }
-
+// Функція для отримання доступних кольорів для товару
 function getColorOptions(productId) {
-    if (productId >= 1 && productId <= 4) {
+    // Особливі групи: визначаємо набори ID товарів, які мають однакові варіанти кольорів
+    const specialGroups = [
+        {
+            ids: [3, 5, 9],
+            colors: [
+                { name: 'блек', value: '#f5ede3' },
+                { name: 'блек', value: '#f8c7d8' },
+                { name: 'блек', value: '#1f1f1f' },
+                { name: 'блек', value: '#d8c2a5' }
+            ]
+        }
+    ];
+
+    // Спочатку перевіряємо особливі групи
+    for (const group of specialGroups) {
+        if (group.ids.includes(productId)) return group.colors;
+    }
+
+    // Резервна логіка за діапазонами
+    if (productId >= 1 && productId <= 12) {
         return [
             { name: 'Молочний', value: '#f5ede3' },
             { name: 'Рожевий', value: '#f8c7d8' },
@@ -37,16 +56,7 @@ function getColorOptions(productId) {
         ];
     }
 
-    if (productId >= 5 && productId <= 8) {
-        return [
-            { name: 'Кремовий', value: '#f4ead9' },
-            { name: 'Шоколадний', value: '#7b4b2a' },
-            { name: 'Графітовий', value: '#4b4b4b' },
-            { name: 'Сірий', value: '#c9ced6' }
-        ];
-    }
-
-    if (productId >= 9 && productId <= 16) {
+    if (productId >= 13 && productId <= 16) {
         return [
             { name: 'Білий', value: '#f8f4ef' },
             { name: 'Чорний', value: '#1f1f1f' },
@@ -72,7 +82,7 @@ function getColorOptions(productId) {
     ];
 }
 
-// 1. Додаємо стилі для контейнера (якщо їх немає в HTML)
+// 1.стилі для контейнера
 if (!document.getElementById('products-dynamic-styles')) {
     const productsStyle = document.createElement('style');
     productsStyle.id = 'products-dynamic-styles';
@@ -449,7 +459,7 @@ function ensureProductModal() {
                 <a href="dodatok.html" class="size-guide-link">Підібрати розмір</a>
                 <div class="modal-actions">
                     <button id="modalFavoriteBtn" class="modal-favorite-btn" type="button"></button>
-                    <a href="Obrane.html" class="modal-go-favorites">Перейти в обране</a>
+                    <a href="favorites.html" class="modal-go-favorites">Перейти в обране</a>
                 </div>
             </div>
         </div>
@@ -603,21 +613,21 @@ function updateAllFavoriteButtons() {
     }
 }
 
-// 2. Спроба завантажити дані з JSON (Перший список)
+// 2. Спроба завантажити дані з JSON (перший список)
 const productsDataPromise = fetch(`products-data.json?cache-bust=${Date.now()}`)
     .then(response => {
-        if (!response.ok) throw new Error(`Ошибка HTTP ${response.status}`);
+        if (!response.ok) throw new Error(`Помилка HTTP ${response.status}`);
         return response.json();
     })
     .then(data => {
         if (data && Array.isArray(data.products)) {
             allProductsData = data.products;
             productsSource = 'products-data.json';
-            console.log('Дані завантажено з JSON (Структурований список)');
+            console.log('Дані завантажено з JSON (структурований список)');
         }
     })
     .catch(error => {
-        console.warn('JSON не знайдено, перевіряємо локальну змінну allProducts (Другий список):', error);
+        console.warn('JSON не знайдено, перевіряємо локальну змінну allProducts (другий список):', error);
         if (typeof allProducts !== 'undefined') {
             allProductsData = allProducts;
             productsSource = 'products.js';
@@ -642,8 +652,8 @@ function renderProducts(productIds, containerId = 'productsContainer') {
             const product = allProductsData.find(p => p.id === id);
             
             if (product) {
-                // ПЕРЕВІРКА: Якщо ціна окремо (1-й список), беремо її. 
-                // Якщо ціни немає (2-й список), вона вже вшита в name.
+                // Перевірка: якщо ціна окремо (перший список), беремо її.
+                // Якщо ціни немає (другий список), вона вже вшита в name.
                 const priceHTML = product.price ? `<div class="price">${product.price}</div>` : '';
                 
                 container.innerHTML += `
@@ -671,7 +681,7 @@ function renderProducts(productIds, containerId = 'productsContainer') {
     }
 }
 
-// 4. Функція для обраного (Favorites)
+// 4. Функція для обраного (favorites)
 function toggleFavorite(productId, btn, event) {
     if (event) {
         event.stopPropagation();
