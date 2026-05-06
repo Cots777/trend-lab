@@ -1,20 +1,26 @@
 {
   "products": [
-    { "id": 1, "name": "Бант для волосся", "price": "111₴", "img": "photo_all/photo_aks/photo_1_2025-05-24_23-16-40.jpg" },
-    { "id": 2, "name": "Підвіска з намистин", "price": "200₴", "img": "photo_all/photo_aks/photo_2_2025-05-24_23-16-40.jpg" },
-    { "id": 3, "name": "Сережки зіркові", "price": "220₴", "img": "photo_all/photo_aks/photo_3_2025-05-24_23-16-40.jpg" },
-    { "id": 4, "name": "Окуляри", "price": "190₴", "img": "photo_all/photo_aks/photo_8_2025-05-24_23-16-40.jpg" },
+    { "id": 1, "name": "Бант <Ніжність>", "price": "120₴", "img": "photo_all/photo_aks/photo_1_2025-05-24_23-16-40.jpg" },
+    { "id": 2, "name": "Підвіска <Магічне коло>", "price": "310₴", "img": "photo_all/photo_aks/photo_2_2025-05-24_23-16-40.jpg" },
+    { "id": 3, "name": "Сережки <Зіронька>", "price": "810₴", "img": "photo_all/photo_aks/photo_3_2025-05-24_23-16-40.jpg" },
+    { "id": 4, "name": "Окуляри <Ретро-вайб>", "price": "280₴", "img": "photo_all/photo_aks/photo_4_2025-05-24_23-16-40.jpg" },
+    { "id": 5, "name": "Сережки <Чотирилисник>", "price": "1100₴", "img": "photo_all/photo_aks/photo_5_2025-05-24_23-16-40.jpg" },
+    { "id": 6, "name": "Окуляри <Нуар>", "price": "260₴", "img": "photo_all/photo_aks/photo_6_2025-05-24_23-16-40.jpg" },
+    { "id": 7, "name": "Окуляри <Віолет>", "price": "170₴", "img": "photo_all/photo_aks/photo_7_2025-05-24_23-16-40.jpg" },
+    { "id": 8, "name": "Окуляри <Округлення>", "price": "175₴", "img": "photo_all/photo_aks/photo_8_2025-05-24_23-16-40.jpg" },
+    { "id": 9, "name": "Браслет <Срібна конюшина>", "price": "1500", "img": "photo_all/photo_bel_girl/photo_1_2025-05-24_23-21-12.jpg" },
+    { "id": 10, "name": "Сережки <Переплетення>", "price": "710₴", "img": "photo_all/photo_bel_girl/photo_1_2025-05-30_21-40-45.jpg" },
+    { "id": 11, "name": "Брошка <Ніжна лілія> ", "price": "180₴", "img": "photo_all/photo_bel_girl/photo_3_2025-05-24_23-21-12.jpg" },
+    { "id": 12, "name": "Годинник <Срібний час>", "price": "1400₴", "img": "photo_all/photo_bel_girl/photo_2_2025-05-30_21-40-45.jpg" },
 
 
-    { "id": 5, "name": "Бант для волосся", "price": "111₴", "img": "photo_all/photo_aks/photo_4_2025-05-24_23-16-40.jpg" },
-    { "id": 6, "name": "Підвіска з намистин", "price": "200₴", "img": "photo_all/photo_aks/photo_5_2025-05-24_23-16-40.jpg" },
-    { "id": 7, "name": "Сережки зіркові", "price": "220₴", "img": "photo_all/photo_aks/photo_6_2025-05-24_23-16-40.jpg" },
-    { "id": 8, "name": "Окуляри", "price": "190₴", "img": "photo_all/photo_aks/photo_7_2025-05-24_23-16-40.jpg" },
 
-    { "id": 9, "name": "Комплект Чорна Орхідея", "price": "230₴", "img": "photo_all/photo_bel_girl/photo_1_2025-05-24_23-21-12.jpg" },
-    { "id": 10, "name": "Комплект Місячний шовк", "price": "760₴", "img": "photo_all/photo_bel_girl/photo_1_2025-05-30_21-40-45.jpg" },
-    { "id": 11, "name": "Комплект Янгольський дотик", "price": "777₴", "img": "photo_all/photo_bel_girl/photo_3_2025-05-24_23-21-12.jpg" },
-    { "id": 12, "name": "Комплект Обійми хмар", "price": "690₴", "img": "photo_all/photo_bel_girl/photo_2_2025-05-30_21-40-45.jpg" },
+
+
+
+
+
+
     { "id": 13, "name": "Елегантний Релакс", "price": "230₴", "img": "photo_all/photo_bel_boy/photo_1_2025-05-24_23-21-40.jpg" },
     { "id": 14, "name": "Дикий Стиль", "price": "200₴", "img": "photo_all/photo_bel_boy/photo_2_2025-05-24_23-21-40.jpg" },
     { "id": 15, "name": "Тінь Сили", "price": "190₴", "img": "photo_all/photo_bel_boy/photo_3_2025-05-24_23-21-40.jpg" },
