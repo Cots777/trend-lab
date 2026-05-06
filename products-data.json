@@ -4,10 +4,22 @@
     { "id": 2, "name": "Підвіска з намистин", "price": "200₴", "img": "photo_all/photo_aks/photo_2_2025-05-24_23-16-40.jpg" },
     { "id": 3, "name": "Сережки зіркові", "price": "220₴", "img": "photo_all/photo_aks/photo_3_2025-05-24_23-16-40.jpg" },
     { "id": 4, "name": "Окуляри", "price": "190₴", "img": "photo_all/photo_aks/photo_8_2025-05-24_23-16-40.jpg" },
-    { "id": 5, "name": "Кепка Шоколадна", "price": "320₴", "img": "photo_all/photo_kepka/photo_2_2025-05-24_23-18-53.jpg" },
+
+
+    { "id": 5, "name": "Бант для волосся", "price": "111₴", "img": "photo_all/photo_aks/photo_4_2025-05-24_23-16-40.jpg" },
+    { "id": 6, "name": "Підвіска з намистин", "price": "200₴", "img": "photo_all/photo_aks/photo_5_2025-05-24_23-16-40.jpg" },
+    { "id": 7, "name": "Сережки зіркові", "price": "220₴", "img": "photo_all/photo_aks/photo_6_2025-05-24_23-16-40.jpg" },
+    { "id": 8, "name": "Окуляри", "price": "190₴", "img": "photo_all/photo_aks/photo_7_2025-05-24_23-16-40.jpg" },
+
+
+
+
+    /* { "id": 5, "name": "Кепка Шоколадна", "price": "320₴", "img": "photo_all/photo_kepka/photo_2_2025-05-24_23-18-53.jpg" },
     { "id": 6, "name": "Кепка Кремова", "price": "320₴", "img": "photo_all/photo_kepka/photo_3_2025-05-24_23-18-53.jpg" },
     { "id": 7, "name": "Кепка Молочна", "price": "320₴", "img": "photo_all/photo_kepka/photo_4_2025-05-24_23-18-53.jpg" },
-    { "id": 8, "name": "Панама Скай", "price": "275₴", "img": "photo_all/photo_kepka/photo_6_2025-05-24_23-18-53.jpg" },
+    { "id": 8, "name": "Панама Скай", "price": "275₴", "img": "photo_all/photo_kepka/photo_6_2025-05-24_23-18-53.jpg" }, */
+
+
     { "id": 9, "name": "Комплект Чорна Орхідея", "price": "230₴", "img": "photo_all/photo_bel_girl/photo_1_2025-05-24_23-21-12.jpg" },
     { "id": 10, "name": "Комплект Місячний шовк", "price": "760₴", "img": "photo_all/photo_bel_girl/photo_1_2025-05-30_21-40-45.jpg" },
     { "id": 11, "name": "Комплект Янгольський дотик", "price": "777₴", "img": "photo_all/photo_bel_girl/photo_3_2025-05-24_23-21-12.jpg" },
