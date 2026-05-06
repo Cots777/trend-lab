@@ -1,14 +1,29 @@
 let allProductsData = [];
 let productsLoaded = false;
 let productsSource = 'unknown';
+// Розміри за замовчуванням для товарів, які не входять до спеціальних груп
 const DEFAULT_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
-
+// Функція для отримання доступних розмірів для товару
 function getSizeOptions(productId) {
     const specialGroups = [
         {
-            ids: [3, 5, 9, 10, 12],
-            sizes: ['11', '22', '33', '44']
-        }
+            ids: [2],
+            sizes: ['30cм', '40см', '50см', '60см', '70см']
+        },
+        {
+            ids: [9],
+            sizes: ['15см', '17см', '19см', '21см', '23см']
+        },
+        {
+            ids: [3, 5, 10],
+            sizes: ['1-3см', '4-6см', '7-10см']
+        },
+        {
+            ids: [12],
+            sizes: ['24-30мм', '32-38мм', '40-45мм']
+        }                
+        
+
     ];
 
     for (const group of specialGroups) {
@@ -17,10 +32,6 @@ function getSizeOptions(productId) {
 
     if (productId >= 1 && productId <= 6) {
         return ['XS', 'S', 'M', 'L', 'XL'];
-    }
-
-    if (productId >= 13 && productId <= 16) {
-        return ['42', '44', '46', '48', '50'];
     }
 
     if (productId >= 7 && productId <= 12) {
