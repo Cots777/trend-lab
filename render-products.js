@@ -3,6 +3,33 @@ let productsLoaded = false;
 let productsSource = 'unknown';
 const DEFAULT_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 
+function getSizeOptions(productId) {
+    const specialGroups = [
+        {
+            ids: [3, 5, 9, 10, 12],
+            sizes: ['11', '22', '33', '44']
+        }
+    ];
+
+    for (const group of specialGroups) {
+        if (group.ids.includes(productId)) return group.sizes;
+    }
+
+    if (productId >= 1 && productId <= 6) {
+        return ['XS', 'S', 'M', 'L', 'XL'];
+    }
+
+    if (productId >= 13 && productId <= 16) {
+        return ['42', '44', '46', '48', '50'];
+    }
+
+    if (productId >= 7 && productId <= 12) {
+        return ['S', 'M', 'L', 'XL', '2XL'];
+    }
+
+    return DEFAULT_SIZES;
+}
+
 function getFavorites() {
     return JSON.parse(localStorage.getItem('favorites')) || [];
 }
@@ -31,12 +58,12 @@ function getColorOptions(productId) {
     // Особливі групи: визначаємо набори ID товарів, які мають однакові варіанти кольорів
     const specialGroups = [
         {
-            ids: [3, 5, 9],
+            ids: [3, 5, 9, 10, 12],
             colors: [
-                { name: 'блек', value: '#f5ede3' },
-                { name: 'блек', value: '#f8c7d8' },
-                { name: 'блек', value: '#1f1f1f' },
-                { name: 'блек', value: '#d8c2a5' }
+                { name: 'Срібло', value: '#C0C0C0' },
+                { name: 'Золото', value: '#D4AF37' },
+                { name: 'Біле Золото', value: '#E5E4E2' },
+                { name: 'Платина', value: '#E5E1E6' }
             ]
         }
     ];
@@ -510,9 +537,10 @@ function openProductModal(productId) {
     priceEl.textContent = product.price || '';
 
     const selectedSizes = getSelectedSizes();
-    const currentSize = selectedSizes[productId] || 'M';
+    const productSizes = getSizeOptions(productId);
+    const currentSize = selectedSizes[productId] || productSizes[0];
 
-    sizeOptionsEl.innerHTML = DEFAULT_SIZES.map(size => `
+    sizeOptionsEl.innerHTML = productSizes.map(size => `
         <button
             class="size-btn ${size === currentSize ? 'active' : ''}"
             type="button"
