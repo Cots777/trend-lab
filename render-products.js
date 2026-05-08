@@ -66,7 +66,7 @@ function setSelectedColors(selectedColors) {
 }
 // Функція для отримання доступних кольорів для товару
 function getColorOptions(productId) {
-    // Особливі групи: визначаємо набори ID товарів, які мають однакові варіанти кольорів
+    // Особливі групи набори ID товарів, які мають однакові варіанти кольорів
     const specialGroups = [
         {
             ids: [3, 5, 9, 10, 12],
