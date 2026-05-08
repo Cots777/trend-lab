@@ -154,7 +154,7 @@
             position: absolute;
             top: calc(100% + 8px);
             right: 0;
-            width: min(380px, 88vw);
+            width: min(420px, 88vw);
             border-radius: 14px;
             background: #ffffff;
             box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
@@ -162,6 +162,8 @@
             overflow: hidden;
             display: none;
             z-index: 10040;
+            max-height: 320px;
+            overflow-y: auto;
         }
         .search-suggestions.open {
             display: block;
@@ -171,10 +173,13 @@
             border: none;
             background: #ffffff;
             text-align: left;
-            padding: 10px 12px;
+            padding: 8px 10px;
             cursor: pointer;
             border-bottom: 1px solid #f1e6dd;
             transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .search-suggestions button:last-child {
             border-bottom: none;
@@ -182,17 +187,35 @@
         .search-suggestions button:hover {
             background: #fff4ea;
         }
+        .search-suggestion-image {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            background: #f5f1ec;
+        }
+        .search-suggestion-content {
+            flex: 1;
+            min-width: 0;
+        }
         .search-suggestion-title {
             display: block;
             font-size: 0.95rem;
             font-weight: 700;
             color: #2f211a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .search-suggestion-meta {
             display: block;
             margin-top: 2px;
             font-size: 0.8rem;
             color: #7a6256;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .brand-home {
             display: inline-flex;

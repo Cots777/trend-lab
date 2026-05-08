@@ -62,7 +62,8 @@
         searchSuggestions.innerHTML = matches.map(product => {
             const category = inferCategory(product);
             const meta = [product.price || 'ціна не вказана', category ? category.label : 'товар з каталогу'].join(' • ');
-            return '<button type="button" data-product-id="' + product.id + '"><span class="search-suggestion-title">' + (product.name || 'Без назви') + '</span><span class="search-suggestion-meta">' + meta + '</span></button>';
+            const imgSrc = product.img || 'photo_all/category/photo_1_2025-05-25_0012-13-46.jpg';
+            return '<button type="button" data-product-id="' + product.id + '"><img class="search-suggestion-image" src="' + imgSrc + '" alt="' + (product.name || 'Товар') + '"><div class="search-suggestion-content"><span class="search-suggestion-title">' + (product.name || 'Без назви') + '</span><span class="search-suggestion-meta">' + meta + '</span></div></button>';
         }).join('');
 
         searchSuggestions.classList.add('open');
@@ -111,6 +112,15 @@
 
         if (!input || !button) return;
 
+        function openProductPage(product) {
+            const category = inferCategory(product);
+            if (category) {
+                window.location.href = category.url + '?productId=' + product.id;
+            } else {
+                window.location.href = options.targetUrl + '?q=' + encodeURIComponent(product.name);
+            }
+        }
+
         function openCatalogSearch(queryOverride) {
             const query = (queryOverride !== undefined ? queryOverride : input.value).trim();
             const target = options.targetUrl + (query ? '?q=' + encodeURIComponent(query) : '');
@@ -120,7 +130,7 @@
         function refreshHomepageSuggestions(products) {
             if (!searchSuggestions) return;
             renderSuggestions(searchSuggestions, products, input.value.trim(), selectedProduct => {
-                openCatalogSearch(selectedProduct.name || input.value.trim());
+                openProductPage(selectedProduct);
             });
         }
 
@@ -145,7 +155,7 @@
                     const productId = Number(buttonElement.getAttribute('data-product-id'));
                     const selectedProduct = products.find(product => product.id === productId);
                     if (selectedProduct) {
-                        openCatalogSearch(selectedProduct.name || input.value.trim());
+                        openProductPage(selectedProduct);
                     }
                 });
 
