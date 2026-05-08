@@ -1,13 +1,12 @@
 (function () {
     const categoryMap = [
-        { match: ['аксесуар', 'сереж', 'бант', 'підвіск', 'браслет', 'брошк', 'годинник', 'окуляр'], label: 'Аксесуари', url: 'obr1.html' },
-        { match: ['убор', 'кепк', 'панам', 'шапк'], label: 'Головні убори', url: 'obr2.html' },
-        { match: ['жіноч', 'girl', 'білизн'], label: 'Жіноча білизна', url: 'obr3.html' },
-        { match: ['чоловіч', 'boy', 'білизн'], label: 'Чоловіча білизна', url: 'obr4.html' },
-        { match: ['чоловіки', 'men', 'boy'], label: 'Чоловіки', url: 'obr5.html' },
-        { match: ['жінки', 'women', 'girl'], label: 'Жінки', url: 'obr6.html' },
-        { match: ['джинс'], label: 'Джинси', url: 'obr7.html' },
-        { match: ['sport', 'спор'], label: 'Sport для всіх', url: 'obr8.html' }
+        { ids: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], label: 'Аксесуари', url: 'obr1.html', aliases: ['аксесуар', 'аксесуари', 'accessory', 'аксе'] },
+        { ids: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], label: 'Головні убори', url: 'obr2.html', aliases: ['убор', 'кепк', 'панам', 'шапк', 'hat'] },
+        { ids: [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48], label: 'Чоловіча білизна', url: 'obr4.html', aliases: ['чоловіч', 'male underwear', 'mens underwear', 'білизн'] },
+        { ids: [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60], label: 'Чоловіки', url: 'obr5.html', aliases: ['чоловіки', 'men', 'boy', 'чол'] },
+        { ids: [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72], label: 'Жінки', url: 'obr6.html', aliases: ['жінки', 'women', 'girl', 'жін'] },
+        { ids: [73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84], label: 'Джинси', url: 'obr7.html', aliases: ['джинс', 'jeans', 'denim'] },
+        { ids: [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96], label: 'Sport для всіх', url: 'obr8.html', aliases: ['sport', 'спор', 'спорт', 'спортив', 'sports'] }
     ];
 
     function normalizeText(value) {
@@ -20,8 +19,19 @@
     }
 
     function inferCategory(product) {
-        const searchable = normalizeText(product.name + ' ' + product.img);
-        return categoryMap.find(category => category.match.some(token => searchable.includes(token))) || null;
+        return categoryMap.find(category => category.ids.includes(product.id)) || null;
+    }
+
+    function getSearchableText(product) {
+        const category = inferCategory(product);
+        const categoryText = category ? category.label + ' ' + category.aliases.join(' ') : '';
+        return normalizeText(product.name + ' ' + product.img + ' ' + categoryText);
+    }
+
+    function matchesQuery(product, query) {
+        const normalizedQuery = normalizeText(query);
+        if (!normalizedQuery) return false;
+        return getSearchableText(product).includes(normalizedQuery);
     }
 
     function fetchProducts() {
@@ -40,7 +50,7 @@
         }
 
         const matches = products
-            .filter(product => normalizeText(product.name).includes(normalizedQuery) || normalizeText(product.img).includes(normalizedQuery))
+            .filter(product => matchesQuery(product, normalizedQuery))
             .slice(0, 6);
 
         if (!matches.length) {
@@ -71,7 +81,7 @@
     function renderResults(searchResults, searchHint, products, query) {
         const normalizedQuery = normalizeText(query);
         const scopedProducts = normalizedQuery
-            ? products.filter(product => normalizeText(product.name).includes(normalizedQuery) || normalizeText(product.img).includes(normalizedQuery))
+            ? products.filter(product => matchesQuery(product, normalizedQuery))
             : products.filter(product => product.name);
 
         searchResults.innerHTML = '';
@@ -97,20 +107,56 @@
     function initHomepageSearch(options) {
         const input = document.getElementById(options.inputId);
         const button = document.getElementById(options.buttonId);
+        const searchSuggestions = options.suggestionsId ? document.getElementById(options.suggestionsId) : null;
 
         if (!input || !button) return;
 
-        function openCatalogSearch() {
-            const query = input.value.trim();
+        function openCatalogSearch(queryOverride) {
+            const query = (queryOverride !== undefined ? queryOverride : input.value).trim();
             const target = options.targetUrl + (query ? '?q=' + encodeURIComponent(query) : '');
             window.location.href = target;
         }
 
-        button.addEventListener('click', openCatalogSearch);
-        input.addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                openCatalogSearch();
+        function refreshHomepageSuggestions(products) {
+            if (!searchSuggestions) return;
+            renderSuggestions(searchSuggestions, products, input.value.trim(), selectedProduct => {
+                openCatalogSearch(selectedProduct.name || input.value.trim());
+            });
+        }
+
+        fetchProducts().then(products => {
+            const update = () => refreshHomepageSuggestions(products);
+
+            input.addEventListener('input', update);
+            input.addEventListener('focus', update);
+            input.addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    openCatalogSearch();
+                }
+            });
+
+            button.addEventListener('click', () => openCatalogSearch());
+
+            if (searchSuggestions) {
+                searchSuggestions.addEventListener('click', event => {
+                    const buttonElement = event.target.closest('button[data-product-id]');
+                    if (!buttonElement) return;
+                    const productId = Number(buttonElement.getAttribute('data-product-id'));
+                    const selectedProduct = products.find(product => product.id === productId);
+                    if (selectedProduct) {
+                        openCatalogSearch(selectedProduct.name || input.value.trim());
+                    }
+                });
+
+                document.addEventListener('click', event => {
+                    const root = document.getElementById(options.rootId || 'homepageSearchBox');
+                    if (root && !root.contains(event.target)) {
+                        searchSuggestions.classList.remove('open');
+                    }
+                });
+
+                update();
             }
         });
     }

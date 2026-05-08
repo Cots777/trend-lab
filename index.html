@@ -241,6 +241,7 @@
                     <path d="M16 16L20 20"></path>
                 </svg>
             </button>
+            <div class="search-suggestions" id="homepageSearchSuggestions" aria-live="polite"></div>
         </div>
     </div>
     <div class="menu" id="menu">
@@ -284,6 +285,7 @@
         TrendLabSearch.initHomepageSearch({
             inputId: 'homepageSearchInput',
             buttonId: 'homepageSearchButton',
+            suggestionsId: 'homepageSearchSuggestions',
             targetUrl: 'catalog.html'
         });
     </script>
