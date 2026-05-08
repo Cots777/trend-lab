@@ -233,7 +233,10 @@
         </div>
     </div>
     <div class="top-right-tools">
-        <a class="quick-link" href="catalog.html">Каталог</a>
+        <div class="header-search" id="homepageSearchBox">
+            <input id="homepageSearchInput" type="search" placeholder="Пошук товарів..." autocomplete="off" aria-label="Я шукаю...">
+            <button type="button" id="homepageSearchButton" aria-label="Пошук товарів" title="Я шукаю...">🔍</button>
+        </div>
     </div>
     <div class="menu" id="menu">
         <a href="novelty.html">Новинки</a>
@@ -245,6 +248,7 @@
         <a href="dimensions.html">Розміри</a>
         
     </div>
+    <script src="product-search.js"></script>
     <script>
         function toggleMenu() {
             var menu = document.getElementById('menu');
@@ -271,6 +275,12 @@
         setInterval(changeMessage, 29000);
         marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
         marquee.style.fontWeight = "bold";
+
+        TrendLabSearch.initHomepageSearch({
+            inputId: 'homepageSearchInput',
+            buttonId: 'homepageSearchButton',
+            targetUrl: 'catalog.html'
+        });
     </script>
 
     <section class="hero">
@@ -338,7 +348,6 @@
     </div>
 </body>
 </html>
-
 
 
 

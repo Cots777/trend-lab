@@ -74,6 +74,7 @@
             display: flex;
             align-items: center;
             z-index: 10030;
+            overflow: visible;
         }
         .quick-link {
             height: 40px;
@@ -95,6 +96,93 @@
         .quick-link:hover {
             background: rgba(72, 72, 72, 0.92);
             transform: translateY(-1px);
+        }
+        .header-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 40px;
+            padding: 0 8px 0 10px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(58, 58, 58, 0.96) 0%, rgba(40, 40, 40, 0.94) 100%);
+            border: 1px solid rgba(255, 214, 176, 0.3);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.32);
+        }
+        .header-search input {
+            width: 116px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .header-search input::placeholder {
+            color: rgba(255, 255, 255, 0.72);
+            font-weight: 500;
+        }
+        .header-search button {
+            border: none;
+            background: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0 10px;
+            width: auto;
+            min-width: 66px;
+            min-height: 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .header-search button:hover {
+            background: rgba(255, 235, 220, 0.24);
+            transform: translateY(-1px);
+        }
+        .search-suggestions {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: min(380px, 88vw);
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: none;
+            z-index: 10040;
+        }
+        .search-suggestions.open {
+            display: block;
+        }
+        .search-suggestions button {
+            width: 100%;
+            border: none;
+            background: #ffffff;
+            text-align: left;
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1e6dd;
+            transition: background-color 0.2s ease;
+        }
+        .search-suggestions button:last-child {
+            border-bottom: none;
+        }
+        .search-suggestions button:hover {
+            background: #fff4ea;
+        }
+        .search-suggestion-title {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2f211a;
+        }
+        .search-suggestion-meta {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.8rem;
+            color: #7a6256;
         }
         .brand-home {
             display: inline-flex;
@@ -167,6 +255,24 @@
                 border-radius: 10px;
                 font-size: 0.82rem;
             }
+            .header-search {
+                height: 34px;
+                padding: 0 6px 0 8px;
+                border-radius: 10px;
+            }
+            .header-search input {
+                width: 88px;
+                font-size: 0.8rem;
+            }
+            .header-search button {
+                min-width: 58px;
+                min-height: 26px;
+                font-size: 0.72rem;
+                border-radius: 8px;
+            }
+            .search-suggestions {
+                width: min(320px, 92vw);
+            }
             .brand-home {
                 width: 54px;
                 height: 28px;
@@ -189,5 +295,8 @@
             .quick-link {
                 padding: 0 10px;
                 font-size: 0.76rem;
+            }
+            .header-search input {
+                width: 82px;
             }
         }
