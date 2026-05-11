@@ -18,7 +18,7 @@
         .page-header {
             text-align: center;
             padding: 120px 20px 60px;
-            background: url('https://via.placeholder.com/1920x500?text=Контакти+TrendLab') no-repeat center center/cover;
+            background: url('https://5dda21c1f1.clvaw-cdnwnd.com/2329a8d63917b28ca3502c9f0761b3fe/200000899-4174441746/contacts.png?ph=5dda21c1f1') no-repeat center center/cover;
             position: relative;
             color: white;
         }
@@ -244,14 +244,23 @@
         </div>
     </div>
     <div class="top-right-tools">
-        <a class="quick-link" href="catalog.html">Каталог</a>
+        <div class="header-search" id="homepageSearchBox">
+            <input id="homepageSearchInput" type="search" placeholder="Я шукаю..." autocomplete="off" aria-label="Я шукаю...">
+            <button type="button" id="homepageSearchButton" aria-label="Я шукаю..." title="Я шукаю...">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="11" cy="11" r="6.5"></circle>
+                    <path d="M16 16L20 20"></path>
+                </svg>
+            </button>
+            <div class="search-suggestions" id="homepageSearchSuggestions" aria-live="polite"></div>
+        </div>
     </div>
     <div class="menu" id="menu">
+        <a href="index.html">Головна</a>
         <a href="novelty.html">Новинки</a>
         <a href="catalog.html">Каталог товарів</a>
         <a href="favorites.html">Обране</a>
         <a href="contacts.html">Наші контакти</a>
-        <a href="index.html">Про нас ^-^</a>
         <a href="reviews.html">Відгуки</a>
         <a href="dimensions.html">Розміри</a>
     </div>

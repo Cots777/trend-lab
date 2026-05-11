@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="uk">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Розумний підбір | TrendLab</title>
+	<title>Розміри | TrendLab</title>
 	<link rel="stylesheet" href="menu.css">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 	<style>
@@ -160,6 +160,10 @@
 			gap: 6px;
 		}
 
+		.field-wide {
+			grid-column: 1 / -1;
+		}
+
 		label {
 			font-size: 0.82rem;
 			font-weight: 700;
@@ -208,24 +212,28 @@
 			border-color: transparent;
 		}
 
-		.actions {
-			display: flex;
-			gap: 10px;
-			flex-wrap: wrap;
-		}
+ 		.actions {
+ 			display: flex;
+ 			gap: 12px;
+ 			flex-wrap: wrap;
+ 			align-items: center;
+ 		}
 
-		.button {
-			border: 0;
-			border-radius: 12px;
-			padding: 12px 16px;
-			font-weight: 700;
-			cursor: pointer;
-			text-decoration: none;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			transition: transform 0.2s ease;
-		}
+ 		.button {
+ 			border: 0;
+ 			border-radius: 12px;
+ 			padding: 12px 16px;
+ 			font-weight: 700;
+ 			cursor: pointer;
+ 			text-decoration: none;
+ 			display: inline-flex;
+ 			align-items: center;
+ 			justify-content: center;
+ 			transition: transform 0.18s ease, box-shadow 0.18s ease;
+ 			flex: 1; /* make buttons share available space */
+ 			min-width: 140px;
+ 			box-shadow: 0 8px 20px rgba(183,82,42,0.08);
+ 		}
 
 		.button:hover {
 			transform: translateY(-1px);
@@ -237,10 +245,24 @@
 			box-shadow: 0 10px 20px rgba(183, 82, 42, 0.3);
 		}
 
-		.button.secondary {
-			color: #8c4a2a;
-			background: #fff8ef;
-			border: 1px solid var(--line);
+ 		.button.secondary {
+ 			color: var(--accent-2);
+ 			background: linear-gradient(180deg, rgba(255,255,255,0.98), #fff8ef);
+ 			border: 2px solid rgba(183,82,42,0.08);
+ 		}
+
+		.button:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(183,82,42,0.12); }
+
+		input, select {
+			box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+		}
+
+		/* custom focus style for inputs */
+		input:focus, select:focus {
+			outline: none;
+			border-color: rgba(183,82,42,0.25);
+			box-shadow: 0 6px 18px rgba(183,82,42,0.06);
+			transition: box-shadow 0.18s ease, border-color 0.18s ease;
 		}
 
 		.result {
@@ -275,6 +297,35 @@
 			font-weight: 800;
 			color: var(--accent);
 			line-height: 1;
+		}
+
+		.metrics-grid {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 10px;
+		}
+
+		.metric-tile {
+			padding: 12px;
+			border-radius: 12px;
+			border: 1px solid var(--line);
+			background: #fff8ef;
+		}
+
+		.metric-label {
+			margin: 0;
+			font-size: 0.76rem;
+			font-weight: 700;
+			color: #8c4a2a;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		.metric-value {
+			margin: 4px 0 0;
+			font-size: 1.18rem;
+			font-weight: 800;
+			color: var(--accent);
 		}
 
 		.muted {
@@ -412,17 +463,28 @@
 			font-weight: 700;
 		}
 
-		@media (max-width: 920px) {
-			.layout {
-				grid-template-columns: 1fr;
-			}
+ 		@media (max-width: 920px) {
+ 			.layout {
+ 				grid-template-columns: 1fr;
+ 			}
 
 			.panel-head {
 				flex-direction: column;
 				align-items: flex-start;
 			}
 
-			.form-grid {
+ 			.form-grid {
+ 				grid-template-columns: 1fr;
+ 			}
+
+			.actions { gap: 10px; }
+			.actions .button { min-width: 0; }
+
+			.field-wide {
+				grid-column: auto;
+			}
+
+			.metrics-grid {
 				grid-template-columns: 1fr;
 			}
 		}
@@ -453,17 +515,26 @@
 			<div></div>
 		</div>
 	</div>
-	<div class="top-right-tools">
-		<a class="quick-link" href="catalog.html">Каталог</a>
-	</div>
+    <div class="top-right-tools">
+        <div class="header-search" id="homepageSearchBox">
+            <input id="homepageSearchInput" type="search" placeholder="Я шукаю..." autocomplete="off" aria-label="Я шукаю...">
+            <button type="button" id="homepageSearchButton" aria-label="Я шукаю..." title="Я шукаю...">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="11" cy="11" r="6.5"></circle>
+                    <path d="M16 16L20 20"></path>
+                </svg>
+            </button>
+            <div class="search-suggestions" id="homepageSearchSuggestions" aria-live="polite"></div>
+        </div>
+    </div>
 	<div class="menu" id="menu">
-		<a href="novelty.html">Новинки</a>
-		<a href="catalog.html">Каталог товарів</a>
-		<a href="favorites.html">Обране</a>
-		<a href="contacts.html">Наші контакти</a>
-		<a href="index.html">Про нас ^-^</a>
-		<a href="reviews.html">Відгуки</a>
-		<a href="dimensions.html">Розміри</a>
+        <a href="index.html">Головна</a>
+        <a href="novelty.html">Новинки</a>
+        <a href="catalog.html">Каталог товарів</a>
+        <a href="favorites.html">Обране</a>
+        <a href="contacts.html">Наші контакти</a>
+        <a href="reviews.html">Відгуки</a>
+        <a href="dimensions.html">Розміри</a>
 	</div>
 
 	<main class="layout">
@@ -471,7 +542,7 @@
 			<header class="panel-head">
 				<div>
 					<h1 class="title">✨ Розумний підбір для магазину</h1>
-					<p class="subtitle">Корисна сторінка для TrendLab: рахує орієнтовний розмір, підбирає капсулу та веде у потрібний розділ каталогу.</p>
+					<p class="subtitle">Корисна сторінка для TrendLab: рахує орієнтовний розмір і веде у потрібний розділ каталогу.</p>
 				</div>
 				<span class="badge">💡 Функціональна сторінка</span>
 			</header>
@@ -480,7 +551,6 @@
 				<div class="hero-card"></div>
 				<div class="chips">
 					<span class="chip">Підбір розміру</span>
-					<span class="chip">Капсула дня</span>
 					<span class="chip">Швидкий перехід у каталог</span>
 					<span class="chip">Під стиль TrendLab</span>
 				</div>
@@ -491,10 +561,10 @@
 					<div class="info-block">
 						<h4>🎯 Як працює?</h4>
 						<ol class="tips-list">
-							<li>Виберіть стать і сценарій</li>
+							<li>Виберіть стать</li>
 							<li>Вкажіть ваші параметри</li>
 							<li>Система розрахує розмір</li>
-							<li>Отримайте готову капсулу</li>
+							<li>Порівняйте результат з таблицею</li>
 						</ol>
 					</div>
 
@@ -514,10 +584,6 @@
 						</ul>
 					</div>
 
-					<div class="info-block">
-						<h4>✨ Капсула дня</h4>
-						<p>Це готова підборка 3-4 речей, які ідеально гармонують між собою. Підходить для вашого сценарію та палітри TrendLab.</p>
-					</div>
 				</div>
 			</div>
 		</section>
@@ -526,7 +592,7 @@
 			<header class="panel-head">
 				<div>
 					<h2 class="title" style="font-size: 1.55rem;">Заповніть дані</h2>
-					<p class="subtitle">Система підкаже розмір і запропонує готову капсулу під ваш сценарій.</p>
+					<p class="subtitle">Система підкаже орієнтовний розмір у діапазоні XXS-10XL за вашими параметрами.</p>
 				</div>
 			</header>
 
@@ -543,42 +609,11 @@
 					</div>
 
 					<div class="field">
-						<label for="occasion">Сценарій</label>
-						<select id="occasion">
-							<option value="city">Місто / кожен день</option>
-							<option value="work">Робота / навчання</option>
-							<option value="date">Побачення / вихід</option>
-							<option value="sport">Спорт / активний день</option>
-						</select>
-					</div>
-
-					<div class="field">
-						<label for="season">Сезон</label>
-						<select id="season">
-							<option value="all">Універсально</option>
-							<option value="spring">Весна</option>
-							<option value="summer">Літо</option>
-							<option value="autumn">Осінь</option>
-							<option value="winter">Зима</option>
-						</select>
-					</div>
-
-					<div class="field">
-						<label for="mood">Настрій</label>
-						<select id="mood">
-							<option value="calm">Спокійний</option>
-							<option value="bold">Сміливий</option>
-							<option value="soft">Ніжний</option>
-							<option value="clean">Мінімал</option>
-						</select>
-					</div>
-
-					<div class="field">
 						<label for="height">Зріст, см</label>
-						<input id="height" type="number" min="140" max="220" value="172">
+						<input id="height" type="number" min="100" max="120" value="170">
 					</div>
 
-					<div class="field">
+					<div class="field field-wide">
 						<label for="weight">Вага, кг</label>
 						<input id="weight" type="number" min="35" max="200" value="68">
 					</div>
@@ -596,13 +631,18 @@
 				</div>
 
 				<div class="result-card">
-					<h3 class="result-title">🎨 Капсула дня</h3>
-					<div class="chips" id="profileChips"></div>
-				</div>
-
-				<div class="result-card">
-					<h3 class="result-title">⭐ Що підійде зараз</h3>
-					<div class="suggestions" id="suggestions"></div>
+					<h3 class="result-title">🧠 Корисний індикатор</h3>
+					<div class="metrics-grid">
+						<div class="metric-tile">
+							<p class="metric-label">ІМТ</p>
+							<p class="metric-value" id="bmiValue">-</p>
+						</div>
+						<div class="metric-tile">
+							<p class="metric-label">Рекомендація по посадці</p>
+							<p class="metric-value" id="fitHint">Базова</p>
+						</div>
+					</div>
+					<p class="muted" id="bmiNote">ІМТ допомагає швидше обрати між приталеним та вільним кроєм.</p>
 				</div>
 
 				<div class="result-card">
@@ -615,15 +655,15 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr><td>До 165 см</td><td>XS / S</td></tr>
-							<tr><td>165-175 см</td><td>S / M</td></tr>
-							<tr><td>175-185 см</td><td>M / L</td></tr>
-							<tr><td>Понад 185 см</td><td>L / XL</td></tr>
+							<tr><td>Низький ІМТ</td><td>XXS - M</td></tr>
+							<tr><td>Середній ІМТ</td><td>L - 3XL</td></tr>
+							<tr><td>Високий ІМТ</td><td>4XL - 7XL</td></tr>
+							<tr><td>Дуже високий ІМТ</td><td>8XL - 10XL</td></tr>
 						</tbody>
 					</table>
 				</div>
 
-				<p class="footnote">Ця сторінка корисна для покупця: швидко дає розмір, готову капсулу та прямі переходи в потрібні розділи магазину.</p>
+				<p class="footnote">Ця сторінка корисна для покупця: швидко дає розмір від XXS до 10XL на основі параметрів тіла.</p>
 			</div>
 		</section>
 	</main>
@@ -660,86 +700,15 @@
 			female: "Жіночий"
 		};
 
-		const catalogBlocks = {
-			male: {
-				city: [
-					["Кепка", "obr2.html", "🧢"],
-					["Годинник", "obr1.html", "⌚"],
-					["Худі", "obr5.html", "👕"]
-				],
-				work: [
-					["Сорочка", "obr5.html", "👔"],
-					["Штани", "obr7.html", "👖"],
-					["Лофери", "obr8.html", "👞"]
-				],
-				date: [
-					["Ланцюжок", "obr1.html", "⌚"],
-					["Футболка", "obr5.html", "👕"],
-					["Кеди", "obr8.html", "👟"]
-				],
-				sport: [
-					["Кепка", "obr2.html", "🧢"],
-					["Худі", "obr5.html", "🧥"],
-					["Кросівки", "obr8.html", "👟"]
-				]
-			},
-			female: {
-				city: [
-					["Берет", "obr2.html", "🎀"],
-					["Мінісумка", "obr1.html", "👜"],
-					["Лонгслів", "obr6.html", "👚"]
-				],
-				work: [
-					["Блуза", "obr6.html", "👚"],
-					["Спідниця", "obr6.html", "👗"],
-					["Лофери", "obr8.html", "👠"]
-				],
-				date: [
-					["Берет", "obr2.html", "🎀"],
-					["Сумка", "obr1.html", "👜"],
-					["Жакет", "obr6.html", "👚"]
-				],
-				sport: [
-					["Кепка", "obr2.html", "🧢"],
-					["Спорттоп", "obr6.html", "👕"],
-					["Кросівки", "obr8.html", "👟"]
-				]
-			}
-		};
-
-		const occasionLabels = {
-			city: "Місто",
-			work: "Робота",
-			date: "Побачення",
-			sport: "Спорт"
-		};
-
-		const seasonLabels = {
-			all: "Універсально",
-			spring: "Весна",
-			summer: "Літо",
-			autumn: "Осінь",
-			winter: "Зима"
-		};
-
-		const moodLabels = {
-			calm: "Спокійний",
-			bold: "Сміливий",
-			soft: "Ніжний",
-			clean: "Мінімал"
-		};
-
 		const genderInputs = document.querySelectorAll('input[name="gender"]');
-		const occasion = document.getElementById("occasion");
-		const season = document.getElementById("season");
-		const mood = document.getElementById("mood");
 		const height = document.getElementById("height");
 		const weight = document.getElementById("weight");
 		const calculateBtn = document.getElementById("calculateBtn");
 		const sizeValue = document.getElementById("sizeValue");
 		const sizeNote = document.getElementById("sizeNote");
-		const suggestions = document.getElementById("suggestions");
-		const profileChips = document.getElementById("profileChips");
+		const bmiValue = document.getElementById("bmiValue");
+		const fitHint = document.getElementById("fitHint");
+		const bmiNote = document.getElementById("bmiNote");
 
 		function getGender() {
 			const checked = Array.from(genderInputs).find((input) => input.checked);
@@ -748,70 +717,82 @@
 
 		function estimateSize(gender, h, w) {
 			const bmi = w / Math.pow(h / 100, 2);
-			let result = gender === "female" ? "S" : "M";
+			const scale = ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL", "7XL", "8XL", "9XL", "10XL"];
+			let index;
 
-			if (gender === "male") {
-				if (bmi < 19.5) result = "S";
-				else if (bmi < 24) result = "M";
-				else if (bmi < 28) result = "L";
-				else result = "XL";
-			} else {
-				if (bmi < 18.5) result = "XS/S";
-				else if (bmi < 22.5) result = "S/M";
-				else if (bmi < 26) result = "M/L";
-				else result = "L/XL";
+			if (bmi < 16) index = 0;
+			else if (bmi < 17) index = 1;
+			else if (bmi < 18.5) index = 2;
+			else if (bmi < 20.5) index = 3;
+			else if (bmi < 23) index = 4;
+			else if (bmi < 25.5) index = 5;
+			else if (bmi < 28) index = 6;
+			else if (bmi < 30.5) index = 7;
+			else if (bmi < 33) index = 8;
+			else if (bmi < 35.5) index = 9;
+			else if (bmi < 38) index = 10;
+			else if (bmi < 40.5) index = 11;
+			else if (bmi < 43) index = 12;
+			else if (bmi < 46) index = 13;
+			else index = 14;
+
+			if (h >= 205) index += 2;
+			else if (h >= 195) index += 1;
+			else if (h <= 150) index -= 2;
+			else if (h <= 160) index -= 1;
+
+			if (gender === "female") index -= 1;
+
+			index = Math.max(0, Math.min(scale.length - 1, index));
+			return scale[index];
+		}
+
+		function getBmiProfile(bmi) {
+			if (bmi < 18.5) {
+				return {
+					fit: "Приталена",
+					note: "Можна дивитись моделі з більш чіткою посадкою по фігурі."
+				};
 			}
 
-			if (h >= 185 && result === "M") result = gender === "male" ? "L" : "M/L";
-			if (h <= 160 && result === "L") result = gender === "male" ? "M" : "S/M";
+			if (bmi < 25) {
+				return {
+					fit: "Базова",
+					note: "Оптимально: regular fit або класичний прямий крій."
+				};
+			}
 
-			return result;
+			if (bmi < 30) {
+				return {
+					fit: "Comfort fit",
+					note: "Комфортніше обирати моделі з невеликим запасом по обʼєму."
+				};
+			}
+
+			return {
+				fit: "Relaxed fit",
+				note: "Краще працюють вільні силуети та еластичні тканини."
+			};
 		}
 
 		function render() {
 			const gender = getGender();
-			const scenario = occasion.value;
-			const selectedSeason = season.value;
-			const selectedMood = mood.value;
 			const h = Number(height.value || 0);
 			const w = Number(weight.value || 0);
+			const bmi = h > 0 ? w / Math.pow(h / 100, 2) : 0;
 
 			const size = estimateSize(gender, h, w);
-			const scenarioLabel = occasionLabels[scenario];
-			const seasonLabel = seasonLabels[selectedSeason];
-			const moodLabel = moodLabels[selectedMood];
-			const profile = catalogBlocks[gender][scenario];
+			const bmiProfile = getBmiProfile(bmi);
 
 			sizeValue.textContent = size;
-			sizeNote.textContent = `Орієнтир для ${genderLabels[gender].toLowerCase()} лінійки. Зріст ${h} см, вага ${w} кг.`;
-
-			profileChips.innerHTML = "";
-			[genderLabels[gender], scenarioLabel, seasonLabel, moodLabel].forEach((text) => {
-				const chip = document.createElement("span");
-				chip.className = "chip";
-				chip.textContent = text;
-				profileChips.appendChild(chip);
-			});
-
-			suggestions.innerHTML = "";
-			profile.forEach(([label, link, icon]) => {
-				const item = document.createElement("a");
-				item.className = "suggestion";
-				item.href = link;
-				item.innerHTML = `
-					<div class="suggestion-icon">${icon}</div>
-					<div>
-						<p class="suggestion-title">${label}</p>
-						<p class="suggestion-text">Підійде під обраний сценарій і палiтру магазину.</p>
-					</div>
-					<div class="suggestion-go">Відкрити</div>
-				`;
-				suggestions.appendChild(item);
-			});
+			sizeNote.textContent = `Орієнтир для ${genderLabels[gender].toLowerCase()} лінійки. Діапазон розрахунку: XXS-10XL. Зріст ${h} см, вага ${w} кг.`;
+			bmiValue.textContent = Number.isFinite(bmi) ? bmi.toFixed(1) : "-";
+			fitHint.textContent = bmiProfile.fit;
+			bmiNote.textContent = bmiProfile.note;
 		}
 
 		genderInputs.forEach((input) => input.addEventListener("change", render));
-		[occasion, season, mood, height, weight].forEach((field) => field.addEventListener("input", render));
+		[height, weight].forEach((field) => field.addEventListener("input", render));
 		calculateBtn.addEventListener("click", render);
 
 		render();

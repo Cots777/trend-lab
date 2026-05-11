@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ua">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
         }
     </style>
 </head>
-<body> 
+<body>
     <div class="marquee"><marquee id="marquee" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
     </div>
     <div class="top-nav-fixed">
@@ -27,17 +27,27 @@
         </div>
     </div>
     <div class="top-right-tools">
-        <a class="quick-link" href="catalog.html">Каталог</a>
+        <div class="header-search" id="homepageSearchBox">
+            <input id="homepageSearchInput" type="search" placeholder="Я шукаю..." autocomplete="off" aria-label="Я шукаю...">
+            <button type="button" id="homepageSearchButton" aria-label="Я шукаю..." title="Я шукаю...">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="11" cy="11" r="6.5"></circle>
+                    <path d="M16 16L20 20"></path>
+                </svg>
+            </button>
+            <div class="search-suggestions" id="homepageSearchSuggestions" aria-live="polite"></div>
+        </div>
     </div>
     <div class="menu" id="menu">
+        <a href="index.html">Головна</a>
         <a href="novelty.html">Новинки</a>
         <a href="catalog.html">Каталог товарів</a>
         <a href="favorites.html">Обране</a>
         <a href="contacts.html">Наші контакти</a>
-        <a href="index.html">Про нас ^-^</a>
         <a href="reviews.html">Відгуки</a>
         <a href="dimensions.html">Розміри</a>
     </div>
+    <script src="product-search.js"></script>
     <script>
         function toggleMenu() {
             var menu = document.getElementById('menu');
@@ -61,19 +71,68 @@
         }
 
         marquee.addEventListener('finish', changeMessage);
-        setInterval(changeMessage, 29000); // смена сообщения каждые 5 секунд
+        setInterval(changeMessage, 29000);
         marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
         marquee.style.fontWeight = "bold";
+
+        TrendLabSearch.initHomepageSearch({
+            inputId: 'homepageSearchInput',
+            buttonId: 'homepageSearchButton',
+            suggestionsId: 'homepageSearchSuggestions',
+            targetUrl: 'catalog.html'
+        });
     </script>
 
+    <section class="page-hero">
+        <h1>Каталог TrendLab</h1>
+    </section>
+
     <style>
+    .page-hero {
+        margin-top: 60px;
+        padding: 94px 20px 72px;
+        text-align: center;
+        color: #fff;
+        background:
+            linear-gradient(120deg, rgba(58, 28, 14, 0.68), rgba(183, 82, 42, 0.42)),
+            url('https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1920&q=80') center 35% / cover no-repeat;
+    }
+
+    .page-hero h1 {
+        margin: 0;
+        font-size: clamp(2.2rem, 4vw, 3.6rem);
+        font-weight: 900;
+        letter-spacing: 0.2px;
+    }
+
+    .page-hero p {
+        margin: 12px auto 0;
+        max-width: 760px;
+        font-size: clamp(1rem, 1.6vw, 1.15rem);
+        line-height: 1.7;
+        opacity: 0.96;
+    }
+
+    .collection-shell {
+        max-width: 1240px;
+        margin: 22px auto 150px;
+        padding: 0 16px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .collection-panel {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 246, 238, 0.96) 100%);
+        border: 1px solid rgba(244, 162, 97, 0.32);
+        border-radius: 28px;
+        box-shadow: 0 24px 56px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+    }
+
     .gallery-container {
         max-width: 1200px;
-        margin: 100px auto 40px auto;
+        margin: 0 auto;
         padding: 32px 24px;
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     }
     .gallery-title {
         text-align: center;
@@ -144,8 +203,10 @@
     }
     </style>
 
-    <div class="gallery-container">
-        <h2 class="gallery-title">Каталог наших товарів</h2>
+    <main class="collection-shell">
+        <section class="collection-panel">
+            <div class="gallery-container">
+                <h2 class="gallery-title">Каталог наших товарів</h2>
         <a href="obr1.html"><div class="gallery-row">
             <div class="gallery-item">
                 <img src="photo_all/category/photo_2025-05-24_23-46-55.jpg" style="object-fit:cover;" alt="Фото 1 Товар 1 Photo 1">
@@ -182,7 +243,9 @@
                 <div class="gallery-caption">Sport для всіх</div>
             </div></a>
         </div>
-    </div>
+            </div>
+        </section>
+    </main>
 <script>
 function addToFavorites(productId) {
     let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -198,3 +261,5 @@ function addToFavorites(productId) {
 
 </body>
 </html>
+
+
