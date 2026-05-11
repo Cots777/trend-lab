@@ -48,6 +48,18 @@
         <a href="reviews.html">Відгуки</a>
         <a href="dimensions.html">Розміри</a>
 </div>
+	<script src="product-search.js"></script>
+	<script>
+		if (window.TrendLabSearch) {
+			TrendLabSearch.initHomepageSearch({
+				inputId: 'homepageSearchInput',
+				buttonId: 'homepageSearchButton',
+				suggestionsId: 'homepageSearchSuggestions',
+				targetUrl: 'catalog.html',
+				rootId: 'homepageSearchBox'
+			});
+		}
+	</script>
 <script>
     function toggleMenu() {
         var menu = document.getElementById('menu');

@@ -257,6 +257,19 @@
         <a href="dimensions.html">Розміри</a>
     </div>
 
+    <script src="product-search.js"></script>
+    <script>
+        if (window.TrendLabSearch) {
+            TrendLabSearch.initHomepageSearch({
+                inputId: 'homepageSearchInput',
+                buttonId: 'homepageSearchButton',
+                suggestionsId: 'homepageSearchSuggestions',
+                targetUrl: 'catalog.html',
+                rootId: 'homepageSearchBox'
+            });
+        }
+    </script>
+
     <div class="page-header">
         <h1>Новинки TrendLab</h1>
         <p>Свіжі моделі сезону: гортайте фото стрілками та обирайте свій новий стиль.</p>

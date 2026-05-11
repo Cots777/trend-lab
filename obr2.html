@@ -39,6 +39,19 @@
             <div class="search-suggestions" id="homepageSearchSuggestions" aria-live="polite"></div>
         </div>
     </div>
+    
+	<script src="product-search.js"></script>
+	<script>
+		if (window.TrendLabSearch) {
+			TrendLabSearch.initHomepageSearch({
+				inputId: 'homepageSearchInput',
+				buttonId: 'homepageSearchButton',
+				suggestionsId: 'homepageSearchSuggestions',
+				targetUrl: 'catalog.html',
+				rootId: 'homepageSearchBox'
+			});
+		}
+	</script>
 <div class="menu" id="menu">
         <a href="index.html">Головна</a>
         <a href="novelty.html">Новинки</a>

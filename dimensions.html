@@ -253,6 +253,7 @@
 
 		.button:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(183,82,42,0.12); }
 
+
 		input, select {
 			box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
 		}
@@ -526,6 +527,18 @@
             </button>
             <div class="search-suggestions" id="homepageSearchSuggestions" aria-live="polite"></div>
         </div>
+	<script src="product-search.js"></script>
+	<script>
+		if (window.TrendLabSearch) {
+			TrendLabSearch.initHomepageSearch({
+				inputId: 'homepageSearchInput',
+				buttonId: 'homepageSearchButton',
+				suggestionsId: 'homepageSearchSuggestions',
+				targetUrl: 'catalog.html',
+				rootId: 'homepageSearchBox'
+			});
+		}
+	</script>
     </div>
 	<div class="menu" id="menu">
         <a href="index.html">Головна</a>
