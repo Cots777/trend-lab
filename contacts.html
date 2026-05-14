@@ -1,10 +1,11 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ua">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Контакти | TrendLab</title>
+    <link rel="icon" type="image/svg+xml" href="./photo_all/category/Logo_2.svg">
+    <link rel="shortcut icon" type="image/svg+xml" href="./photo_all/category/Logo_2.svg">
     <link rel="stylesheet" href="menu.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -231,11 +232,11 @@
     </style>
 </head>
 <body>
-    <div class="marquee">`r`n        <marquee id="marquee" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
+    <div class="marquee">      <marquee id="marquee" scrollamount="10">Весінній роспродаж на TrendLab! Знижки до 50% на всі категорії товарів. Встигніть придбати найкраще!</marquee>
     </div>
     <div class="top-nav-fixed">
         <a class="brand-home" href="index.html" aria-label="Перейти на головну">
-            <img src="photo_all/category/photo_1_2025-05-25_0012-13-46.jpg" alt="TrendLab">
+            <img src="photo_all/category/Logo_1.svg" alt="TrendLab">
         </a>
         <div class="burger" onclick="toggleMenu()" aria-label="Відкрити меню" role="button" tabindex="0" onkeydown="if(event.key==='Enter' || event.key===' '){toggleMenu();}">
             <div></div>
@@ -299,7 +300,7 @@
         }
 
         marquee.addEventListener('finish', changeMessage);
-        setInterval(changeMessage, 29000); // смена сообщения каждые 5 секунд
+        setInterval(changeMessage, 29000); // зміна повідомлення кожні 5 секунд
         marquee.style.fontSize = window.innerWidth <= 768 ? "1.05rem" : "1.5rem";
         marquee.style.fontWeight = "bold";
     </script>
@@ -344,4 +345,5 @@
     </div>
 </body>
 </html>
+
 

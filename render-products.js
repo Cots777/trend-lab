@@ -655,7 +655,7 @@ function updateAllFavoriteButtons() {
 // 2. Спроба завантажити дані з JSON (перший список)
 const productsDataPromise = fetch(`products-data.json?cache-bust=${Date.now()}`)
     .then(response => {
-        if (!response.ok) throw new Error(`Помилка HTTP ${response.status}`);
+        if (!response.ok) throw new Error(`Помилка  ${response.status}`);
         return response.json();
     })
     .then(data => {

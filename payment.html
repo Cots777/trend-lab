@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оплата | TrendLab</title>
+    <link rel="icon" type="image/svg+xml" href="./photo_all/category/Logo_2.svg">
+    <link rel="shortcut icon" type="image/svg+xml" href="./photo_all/category/Logo_2.svg">
     <style>
         :root {
             --bg-main: #f7cfa2;
@@ -670,7 +672,7 @@
         }
 
         function updateSummary(products, favorites) {
-            // Сбрасываем колесо когда товары изменяются
+            // Скидаємо колесо коли товари змінюються
             if (typeof DiscountWheel !== 'undefined') {
                 DiscountWheel.reset();
             }
@@ -851,19 +853,38 @@
                 return false;
             }
 
-            alert('✓ Всі дані заповнені коректно!\n\nЗамовлення на обробці...');
-            console.log('Форма готова до відправки:', {
-                cardType: cardType,
-                cardName: cardName,
-                cardNumber: cardNumber.replace(/\s/g, ''),
-                expiry: expiry,
-                cvc: cvc
-            });
+            // Успішна оплата
+            alert('✓ Оплата успішна!\n\nВаше замовлення прийнято.');
             
-            // Сбрасываем колесо для нового заказа
+            // Очищуємо корзину
+            localStorage.removeItem('favorites');
+            
+            // Очищуємо форму
+            document.getElementById('paymentForm').reset();
+            
+            // Скидаємо колесо
             if (typeof DiscountWheel !== 'undefined') {
                 DiscountWheel.reset();
             }
+            
+            // Оновлюємо дисплей підсумку
+            document.getElementById('summaryCount').textContent = '0';
+            document.getElementById('summaryItems').textContent = '0.00 ₴';
+            document.getElementById('summaryDelivery').textContent = '0.00 ₴';
+            document.getElementById('summaryTotal').textContent = '0.00 ₴';
+            
+            var discountRow = document.getElementById('discountRow');
+            if (discountRow) {
+                discountRow.style.display = 'none';
+            }
+            
+            var hint = document.getElementById('summaryHint');
+            hint.textContent = 'Оберіть товари в розділі "Обране", щоб побачити суму до оплати.';
+            
+            var payButton = document.getElementById('payButton');
+            payButton.disabled = true;
+            payButton.style.opacity = '0.6';
+            payButton.style.cursor = 'not-allowed';
 
             return false;
         }
@@ -871,7 +892,7 @@
 
     <script src="discount-wheel.js"></script>
     <script>
-        // Функция для пересчета суммы при новой скидке
+        // Функція для пересчету суми при новій скидці
         window.updateSummaryWithDiscount = function(discount) {
             var summaryItems = document.getElementById('summaryItems');
             var itemsTotal = parsePrice(summaryItems.textContent);
@@ -880,7 +901,7 @@
             var discountAmount = (itemsTotal * (discount || 0)) / 100;
             var total = itemsTotal + delivery - discountAmount;
 
-            // Показываем итог с новой суммой и отдельно процент
+            // Показуємо підсумок з новою сумою та окремо відсоток
             document.getElementById('summaryTotal').textContent = formatUAH(total);
             
             var discountRow = document.getElementById('discountRow');
@@ -893,7 +914,7 @@
             }
         };
 
-        // Инициализируем колесо скидок после загрузки DOM
+        // Ініціалізуємо колесо знижок після завантаження DOM
         function initDiscountWheel() {
             if (typeof DiscountWheel !== 'undefined') {
                 DiscountWheel.init();
@@ -908,7 +929,7 @@
             initDiscountWheel();
         }
 
-        // Настройки сегментов удалены из UI — при необходимости правьте `discount-wheel.js` или localStorage
+        // Налаштування сегментів видалені з UI — за потреби редагуйте `discount-wheel.js` або localStorage
     </script>
 </body>
 </html>

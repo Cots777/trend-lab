@@ -1,21 +1,21 @@
-// 🎡 Функционал колеса скидок для TrendLab
-// Минимальная сумма для использования: 2000 грн
+// 🎡 Функціонал колеса знижок для TrendLab
+// Мінімальна сума для використання: 2000 грн
 
 const DiscountWheel = {
     MIN_AMOUNT: 2000,
     
-    // Сегменты (процент и вес) — загружаются из localStorage или ставятся по умолчанию
+    // Сегменти (відсоток і вага) — завантажуються з localStorage або встановлюються за замовчуванням
     segments: null,
     
-    // Состояние колеса
+    // Стан колеса
     isSpinning: false,
     currentDiscount: null,
     lastSpinTime: 0,
-    spinCooldown: 500, // минимальная задержка между кликами
-    hasSpinThisOrder: false, // флаг: уже один раз крутил в этом заказе
+    spinCooldown: 500, // мінімальна затримка між кліками
+    hasSpinThisOrder: false, // прапор: вже один раз крутили в цьому замовленні
     
     /**
-     * Инициализация колеса
+     * Ініціалізація колеса
      */
     init: function() {
         const wheel = document.getElementById('discountWheel');
@@ -23,8 +23,11 @@ const DiscountWheel = {
         
         if (!wheel || !spinButton) return;
         
+        // Завантажимо збережене стан колеса
+        this.loadWheelState();
+        
         spinButton.addEventListener('click', () => this.spin());
-        // Загрузим сегменты из localStorage или используем дефолт настройка скидок и весов
+        // Завантажимо сегменти з localStorage або використовуємо стандартне налаштування знижок та ваг
         this.segments = this.loadSegments() || [
             {percent:5, weight:1},
             {percent:10, weight:1},
@@ -35,7 +38,7 @@ const DiscountWheel = {
             {percent:30, weight:1},
             {percent:15, weight:1}
         ];
-        // Добавим подписи сегментов и плавность
+        // Додамо підписи сегментів і плавність
         this.renderLabels();
         if (wheel) {
             wheel.style.transition = 'transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
@@ -49,11 +52,11 @@ const DiscountWheel = {
     getDiscount: function() {
         return this.currentDiscount || 0;
     },
-    // Получить текущие сегменты
+    // Отримати поточні сегменти
     getSegments: function() {
         return this.segments || [];
     },
-    // Установить сегменты и сохранить в localStorage
+    // Встановити сегменти та зберегти в localStorage
     setSegments: function(segments) {
         this.segments = (segments || []).map(function(s){
             return { percent: Number(s.percent)||0, weight: Number(s.weight)||0 };
@@ -73,7 +76,30 @@ const DiscountWheel = {
     },
     
     /**
-     * Проверить, может ли пользователь крутить колесо
+     * Збереження стану колеса (чи вже крутили це замовлення)
+     */
+    saveWheelState: function() {
+        try {
+            localStorage.setItem('trendlab_wheel_spin_used', this.hasSpinThisOrder ? '1' : '0');
+            localStorage.setItem('trendlab_wheel_discount', String(this.currentDiscount || ''));
+        } catch(e) {}
+    },
+    
+    /**
+     * Завантаження стану колеса
+     */
+    loadWheelState: function() {
+        try {
+            const spinUsed = localStorage.getItem('trendlab_wheel_spin_used');
+            const discount = localStorage.getItem('trendlab_wheel_discount');
+            
+            this.hasSpinThisOrder = spinUsed === '1';
+            this.currentDiscount = discount ? parseInt(discount) : null;
+        } catch(e) {}
+    },
+    
+    /**
+     * Перевірити, чи може користувач крутити колесо
      */
     canSpin: function(itemsTotal) {
         return itemsTotal >= this.MIN_AMOUNT && 
@@ -83,7 +109,7 @@ const DiscountWheel = {
     },
     
     /**
-     * Обновить состояние кнопки в зависимости от суммы
+     * Оновити стан кнопки залежно від суми
      */
     updateWheelState: function(itemsTotal = 0) {
         const spinButton = document.getElementById('spinWheelBtn');
@@ -129,7 +155,8 @@ const DiscountWheel = {
         }
         
         this.isSpinning = true;
-        this.hasSpinThisOrder = true; // Блокируем дальнейшее кручение
+        this.hasSpinThisOrder = true; // Блокуємо подальше кручення
+        this.saveWheelState(); // Зберігаємо в localStorage
         this.lastSpinTime = Date.now();
         
         const wheel = document.getElementById('discountWheel');
@@ -137,7 +164,7 @@ const DiscountWheel = {
         
         spinButton.disabled = true;
         
-        // Выбор сегмента взвешенно по weight
+        // Вибір сегмента зважено за вагою
         const segments = this.segments || [];
         const totalWeight = segments.reduce((s, seg) => s + (seg.weight || 0), 0);
         let targetIdx = 0;
@@ -165,6 +192,7 @@ const DiscountWheel = {
         // Після анімації показуємо результат (чуть довше, щоб вмістилося)
         setTimeout(() => {
             this.currentDiscount = selectedDiscount;
+            this.saveWheelState(); // Зберігаємо результат
             this.showWinNotification(selectedDiscount, itemsTotal);
             this.updateWheelState(itemsTotal);
             this.isSpinning = false;
@@ -175,16 +203,16 @@ const DiscountWheel = {
         }, 4200); // Тривалість анімації трохи довша
     },
 
-    // Отрисовать подписи сегментов прямо на колесе (вращаются с колесом)
+    // Намалювати підписи сегментів прямо на колесі (обертаються з колесом)
     renderLabels: function() {
         const wheel = document.getElementById('discountWheel');
         if (!wheel) return;
         
-        // Удалим старые метки если есть
+        // Видалимо старі мітки якщо є
         const oldLabels = wheel.querySelectorAll('.wheel-label');
         oldLabels.forEach(n => n.remove());
         
-        // Удалим старый контейнер если есть (от предыдущей версии)
+        // Видалимо старий контейнер якщо є (від попередної версії)
         const oldContainer = document.querySelector('.wheel-labels-container');
         if (oldContainer) oldContainer.remove();
 
@@ -200,10 +228,10 @@ const DiscountWheel = {
             label.className = 'wheel-label';
             label.textContent = perc + '%';
             
-            // Угол по центру сегмента
+            // Кут по центру сегмента
             const centerAngle = i * angleStep + angleStep / 2;
             
-            // Позиция метки относительно фактического размера колеса
+            // Позиція мітки відносно фактичного розміру колеса
             const radianAngle = (centerAngle - 90) * (Math.PI / 180);
             const x = Math.cos(radianAngle) * labelRadius;
             const y = Math.sin(radianAngle) * labelRadius;
@@ -211,7 +239,7 @@ const DiscountWheel = {
             label.style.position = 'absolute';
             label.style.left = '50%';
             label.style.top = '50%';
-            // Передвигаем на позицию и поворачиваем текст по углу сегмента
+            // Переміщуємо на позицію та повертаємо текст за кутом сегмента
             label.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${centerAngle}deg)`;
             label.style.transformOrigin = 'center center';
             label.style.pointerEvents = 'none';
@@ -249,7 +277,7 @@ const DiscountWheel = {
     },
     
     /**
-     * Пересчитати загальну суму з урахуванням скидки
+     * перерахування загальну суму з урахуванням знижки
      */
     recalculateTotal: function() {
         // Виклик існуючої функції оновлення суми
@@ -267,8 +295,9 @@ const DiscountWheel = {
     reset: function() {
         this.currentDiscount = null;
         this.isSpinning = false;
-        this.hasSpinThisOrder = false; // Позволяем крутить снова для нового заказа
+        this.hasSpinThisOrder = false; // Дозволяємо крутити знову для нового замовлення
         this.lastSpinTime = 0;
+        this.saveWheelState(); // Очищуємо збережене стан
         const wheel = document.getElementById('discountWheel');
         if (wheel) {
             wheel.style.transform = 'rotate(0deg)';
