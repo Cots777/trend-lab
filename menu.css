@@ -327,14 +327,59 @@
         }
         @media (max-width: 520px) {
             :root {
-                --marquee-side-safe: 102px;
+                --marquee-side-safe: 94px;
+                --top-nav-offset: 6px;
+                --top-nav-side-gap: 8px;
+            }
+            .marquee {
+                padding-left: var(--marquee-side-safe);
+                padding-right: var(--marquee-side-safe);
+            }
+            .menu {
+                width: min(250px, calc(100vw - 18px));
+            }
+            .top-nav-fixed {
+                height: 32px;
+                padding: 4px 7px;
+                border-radius: 10px;
+            }
+            .top-right-tools {
+                height: 32px;
             }
             .quick-link {
+                height: 32px;
                 padding: 0 10px;
                 font-size: 0.76rem;
             }
+            .header-search {
+                height: 32px;
+                padding: 0 4px 0 6px;
+                border-radius: 10px;
+            }
             .header-search input {
-                width: 72px;
+                width: 64px;
+                font-size: 0.75rem;
+            }
+            .header-search button {
+                width: 24px;
+                min-width: 24px;
+                min-height: 24px;
+                border-radius: 7px;
+            }
+            .header-search button svg {
+                width: 12px;
+                height: 12px;
+            }
+            .search-suggestions {
+                width: min(300px, calc(100vw - 20px));
+            }
+            .brand-home {
+                width: 36px;
+                height: 36px;
+            }
+            .burger {
+                width: 26px;
+                height: 18px;
             }
         }
         

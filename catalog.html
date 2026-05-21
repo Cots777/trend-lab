@@ -187,6 +187,19 @@
         transform: translateY(-8px) scale(1.03);
         box-shadow: 0 8px 24px rgba(0,0,0,0.13);
     }
+    .gallery-link {
+        display: inline-block;
+        width: auto;
+        text-decoration: none;
+        color: inherit;
+        vertical-align: top;
+    }
+    @media (max-width: 520px) {
+        .gallery-link {
+            display: block;
+            width: 100%;
+        }
+    }
     @media (max-width: 900px) {
         .gallery-row {
             flex-direction: column;
@@ -195,6 +208,44 @@
         .gallery-item, .gallery-item.large {
             width: 90vw;
             max-width: 350px;
+        }
+    }
+    @media (max-width: 520px) {
+        .page-hero {
+            padding: 88px 14px 56px;
+        }
+        .collection-shell {
+            margin: 16px auto 120px;
+            padding: 0 10px;
+        }
+        .collection-panel {
+            border-radius: 22px;
+        }
+        .gallery-container {
+            padding: 22px 14px;
+        }
+        .gallery-title {
+            font-size: 1.75rem;
+            margin-bottom: 22px;
+        }
+        .gallery-row {
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .gallery-item,
+        .gallery-item.large {
+            width: 100%;
+            max-width: 100%;
+        }
+        .gallery-item img {
+            height: 200px;
+        }
+        .gallery-item.large img {
+            height: 220px;
+        }
+        .gallery-caption {
+            font-size: 1rem;
+            padding: 12px 8px;
         }
     }
     a img {
@@ -209,41 +260,57 @@
         <section class="collection-panel">
             <div class="gallery-container">
                 <h2 class="gallery-title">Каталог наших товарів</h2>
-        <a href="obr1.html"><div class="gallery-row">
-            <div class="gallery-item">
-                <img src="photo_all/category/photo_2025-05-24_23-46-55.jpg" style="object-fit:cover;" alt="Фото 1 Товар 1 Photo 1">
-                <div class="gallery-caption">Аксесуари</div>
-            </div></a>
-            <a href="obr2.html"><div class="gallery-item">
-                <img src="photo_all/category/photo_4_2025-05-25_00-13-46.jpg" alt="Фото 2 Товар 2 Photo 2">
-                <div class="gallery-caption">Головні убори</div>
-            </div></a>
-            <a href="obr3.html"><div class="gallery-item">
-                <img src="photo_all/category/photo_2_2025-05-25_00-13-46.jpg" alt="Фото 3 Товар 3 Photo 3">
-                <div class="gallery-caption">Жіноча білизна</div>
-            </div></a>
-            <a href="obr4.html"><div class="gallery-item">
-                <img src="photo_all/category/photo_3_2025-05-25_00-13-46.jpg" alt="Фото 5 Товар 5 Photo 5">
-                <div class="gallery-caption">Чоловіча білизна</div>
-            </div></a>
+        <div class="gallery-row">
+            <a href="obr1.html" class="gallery-link">
+                <div class="gallery-item">
+                    <img src="photo_all/category/photo_2025-05-24_23-46-55.jpg" style="object-fit:cover;" alt="Фото 1 Товар 1 Photo 1">
+                    <div class="gallery-caption">Аксесуари</div>
+                </div>
+            </a>
+            <a href="obr2.html" class="gallery-link">
+                <div class="gallery-item">
+                    <img src="photo_all/category/photo_4_2025-05-25_00-13-46.jpg" alt="Фото 2 Товар 2 Photo 2">
+                    <div class="gallery-caption">Головні убори</div>
+                </div>
+            </a>
+            <a href="obr3.html" class="gallery-link">
+                <div class="gallery-item">
+                    <img src="photo_all/category/photo_2_2025-05-25_00-13-46.jpg" alt="Фото 3 Товар 3 Photo 3">
+                    <div class="gallery-caption">Жіноча білизна</div>
+                </div>
+            </a>
+            <a href="obr4.html" class="gallery-link">
+                <div class="gallery-item">
+                    <img src="photo_all/category/photo_3_2025-05-25_00-13-46.jpg" alt="Фото 5 Товар 5 Photo 5">
+                    <div class="gallery-caption">Чоловіча білизна</div>
+                </div>
+            </a>
         </div>
         <div class="gallery-row">
-            <a href="obr5.html"><div class="gallery-item large">
-                <img src="photo_all/category/photo_1_2025-05-25_00-13-46.jpg" alt="Фото 5 Товар 5 Photo 5">
-                <div class="gallery-caption">Чоловіки</div>
-            </div></a>
-            <a href="obr6.html"><div class="gallery-item large">
-                <img src="photo_all/category/photo_6_2025-05-25_00-13-46.jpg" alt="Фото 6 Товар 6 Photo 6">
-                <div class="gallery-caption">Жінки</div>
-            </div></a>
-            <a href="obr7.html"><div class="gallery-item large">
-                <img src="photo_all/category/photo_7_2025-05-25_00-13-46.jpg" alt="Фото 7 Товар 7 Photo 7">
-                <div class="gallery-caption">Джинси</div>
-            </div></a>
-            <a href="obr8.html"><div class="gallery-item large">
-                <img src="photo_all/category/photo_5_2025-05-25_00-13-46.jpg" alt="Фото 8 Товар 8 Photo 8">
-                <div class="gallery-caption">Sport для всіх</div>
-            </div></a>
+            <a href="obr5.html" class="gallery-link">
+                <div class="gallery-item large">
+                    <img src="photo_all/category/photo_1_2025-05-25_00-13-46.jpg" alt="Фото 5 Товар 5 Photo 5">
+                    <div class="gallery-caption">Чоловіки</div>
+                </div>
+            </a>
+            <a href="obr6.html" class="gallery-link">
+                <div class="gallery-item large">
+                    <img src="photo_all/category/photo_6_2025-05-25_00-13-46.jpg" alt="Фото 6 Товар 6 Photo 6">
+                    <div class="gallery-caption">Жінки</div>
+                </div>
+            </a>
+            <a href="obr7.html" class="gallery-link">
+                <div class="gallery-item large">
+                    <img src="photo_all/category/photo_7_2025-05-25_00-13-46.jpg" alt="Фото 7 Товар 7 Photo 7">
+                    <div class="gallery-caption">Джинси</div>
+                </div>
+            </a>
+            <a href="obr8.html" class="gallery-link">
+                <div class="gallery-item large">
+                    <img src="photo_all/category/photo_5_2025-05-25_00-13-46.jpg" alt="Фото 8 Товар 8 Photo 8">
+                    <div class="gallery-caption">Sport для всіх</div>
+                </div>
+            </a>
         </div>
             </div>
         </section>
