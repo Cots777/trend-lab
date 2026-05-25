@@ -3,6 +3,8 @@
 
 const DiscountWheel = {
     MIN_AMOUNT: 2000,
+    windowStateKey: 'trendlab_wheel_state',
+    summaryObserver: null,
     
     // Сегменти (відсоток і вага) — завантажуються з localStorage або встановлюються за замовчуванням
     segments: null,
@@ -40,10 +42,11 @@ const DiscountWheel = {
         ];
         // Додамо підписи сегментів і плавність
         this.renderLabels();
+        this.observeSummaryChanges();
         if (wheel) {
             wheel.style.transition = 'transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         }
-        this.updateWheelState();
+        this.updateWheelState(this.getItemsTotal());
     },
     
     /**
@@ -65,6 +68,69 @@ const DiscountWheel = {
         this.renderLabels();
         this.updateWheelState();
     },
+    getItemsTotal: function() {
+        const summaryItems = document.getElementById('summaryItems');
+        if (!summaryItems) return 0;
+        const rawTotal = parseFloat(summaryItems.textContent.replace(/[^\d.,]/g, '').replace(',', '.'));
+        return isNaN(rawTotal) ? 0 : rawTotal;
+    },
+    observeSummaryChanges: function() {
+        const summaryItems = document.getElementById('summaryItems');
+        if (!summaryItems || typeof MutationObserver === 'undefined') return;
+        if (this.summaryObserver) return;
+
+        this.summaryObserver = new MutationObserver(() => {
+            this.updateWheelState(this.getItemsTotal());
+        });
+
+        this.summaryObserver.observe(summaryItems, {
+            childList: true,
+            characterData: true,
+            subtree: true
+        });
+    },
+    readWindowState: function() {
+        try {
+            const marker = this.windowStateKey + '=';
+            const name = String(window.name || '');
+            const start = name.indexOf(marker);
+            if (start === -1) return null;
+
+            let raw = name.slice(start + marker.length);
+            const separator = raw.indexOf(';');
+            if (separator !== -1) {
+                raw = raw.slice(0, separator);
+            }
+
+            const parsed = JSON.parse(decodeURIComponent(raw));
+            return {
+                hasSpinThisOrder: parsed && parsed.hasSpinThisOrder === true,
+                currentDiscount: parsed && parsed.currentDiscount !== '' && parsed.currentDiscount !== null
+                    ? parseInt(parsed.currentDiscount, 10)
+                    : null
+            };
+        } catch (e) {
+            return null;
+        }
+    },
+    saveWindowState: function() {
+        try {
+            const marker = this.windowStateKey + '=';
+            const stateValue = encodeURIComponent(JSON.stringify({
+                hasSpinThisOrder: !!this.hasSpinThisOrder,
+                currentDiscount: this.currentDiscount === null ? '' : this.currentDiscount
+            }));
+            const name = String(window.name || '');
+            const parts = name
+                .split(';')
+                .filter(function(part) {
+                    return part && part.indexOf(marker) !== 0;
+                });
+
+            parts.push(marker + stateValue);
+            window.name = parts.join(';');
+        } catch (e) {}
+    },
     loadSegments: function() {
         try {
             var raw = localStorage.getItem('trendlab_wheel_segments');
@@ -83,12 +149,20 @@ const DiscountWheel = {
             localStorage.setItem('trendlab_wheel_spin_used', this.hasSpinThisOrder ? '1' : '0');
             localStorage.setItem('trendlab_wheel_discount', String(this.currentDiscount || ''));
         } catch(e) {}
+        this.saveWindowState();
     },
     
     /**
      * Завантаження стану колеса
      */
     loadWheelState: function() {
+        const windowState = this.readWindowState();
+        if (windowState) {
+            this.hasSpinThisOrder = windowState.hasSpinThisOrder;
+            this.currentDiscount = windowState.currentDiscount;
+            return;
+        }
+
         try {
             const spinUsed = localStorage.getItem('trendlab_wheel_spin_used');
             const discount = localStorage.getItem('trendlab_wheel_discount');
@@ -114,10 +188,13 @@ const DiscountWheel = {
     updateWheelState: function(itemsTotal = 0) {
         const spinButton = document.getElementById('spinWheelBtn');
         const wheelHint = document.getElementById('wheelHint');
+        const total = itemsTotal > 0 ? itemsTotal : this.getItemsTotal();
+
+        this.observeSummaryChanges();
         
         if (!spinButton || !wheelHint) return;
         
-        const canSpinNow = this.canSpin(itemsTotal);
+        const canSpinNow = this.canSpin(total);
         
         spinButton.disabled = !canSpinNow;
         spinButton.style.opacity = canSpinNow ? '1' : '0.5';
@@ -128,10 +205,10 @@ const DiscountWheel = {
                 ? `✨ Ви виграли ${this.currentDiscount}% знижку! Вітаємо!`
                 : '⏸️ Вже крутили колесо для цього замовлення';
             wheelHint.style.color = this.currentDiscount ? '#2ecc71' : '#b7522a';
-        } else if (itemsTotal < this.MIN_AMOUNT && itemsTotal > 0) {
-            wheelHint.textContent = `Ще ${(this.MIN_AMOUNT - itemsTotal).toFixed(2)} ₴ до розблокування колеса`;
+        } else if (total < this.MIN_AMOUNT && total > 0) {
+            wheelHint.textContent = `Ще ${(this.MIN_AMOUNT - total).toFixed(2)} ₴ до розблокування колеса`;
             wheelHint.style.color = '#d86734';
-        } else if (itemsTotal >= this.MIN_AMOUNT) {
+        } else if (total >= this.MIN_AMOUNT) {
             wheelHint.textContent = '🎡 Крутіть колесо 1 раз для знижки!';
             wheelHint.style.color = '#b7522a';
         } else {
@@ -145,9 +222,7 @@ const DiscountWheel = {
      */
     spin: function() {
         if (this.isSpinning) return;
-        
-        const summaryItems = document.getElementById('summaryItems');
-        const itemsTotal = parseFloat(summaryItems.textContent.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
+        const itemsTotal = this.getItemsTotal();
         
         if (!this.canSpin(itemsTotal)) {
             console.warn('Не можна крутити колесо зараз');

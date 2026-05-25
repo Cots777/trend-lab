@@ -655,7 +655,7 @@
             </div>
 
             <div class="actions">
-                 <button type="button" class="btn btn-primary" id="payButton" onclick="validateAndSubmit(event)">Оплатити зараз</button>
+                  <button type="button" class="btn btn-primary" id="payButton">Оплатити зараз</button>
                 <button type="reset" class="btn btn-secondary">Очистити</button>
             </div>
         </form>
@@ -733,11 +733,6 @@
         }
 
         function updateSummary(products, favorites) {
-            // Скидаємо колесо коли товари змінюються
-            if (typeof DiscountWheel !== 'undefined') {
-                DiscountWheel.reset();
-            }
-            
             var selected = products.filter(function (p) {
                 return favorites.includes(p.id);
             });
@@ -919,14 +914,14 @@
             
             // Очищуємо корзину
             localStorage.removeItem('favorites');
-            
-            // Очищуємо форму
-            document.getElementById('paymentForm').reset();
-            
-            // Скидаємо колесо
+
+            // Закриваємо стан колеса тільки після успішної оплати
             if (typeof DiscountWheel !== 'undefined') {
                 DiscountWheel.reset();
             }
+            
+            // Очищуємо форму
+            document.getElementById('paymentForm').reset();
             
             // Оновлюємо дисплей підсумку
             document.getElementById('summaryCount').textContent = '0';
@@ -949,6 +944,8 @@
 
             return false;
         }
+
+        document.getElementById('payButton').addEventListener('click', validateAndSubmit);
     </script>
 
     <script src="discount-wheel.js"></script>
