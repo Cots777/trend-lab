@@ -55,6 +55,14 @@ const DiscountWheel = {
     getDiscount: function() {
         return this.currentDiscount || 0;
     },
+    getActiveDiscount: function(itemsTotal = 0) {
+        const total = Number(itemsTotal) || 0;
+        if (!this.hasSpinThisOrder || total < this.MIN_AMOUNT) {
+            return 0;
+        }
+
+        return this.currentDiscount || 0;
+    },
     // Отримати поточні сегменти
     getSegments: function() {
         return this.segments || [];
@@ -200,14 +208,16 @@ const DiscountWheel = {
         spinButton.style.opacity = canSpinNow ? '1' : '0.5';
         spinButton.style.cursor = canSpinNow ? 'pointer' : 'not-allowed';
         
-        if (this.hasSpinThisOrder) {
+        if (total < this.MIN_AMOUNT && total > 0) {
+            wheelHint.textContent = this.hasSpinThisOrder && this.currentDiscount
+                ? `Ще ${(this.MIN_AMOUNT - total).toFixed(2)} ₴ до відновлення знижки`
+                : `Ще ${(this.MIN_AMOUNT - total).toFixed(2)} ₴ до розблокування колеса`;
+            wheelHint.style.color = '#d86734';
+        } else if (this.hasSpinThisOrder) {
             wheelHint.textContent = this.currentDiscount 
                 ? `✨ Ви виграли ${this.currentDiscount}% знижку! Вітаємо!`
                 : '⏸️ Вже крутили колесо для цього замовлення';
             wheelHint.style.color = this.currentDiscount ? '#2ecc71' : '#b7522a';
-        } else if (total < this.MIN_AMOUNT && total > 0) {
-            wheelHint.textContent = `Ще ${(this.MIN_AMOUNT - total).toFixed(2)} ₴ до розблокування колеса`;
-            wheelHint.style.color = '#d86734';
         } else if (total >= this.MIN_AMOUNT) {
             wheelHint.textContent = '🎡 Крутіть колесо 1 раз для знижки!';
             wheelHint.style.color = '#b7522a';
@@ -356,11 +366,10 @@ const DiscountWheel = {
      */
     recalculateTotal: function() {
         // Виклик існуючої функції оновлення суми
-        const deliveryType = document.getElementById('deliveryType').value;
-        const summaryItems = document.getElementById('summaryItems');
+        const itemsTotal = this.getItemsTotal();
         
-        if (summaryItems && window.updateSummaryWithDiscount) {
-            window.updateSummaryWithDiscount(this.currentDiscount);
+        if (window.updateSummaryWithDiscount) {
+            window.updateSummaryWithDiscount(this.getActiveDiscount(itemsTotal));
         }
     },
     

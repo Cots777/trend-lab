@@ -745,7 +745,7 @@
             var delivery = selected.length > 0 ? calculateDelivery(itemsTotal, deliveryType) : 0;
             var discount = 0;
             if (typeof DiscountWheel !== 'undefined') {
-                discount = (itemsTotal * DiscountWheel.getDiscount()) / 100;
+                discount = (itemsTotal * DiscountWheel.getActiveDiscount(itemsTotal)) / 100;
             }
             var total = itemsTotal + delivery - discount;
 
@@ -956,7 +956,13 @@
             var itemsTotal = parsePrice(summaryItems.textContent);
             var deliveryType = document.getElementById('deliveryType').value;
             var delivery = calculateDelivery(itemsTotal, deliveryType);
-            var discountAmount = (itemsTotal * (discount || 0)) / 100;
+            var activeDiscount = 0;
+            if (typeof DiscountWheel !== 'undefined') {
+                activeDiscount = DiscountWheel.getActiveDiscount(itemsTotal);
+            } else {
+                activeDiscount = discount || 0;
+            }
+            var discountAmount = (itemsTotal * activeDiscount) / 100;
             var total = itemsTotal + delivery - discountAmount;
 
             // Показуємо підсумок з новою сумою та окремо відсоток
@@ -964,9 +970,9 @@
             
             var discountRow = document.getElementById('discountRow');
             var summaryDiscount = document.getElementById('summaryDiscount');
-            if (discount > 0) {
+            if (activeDiscount > 0) {
                 discountRow.style.display = 'flex';
-                summaryDiscount.innerHTML = `<span class="discount-value">${discount}%</span> &nbsp;(${formatUAH(discountAmount)})`;
+                summaryDiscount.innerHTML = `<span class="discount-value">${activeDiscount}%</span> &nbsp;(${formatUAH(discountAmount)})`;
             } else {
                 discountRow.style.display = 'none';
             }
