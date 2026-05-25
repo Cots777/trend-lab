@@ -1,44 +1,60 @@
 let allProductsData = [];
 let productsLoaded = false;
 let productsSource = 'unknown';
+// Кому належить список товарів без вибору розмірів
+var noSizeProductIds = new Set();
+
+function setNoSizeProducts(ids) {
+    try {
+        noSizeProductIds = new Set((ids || []).map(function(i){ return Number(i); }));
+    } catch (e) {
+        noSizeProductIds = new Set();
+    }
+}
+// Впишіть сюди ID товарів, для яких НЕ потрібно показувати вибір розмірів.
+// Приклад: [2, 34, 56]
+const NO_SIZE_PRODUCTS = [1,11]; // <-- змініть масив на потрібні ID
+setNoSizeProducts(NO_SIZE_PRODUCTS);
+
+// Спеціальні групи розмірів — перевіряються після перевірки no-size
+const SPECIAL_SIZE_GROUPS = [
+    { ids: [2], sizes: ['30cм', '40см', '50см', '60см', '70см'] },
+    { ids: [4,6,7,8], sizes: ['42мм', '44мм', '46мм', '48мм', '50мм'] },
+    { ids: [9], sizes: ['15см', '17см', '19см', '21см', '23см'] },
+    { ids: [3, 5, 10], sizes: ['1-3см', '4-6см', '7-10см'] },
+    { ids: [12], sizes: ['24-30мм', '32-38мм', '40-45мм'] }
+];
 // Розміри за замовчуванням для товарів, які не входять до спеціальних груп
 const DEFAULT_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
-// Функція для отримання доступних розмірів для товару
-function getSizeOptions(productId) {
-    const specialGroups = [
-        {
-            ids: [2],
-            sizes: ['30cм', '40см', '50см', '60см', '70см']
-        },
-        {
-            ids: [9],
-            sizes: ['15см', '17см', '19см', '21см', '23см']
-        },
-        {
-            ids: [3, 5, 10],
-            sizes: ['1-3см', '4-6см', '7-10см']
-        },
-        {
-            ids: [12],
-            sizes: ['24-30мм', '32-38мм', '40-45мм']
-        }                
-        
-
-    ];
-
-    for (const group of specialGroups) {
-        if (group.ids.includes(productId)) return group.sizes;
+// Функція fallback: тільки діапазони і дефолтні розміри (викликається після перевірок)
+function fallback_getSizeOptions(productId) {
+    if (productId >= 13 && productId <= 24) {
+        return ['40-54см', '54-56см', '56-58см', '58-60см',];
     }
 
-    if (productId >= 1 && productId <= 6) {
-        return ['XS', 'S', 'M', 'L', 'XL'];
+    if (productId >= 25 && productId <= 48) {
+        return ['XS', 'S', 'M', 'L', 'XL', '2XL'];
     }
 
-    if (productId >= 7 && productId <= 12) {
-        return ['S', 'M', 'L', 'XL', '2XL'];
+    if (productId >= 49 && productId <= 92) {
+        return ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL', '10XL'];
+    }
+
+    if (productId >= 93 && productId <= 96) {
+        return ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46'];
     }
 
     return DEFAULT_SIZES;
+}
+
+// Override to enforce order: 1) no-size list, 2) special groups, 3) fallback to ranges/default
+const __orig_getSizeOptions = fallback_getSizeOptions;
+function getSizeOptions(productId) {
+    if (noSizeProductIds.has(productId)) return [];
+    for (const group of SPECIAL_SIZE_GROUPS) {
+        if (group.ids.includes(productId)) return group.sizes;
+    }
+    return __orig_getSizeOptions(productId);
 }
 
 function getFavorites() {
@@ -69,7 +85,7 @@ function getColorOptions(productId) {
     // Особливі групи набори ID товарів, які мають однакові варіанти кольорів
     const specialGroups = [
         {
-            ids: [3, 5, 9, 10, 12],
+            ids: [2, 3, 5, 9, 10, 12],
             colors: [
                 { name: 'Срібло', value: '#C0C0C0' },
                 { name: 'Золото', value: '#D4AF37' },
@@ -90,25 +106,58 @@ function getColorOptions(productId) {
             { name: 'Молочний', value: '#f5ede3' },
             { name: 'Рожевий', value: '#f8c7d8' },
             { name: 'Чорний', value: '#1f1f1f' },
-            { name: 'Бежевий', value: '#d8c2a5' }
+            { name: 'Бежевий', value: '#d8c2a5' },
+            { name: 'Білий', value: '#f8f4ef' },
+            { name: 'Червоний', value: '#ff0000' }
         ];
     }
 
-    if (productId >= 13 && productId <= 16) {
+    if (productId >= 13 && productId <= 24) {
         return [
             { name: 'Білий', value: '#f8f4ef' },
             { name: 'Чорний', value: '#1f1f1f' },
-            { name: 'Ніжно-рожевий', value: '#f2c9d7' },
-            { name: 'Бежевий', value: '#dcc6aa' }
+            { name: 'Червоний', value: '#ff0000' },
+            { name: 'Зелений', value: '#00ff00' },
+            { name: 'Синій', value: '#0000ff' },
+            { name: 'Фіолетовий', value: '#800080' }  
         ];
     }
 
-    if (productId >= 17 && productId <= 28) {
+    if (productId >= 37 && productId <= 48) {
         return [
-            { name: 'Синій', value: '#6fa8dc' },
+            { name: 'Синій', value: '#0000ff' },
             { name: 'Графітовий', value: '#4b4b4b' },
             { name: 'Світло-сірий', value: '#d8dbe2' },
             { name: 'Чорний', value: '#1f1f1f' }
+        ];
+    }
+
+    if (productId >= 49 && productId <= 60) {
+        return [
+            { name: 'Блакитний', value: '#6fa8dc' },
+            { name: 'Червоний', value: '#ff0000' },
+            { name: 'Салатовий', value: '#75e748' },
+            { name: 'Чорний', value: '#1f1f1f' }
+        ];
+    }
+    
+    if (productId >= 61 && productId <= 72) {
+        return [
+            { name: 'Рожевий', value: '#cc4474' },
+            { name: 'Фіолетовий', value: '#800080' },
+            { name: 'Кремовий', value: '#fffdd0' },
+            { name: 'Помаранчевий', value: '#ffa500' }
+        ];
+    }
+
+    if (productId >= 73 && productId <= 84) {
+        return [
+            { name: 'Білий', value: '#f8f4ef' },
+            { name: 'Чорний', value: '#000000' },
+            { name: 'Світло-синій', value: '#4682b4' },
+            { name: 'Темно-синій', value: '#1d2e44' },
+            { name: 'Хакі', value: '#8f9779' },
+            { name: 'Теракотовий', value: '#8a3324' }
         ];
     }
 
@@ -544,7 +593,7 @@ function ensureProductModal() {
                 <div class="modal-color-title">Оберіть колір:</div>
                 <div id="modalColorOptions" class="color-options"></div>
                 <div id="modalSelectedVariant" class="selected-variant-info"></div>
-                <a href="dodatok.html" class="size-guide-link">Підібрати розмір</a>
+                <a href="dimensions.html" class="size-guide-link">Підібрати розмір</a>
                 <div class="modal-actions">
                     <button id="modalFavoriteBtn" class="modal-favorite-btn" type="button"></button>
                     <a href="favorites.html" class="modal-go-favorites">Перейти в обране</a>
@@ -599,26 +648,38 @@ function openProductModal(productId) {
 
     const selectedSizes = getSelectedSizes();
     const productSizes = getSizeOptions(productId);
-    const currentSize = selectedSizes[productId] || productSizes[0];
 
-    sizeOptionsEl.innerHTML = productSizes.map(size => `
-        <button
-            class="size-btn ${size === currentSize ? 'active' : ''}"
-            type="button"
-            data-size="${size}"
-        >${size}</button>
-    `).join('');
+    // Якщо для товару немає розмірів — приховуємо секцію розмірів
+    if (!productSizes || productSizes.length === 0) {
+        const sizeTitleEl = document.querySelector('.modal-size-title');
+        if (sizeTitleEl) sizeTitleEl.style.display = 'none';
+        sizeOptionsEl.style.display = 'none';
+    } else {
+        const currentSize = selectedSizes[productId] || productSizes[0];
 
-    sizeOptionsEl.querySelectorAll('.size-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const sizesMap = getSelectedSizes();
-            sizesMap[productId] = this.dataset.size;
-            setSelectedSizes(sizesMap);
+        sizeOptionsEl.innerHTML = productSizes.map(size => `
+            <button
+                class="size-btn ${size === currentSize ? 'active' : ''}"
+                type="button"
+                data-size="${size}"
+            >${size}</button>
+        `).join('');
 
-            sizeOptionsEl.querySelectorAll('.size-btn').forEach(item => item.classList.remove('active'));
-            this.classList.add('active');
+        sizeOptionsEl.style.display = '';
+        const sizeTitleEl = document.querySelector('.modal-size-title');
+        if (sizeTitleEl) sizeTitleEl.style.display = '';
+
+        sizeOptionsEl.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const sizesMap = getSelectedSizes();
+                sizesMap[productId] = this.dataset.size;
+                setSelectedSizes(sizesMap);
+
+                sizeOptionsEl.querySelectorAll('.size-btn').forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+            });
         });
-    });
+    }
 
     const selectedColors = getSelectedColors();
     const productColors = getColorOptions(productId);
@@ -814,3 +875,7 @@ document.addEventListener("DOMContentLoaded", restoreFavoriteButtons);
 window.renderProducts = renderProducts;
 window.toggleFavorite = toggleFavorite;
 window.openProductModal = openProductModal;
+// API: вказати список id товарів, для яких не буде вибору розмірів
+window.setNoSizeProducts = setNoSizeProducts;
+// Якщо потрібно — виклик `window.setNoSizeProducts(...)` можна помістити в іншому скрипті.
+// Розмістіть цей виклик перед renderProducts(...) у вашому головному скрипті або залиште тут як приклад.
