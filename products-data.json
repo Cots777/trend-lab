@@ -43,10 +43,10 @@
 
 
     { "id": 37, "name": "Труси <Елегантний Релакс>", "price": "330₴", "img": "photo_all/photo_bel_boy/photo_1_2025-05-24_23-21-40.jpg" },
-    { "id": 38, "name": "Труси <Дикий Стиль>", "price>": "300₴", "img": "photo_all/photo_bel_boy/photo_2_2025-05-24_23-21-40.jpg" },
-    { "id": 39, "name": "Труси <Тінь Сили>", "price>": "490₴", "img": "photo_all/photo_bel_boy/photo_3_2025-05-24_23-21-40.jpg" },
+    { "id": 38, "name": "Труси <Дикий Стиль>", "price": "300₴", "img": "photo_all/photo_bel_boy/photo_2_2025-05-24_23-21-40.jpg" },
+    { "id": 39, "name": "Труси <Тінь Сили>", "price": "490₴", "img": "photo_all/photo_bel_boy/photo_3_2025-05-24_23-21-40.jpg" },
     { "id": 40, "name": "Труси <Графітовий спокій>", "price": "290₴", "img": "photo_all/photo_bel_boy/photo_4_2025-05-24_23-21-40.jpg" },
-    { "id": 41, "name": "Труси <Чорний карбон>", "price": "180", "img": "photo_all/photo_bel_boy/photo_5_2025-05-24_23-21-40.jpg" },
+    { "id": 41, "name": "Труси <Чорний карбон>", "price": "180₴", "img": "photo_all/photo_bel_boy/photo_5_2025-05-24_23-21-40.jpg" },
     { "id": 42, "name": "Труси <Червоний чилі>", "price": "400₴", "img": "photo_all/photo_bel_boy/photo_6_2025-05-24_23-21-40.jpg" },
     { "id": 43, "name": "Труси <Маринований драйв>", "price": "340₴", "img": "photo_all/photo_bel_boy/photo_7_2025-05-24_23-21-40.jpg" },
     { "id": 44, "name": "Труси <Класичний сланець>", "price": "280₴", "img": "photo_all/photo_bel_boy/photo_8_2025-05-24_23-21-40.jpg" },
